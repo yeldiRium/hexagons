@@ -7,25 +7,14 @@ type OnMouseOverFunction = (parameters: {
 }) => void;
 
 interface OnMouseOver {
-  onMouseOver: {
-    onMouseOver: OnMouseOverFunction;
-  };
+  onMouseOver: OnMouseOverFunction;
 }
 
-const createOnMouseOver = function ({ onMouseOver: initialOnMouseOver }: {
+const createOnMouseOver = function ({ onMouseOver }: {
   onMouseOver: OnMouseOverFunction;
 }): OnMouseOver {
-  let mOnMouseOver = initialOnMouseOver;
-
   return {
-    onMouseOver: {
-      get onMouseOver (): OnMouseOverFunction {
-        return mOnMouseOver;
-      },
-      set onMouseOver (newOnMouseOver: OnMouseOverFunction) {
-        mOnMouseOver = newOnMouseOver;
-      }
-    }
+    onMouseOver
   };
 };
 

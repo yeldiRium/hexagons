@@ -7,25 +7,14 @@ type OnMouseOutFunction = (parameters: {
 }) => void;
 
 interface OnMouseOut {
-  onMouseOut: {
-    onMouseOut: OnMouseOutFunction;
-  };
+  onMouseOut: OnMouseOutFunction;
 }
 
-const createOnMouseOut = function ({ onMouseOut: initialOnMouseOut }: {
+const createOnMouseOut = function ({ onMouseOut }: {
   onMouseOut: OnMouseOutFunction;
 }): OnMouseOut {
-  let mOnMouseOut = initialOnMouseOut;
-
   return {
-    onMouseOut: {
-      get onMouseOut (): OnMouseOutFunction {
-        return mOnMouseOut;
-      },
-      set onMouseOut (newOnMouseOut: OnMouseOutFunction) {
-        mOnMouseOut = newOnMouseOut;
-      }
-    }
+    onMouseOut
   };
 };
 

@@ -48,7 +48,7 @@ const handleMouseInputFactory = function ({ window }: {
           lastHoveredEntity !== undefined &&
           OnMouseOut.entityHasOnMouseOut(lastHoveredEntity)
         ) {
-          lastHoveredEntity.components.onMouseOut.onMouseOut({
+          lastHoveredEntity.components.onMouseOut({
             absoluteCursorCoordinates: cursorPosition,
             relativeCursorCoordinates: vector2d.sub(cursorPosition, lastHoveredEntity.components.absoluteLocation.vector)
           });
@@ -62,7 +62,7 @@ const handleMouseInputFactory = function ({ window }: {
         (a, b) => a.components.zIndex.zIndex - b.components.zIndex.zIndex
       ).at(-1)!;
 
-      entityWithHighestZIndex.components.onMouseOver.onMouseOver({
+      entityWithHighestZIndex.components.onMouseOver({
         absoluteCursorCoordinates: cursorPosition,
         relativeCursorCoordinates: vector2d.sub(cursorPosition, entityWithHighestZIndex.components.absoluteLocation.vector)
       });
@@ -72,7 +72,7 @@ const handleMouseInputFactory = function ({ window }: {
         lastHoveredEntity !== entityWithHighestZIndex &&
         OnMouseOut.entityHasOnMouseOut(lastHoveredEntity)
       ) {
-        lastHoveredEntity.components.onMouseOut.onMouseOut({
+        lastHoveredEntity.components.onMouseOut({
           absoluteCursorCoordinates: cursorPosition,
           relativeCursorCoordinates: vector2d.sub(cursorPosition, lastHoveredEntity.components.absoluteLocation.vector)
         });
