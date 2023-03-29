@@ -22,6 +22,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
   rootEntityName: string;
 }): StateMachineArchetype {
   const stateMachineEntity = createEntity<StateMachineComponents>({
+    kind: 'StateMachine',
     components: {
       ...messaging.components.OnMessage.createOnMessage(),
       ...messaging.components.SendMessage.createSendMessage(),

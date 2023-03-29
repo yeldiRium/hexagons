@@ -19,6 +19,7 @@ const createHexagonGridEntity = function ({ orientation: o, size, vector: initia
   vector: vector2d.Vector2d;
 }): HexagonGridArchetype {
   const hexagonGrid = createEntity<HexagonGridComponents>({
+    kind: 'HexagonGrid',
     components: {
       ...layout.components.AbsoluteLocation.createAbsoluteLocation({
         vector: vector2d.zero

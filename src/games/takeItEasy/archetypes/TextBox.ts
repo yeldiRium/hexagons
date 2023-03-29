@@ -38,6 +38,7 @@ const createTextBoxEntity = function ({ context, text, isVisible = true, vector 
   const rect = rect2d.createRect2d({ topLeft, bottomRight });
 
   const textBoxEntity = createEntity<TextBoxComponents>({
+    kind: 'TextBox',
     components: {
       ...input.components.OnClick.createOnClick({
         onClick () {

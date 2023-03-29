@@ -37,6 +37,7 @@ const createTextEntity = function ({
   align?: rendering.components.Text.TextAlign;
 }): TextArchetype {
   return createEntity<TextComponents>({
+    kind: 'Text',
     components: {
       ...layout.components.AbsoluteLocation.createAbsoluteLocation({
         vector: vector2d.zero

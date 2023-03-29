@@ -30,6 +30,7 @@ const createHexagonBackgroundTileEntity = function ({ hexagon, isVisible = true 
   let fillColorBeforeHover: color.Color | undefined;
 
   const hexagonBackgroundTileEntity = createEntity<HexagonBackgroundTileComponents>({
+    kind: 'HexagonBackgroundTile',
     components: {
       ...input.components.OnClick.createOnClick({
         onClick () {

@@ -38,6 +38,7 @@ const createTextHexagonEntity = function ({
   isVisible?: boolean;
 }): TextHexagonArchetype {
   const textHexagonEntity = createEntity<TextHexagonComponents>({
+    kind: 'TextHexagon',
     components: {
       ...input.components.OnClick.createOnClick({
         onClick () {

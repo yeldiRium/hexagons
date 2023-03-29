@@ -42,6 +42,7 @@ const createHexagonGameChipEntity = function ({ hexagon, isVisible = true, gameC
   gameChip: gameChip.GameChip;
 }): HexagonGameChipsArchetype {
   const hexagonGameChipEntity = createEntity<HexagonGameChipComponents>({
+    kind: 'HexagonGameChip',
     components: {
       ...layout.components.AbsoluteLocation.createAbsoluteLocation({
         vector: physics2d.vector2d.zero
