@@ -3,20 +3,22 @@ import { hexagon } from '../../../math/hexagonGrid';
 
 interface HexagonLocation {
   hexagonLocation: {
-    coordinates: hexagon.Hexagon;
+    hexagon: hexagon.Hexagon;
   };
 }
 
-const createHexagonLocation = function (q: number, r: number): HexagonLocation {
-  let mCoordinates = hexagon.createHexagon({ q, r });
+const createHexagonLocation = function ({ hexagon: initialHexagon }: {
+  hexagon: hexagon.Hexagon;
+}): HexagonLocation {
+  let mHexagon = initialHexagon;
 
   return {
     hexagonLocation: {
-      get coordinates (): hexagon.Hexagon {
-        return mCoordinates;
+      get hexagon (): hexagon.Hexagon {
+        return mHexagon;
       },
-      set coordinates (coordinates: hexagon.Hexagon) {
-        mCoordinates = coordinates;
+      set hexagon (coordinates: hexagon.Hexagon) {
+        mHexagon = coordinates;
       }
     }
   };

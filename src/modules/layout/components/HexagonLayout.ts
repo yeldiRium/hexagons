@@ -2,25 +2,23 @@ import { Entity } from '../../../ecs/Entity.js';
 import { vector } from '../../../math';
 import { layout, orientation } from '../../../math/hexagonGrid';
 
-interface HexagonGrid {
-  hexagonGrid: {
+interface HexagonLayout {
+  hexagonLayout: {
     layout: layout.Layout;
   };
 }
 
-const createHexagonGrid = function ({ orientation: o, size, origin }: {
+const createHexagonLayout = function ({ orientation: o, size }: {
   orientation: orientation.Orientation;
   size: vector.Vector;
-  origin: vector.Vector;
-}): HexagonGrid {
+}): HexagonLayout {
   const mLayout = layout.createLayout({
     orientation: o,
-    size,
-    origin
+    size
   });
 
   return {
-    hexagonGrid: {
+    hexagonLayout: {
       get layout (): layout.Layout {
         return mLayout;
       }
@@ -28,14 +26,14 @@ const createHexagonGrid = function ({ orientation: o, size, origin }: {
   };
 };
 
-const entityHasHexagonGrid = function (entity: Entity<any>): entity is Entity<HexagonGrid> {
-  return 'hexagonGrid' in entity.components;
+const entityHasHexagonLayout = function (entity: Entity<any>): entity is Entity<HexagonLayout> {
+  return 'hexagonLayout' in entity.components;
 };
 
 export type {
-  HexagonGrid
+  HexagonLayout
 };
 export {
-  createHexagonGrid,
-  entityHasHexagonGrid
+  createHexagonLayout,
+  entityHasHexagonLayout
 };

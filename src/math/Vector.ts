@@ -1,6 +1,6 @@
 interface Vector {
-  x: number;
-  y: number;
+  readonly x: number;
+  readonly y: number;
 }
 
 const createVector = function ({ x, y }: { x: number; y: number }): Vector {
@@ -16,6 +16,8 @@ const add = function (a: Vector, b: Vector): Vector {
 
 const equal = (a: Vector, b: Vector): boolean => a.x === b.x && a.y === b.y;
 
+const zero = createVector({ x: 0, y: 0 });
+
 export type {
   Vector
 };
@@ -23,5 +25,6 @@ export type {
 export {
   add,
   createVector,
-  equal
+  equal,
+  zero
 };

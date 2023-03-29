@@ -5,18 +5,15 @@ import { vector } from '..';
 interface Layout {
   orientation: Orientation;
   size: vector.Vector;
-  origin: vector.Vector;
 }
 
-const createLayout = function ({ orientation, size, origin }: {
+const createLayout = function ({ orientation, size }: {
   orientation: Orientation;
   size: vector.Vector;
-  origin: vector.Vector;
 }): Layout {
   return {
     orientation,
-    size,
-    origin
+    size
   };
 };
 
@@ -24,12 +21,9 @@ const coordinatesToScreen = function ({ layout, coordinates }: {
   layout: Layout;
   coordinates: Hexagon;
 }): vector.Vector {
-  const x = ((layout.orientation.f0 * coordinates.q) + (layout.orientation.f1 * coordinates.r)) * layout.size.x;
-  const y = ((layout.orientation.f2 * coordinates.q) + (layout.orientation.f3 * coordinates.r)) * layout.size.y;
-
   return vector.createVector({
-    x: x + layout.origin.x,
-    y: y + layout.origin.y
+    x: ((layout.orientation.f0 * coordinates.q) + (layout.orientation.f1 * coordinates.r)) * layout.size.x,
+    y: ((layout.orientation.f2 * coordinates.q) + (layout.orientation.f3 * coordinates.r)) * layout.size.y
   });
 };
 
@@ -45,6 +39,18 @@ const hexagonCornerOffset = function ({ layout, corner }: {
   });
 };
 
+const hexagonCornerOffsets = function ({ layout }: {
+  layout: Layout;
+}): vector.Vector[] {
+  const corners = [];
+
+  for (let i = 0; i < 6; i++) {
+    corners.push(hexagonCornerOffset({ layout, corner: i }));
+  }
+
+  return corners;
+};
+
 const hexagonCorners = function ({ layout, coordinates }: {
   layout: Layout;
   coordinates: Hexagon;
@@ -53,12 +59,10 @@ const hexagonCorners = function ({ layout, coordinates }: {
 
   const center = coordinatesToScreen({ layout, coordinates });
 
-  for (let i = 0; i < 6; i++) {
-    const offset = hexagonCornerOffset({ layout, corner: i });
-
+  for (const cornerOffset of hexagonCornerOffsets({ layout })) {
     corners.push(vector.createVector({
-      x: center.x + offset.x,
-      y: center.y + offset.y
+      x: center.x + cornerOffset.x,
+      y: center.y + cornerOffset.y
     }));
   }
 
@@ -73,5 +77,6 @@ export {
   createLayout,
   coordinatesToScreen,
   hexagonCornerOffset,
+  hexagonCornerOffsets,
   hexagonCorners
 };

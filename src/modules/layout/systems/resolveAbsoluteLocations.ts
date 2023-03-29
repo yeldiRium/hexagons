@@ -1,7 +1,7 @@
 import { Entity } from '../../../ecs/Entity.js';
 import { System } from '../../../ecs/System.js';
-import { vector } from '../../../math';
-import { AbsoluteLocation, Location, TreeNode } from '../components';
+import { AbsoluteLocation, HexagonLayout, HexagonLocation, Location, TreeNode } from '../components';
+import { hexagonGrid, vector } from '../../../math';
 
 const isInnerTreeNode = function (entity: Entity<any>): entity is Entity<AbsoluteLocation.AbsoluteLocation & TreeNode.TreeNode & Location.Location> {
   return AbsoluteLocation.entityHasAbsoluteLocation(entity) &&
@@ -31,7 +31,7 @@ const resolveAbsoluteLocationsSystem = function ({ rootElementName }: {
 
       const elementQueue: {
         parent: Entity<AbsoluteLocation.AbsoluteLocation & TreeNode.TreeNode>;
-        element: Entity<AbsoluteLocation.AbsoluteLocation & TreeNode.TreeNode & Location.Location>;
+        element: Entity<AbsoluteLocation.AbsoluteLocation & TreeNode.TreeNode>;
       }[] = [];
 
       for (const child of rootElement.components.treeNode.children) {
@@ -48,11 +48,33 @@ const resolveAbsoluteLocationsSystem = function ({ rootElementName }: {
       while (elementQueue.length > 0) {
         const { parent, element } = elementQueue.shift()!;
 
-        element.components.absoluteLocation.vector =
-          vector.add(element.components.location.vector, parent.components.absoluteLocation.vector);
+        if (
+          HexagonLocation.entityHasHexagonLocation(element) &&
+          HexagonLayout.entityHasHexagonLayout(parent)
+        ) {
+          const hexagonCenter = hexagonGrid.layout.coordinatesToScreen({
+            layout: parent.components.hexagonLayout.layout,
+            coordinates: element.components.hexagonLocation.hexagon
+          });
+
+          element.components.absoluteLocation.vector = vector.createVector({
+            x: hexagonCenter.x + parent.components.absoluteLocation.vector.x,
+            y: hexagonCenter.y + parent.components.absoluteLocation.vector.y
+          });
+        } else if (
+          Location.entityHasLocation(element)
+        ) {
+          element.components.absoluteLocation.vector =
+            vector.add(element.components.location.vector, parent.components.absoluteLocation.vector);
+        } else {
+          element.components.absoluteLocation.vector = parent.components.absoluteLocation.vector;
+        }
 
         for (const child of element.components.treeNode.children) {
-          if (!isInnerTreeNode(child)) {
+          if (
+            !AbsoluteLocation.entityHasAbsoluteLocation(child) ||
+            !TreeNode.entityHasTreeNode(child)
+          ) {
             continue;
           }
 

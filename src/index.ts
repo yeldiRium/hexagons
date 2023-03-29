@@ -1,7 +1,7 @@
 import { engineFactory } from './ecs/Engine';
-import { vector } from './math';
+import { hexagonGrid, vector } from './math';
+import { HexagonGrid, HexagonTile, Viewport } from './archetypes';
 import { layout, rendering } from './modules';
-import { Rect, Viewport } from './archetypes';
 
 window.addEventListener('DOMContentLoaded', (): void => {
   const rootElementName = 'viewport';
@@ -11,6 +11,7 @@ window.addEventListener('DOMContentLoaded', (): void => {
   const engine = engineFactory({ systems: [
     rendering.systems.trackCanvasSizeFactory({ canvas }),
     layout.systems.resolveAbsoluteLocationsSystem({ rootElementName }),
+    layout.systems.calculateHexagonPolygons(),
     rendering.systems.renderFactory({ canvas })
   ]});
 
@@ -23,29 +24,21 @@ window.addEventListener('DOMContentLoaded', (): void => {
   viewportEntity.name = rootElementName;
   entityManager.addEntity(viewportEntity);
 
-  const outermostRect = Rect.createRectEntity({
-    location: vector.createVector({ x: 50, y: 50 }),
-    size: 100
+  const hexagonGridEntity = HexagonGrid.createHexagonGridEntity({
+    vector: vector.zero,
+    size: vector.zero,
+    orientation: hexagonGrid.orientation.pointyOrientation
   });
 
-  entityManager.addEntity(outermostRect);
-  layout.attachChildToParent({ child: outermostRect, parent: viewportEntity });
+  entityManager.addEntity(hexagonGridEntity);
+  layout.attachChildToParent({ child: hexagonGridEntity, parent: viewportEntity });
 
-  const innerRect1 = Rect.createRectEntity({
-    location: vector.createVector({ x: 10, y: 25 }),
-    size: 20
-  });
+  for (const hexagon of hexagonGrid.patterns.createRegularHexagon({ hexagonSize: 5 })) {
+    const hexagonEntity = HexagonTile.createHexagonTileEntity({ hexagon });
 
-  entityManager.addEntity(innerRect1);
-  layout.attachChildToParent({ child: innerRect1, parent: outermostRect });
-
-  const innerRect2 = Rect.createRectEntity({
-    location: vector.createVector({ x: 55, y: 60 }),
-    size: 35
-  });
-
-  entityManager.addEntity(innerRect2);
-  layout.attachChildToParent({ child: innerRect2, parent: outermostRect });
+    entityManager.addEntity(hexagonEntity);
+    layout.attachChildToParent({ child: hexagonEntity, parent: hexagonGridEntity });
+  }
 
   let time = Date.now();
   const frame = (): void => {
