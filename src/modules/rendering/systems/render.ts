@@ -13,15 +13,11 @@ const renderFactory = function ({ canvas }: {
       for (const entity of entityManager.getEntities(
         AbsoluteLocation.entityHasAbsoluteLocation
       )) {
-        if (StrokeColor.entityHasStrokeColor(entity)) {
-          ctx.strokeStyle = color.toHexString({ color: entity.components.strokeColor.color });
-        } else {
-          ctx.strokeStyle = color.toHexString({ color: color.predefined.black });
-        }
         if (FillColor.entityHasFillColor(entity)) {
           ctx.fillStyle = color.toHexString({ color: entity.components.fillColor.color });
-        } else {
-          ctx.fillStyle = color.toHexString({ color: color.predefined.white });
+        }
+        if (StrokeColor.entityHasStrokeColor(entity)) {
+          ctx.strokeStyle = color.toHexString({ color: entity.components.strokeColor.color });
         }
 
         if (Polygon.entityHasPolygon(entity)) {
@@ -35,8 +31,12 @@ const renderFactory = function ({ canvas }: {
             );
           }
           ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
+          if (FillColor.entityHasFillColor(entity)) {
+            ctx.fill();
+          }
+          if (StrokeColor.entityHasStrokeColor(entity)) {
+            ctx.stroke();
+          }
         }
         if (Text.entityHasText(entity)) {
           if (FillColor.entityHasFillColor(entity)) {
