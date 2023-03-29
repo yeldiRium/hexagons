@@ -3,7 +3,7 @@ import { hexagonGrid } from '../../framework/math';
 import { vector2d } from '../../framework/math/physics2d';
 import { GameController, gameControllerFactory } from '../../framework/GameController.js';
 import { GameLogic, HexagonGrid, HexagonTile, Text, Viewport } from './archetypes';
-import { input, layout, messaging, rendering } from '../../framework/modules';
+import { input, layout, messaging, rendering, spawning } from '../../framework/modules';
 
 const gameFactory = function (): GameController {
   return gameControllerFactory({
@@ -12,6 +12,7 @@ const gameFactory = function (): GameController {
 
       const engine = engineFactory({ systems: [
         rendering.systems.trackCanvasSizeFactory({ canvas }),
+        spawning.systems.spawningFactory(),
         layout.systems.resolveAbsoluteLocationsFactory({ rootElementName }),
         layout.systems.calculateHexagonPolygonsFactory(),
         input.systems.handleMouseInput({ rootElement: canvas }),

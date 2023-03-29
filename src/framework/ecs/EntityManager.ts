@@ -9,6 +9,7 @@ interface EntityManager {
   addEntity: (entity: Entity<any>) => void;
   addEntityAndChildren: (entity: Entity<any>) => void;
   removeEntity: (id: string) => boolean;
+  removeEntityAndChildren: (id: string) => boolean;
   getEntityByName: (name: string) => Result<Entity<any>, NoEntityWithNameFound>;
   getEntityById: (id: string) => Result<Entity<any>, NoEntityWithIdFound>;
   getEntities: <TComponents = any>(predicate: (entity: Entity<any>) => entity is Entity<TComponents>) => Entity<TComponents>[];
@@ -33,6 +34,21 @@ const createEntityManager = function (): EntityManager {
     },
     removeEntity (id): boolean {
       return entities.delete(id);
+    },
+    removeEntityAndChildren (id): boolean {
+      const entity = entities.get(id);
+
+      if (entity === undefined) {
+        return false;
+      }
+      entities.delete(id);
+      if (layout.components.TreeNode.entityHasTreeNode(entity)) {
+        for (const child of entity.components.treeNode.children) {
+          this.removeEntityAndChildren(child.id);
+        }
+      }
+
+      return true;
     },
     getEntityByName <TComponents = any>(name: string): Result<Entity<TComponents>, NoEntityWithNameFound> {
       const entity = [ ...entities.values() ].find((iEntity): boolean => iEntity.name === name);
