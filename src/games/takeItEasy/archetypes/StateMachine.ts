@@ -108,15 +108,6 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
             initializeState ({ stateMachineEntity, changeState }) {
               const hexagonGridEntity: HexagonGrid.HexagonGridArchetype = entityManager.getEntityByName(gameGridEntityName).unwrapOrThrow();
 
-              for (const hexagon of hexagonGrid.patterns.createRegularHexagon({ hexagonSize: gameGridSize })) {
-                const backgroundTileEntity = HexagonBackgroundTile.createHexagonBackgroundTileEntity({ hexagon });
-
-                stateMachineEntity.components.spawn.spawnEntity({
-                  entity: backgroundTileEntity,
-                  parent: hexagonGridEntity
-                });
-              }
-
               const chipStack = gameChip.generateChipStack({
                 chipLocation: hexagonGrid.hexagon.createHexagon({ q: -4, r: 2 })
               });
@@ -127,42 +118,48 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
                 parent: hexagonGridEntity
               });
 
-              stateMachineEntity.components.onMessage.addMessageListener<messaging.messageCreator.MessageInCreator<typeof messages.hexagonBackgroundTileClicked>>({
-                type: messages.hexagonBackgroundTileClicked.type,
-                callback ({ message }): void {
-                  const backgroundTile = message.payload.hexagonBackgroundTile;
+              for (const hexagon of hexagonGrid.patterns.createRegularHexagon({ hexagonSize: gameGridSize })) {
+                const backgroundTileEntity = HexagonBackgroundTile.createHexagonBackgroundTileEntity({
+                  hexagon,
+                  onClick: {
+                    // eslint-disable-next-line @typescript-eslint/no-loop-func
+                    onClick (): void {
+                      nextChip.components.hexagonLocation.hexagon = hexagonGrid.hexagon.clone(backgroundTileEntity.components.hexagonLocation.hexagon);
 
-                  nextChip.components.hexagonLocation.hexagon = hexagonGrid.hexagon.clone(backgroundTile.components.hexagonLocation.hexagon);
+                      // Move the hexagon out of the way, so that the check for the game ending condition does not stumble
+                      // across it. This is necessary, because the despawning happens after this callback has completed.
+                      backgroundTileEntity.components.hexagonLocation.hexagon = hexagonGrid.hexagon.createHexagon({
+                        q: -100,
+                        r: -100
+                      });
+                      backgroundTileEntity.components.despawn.despawn();
 
-                  // Move the hexagon out of the way, so that the check for the game ending condition does not stumble
-                  // across it. This is necessary, because the despawning happens after this callback has completed.
-                  backgroundTile.components.hexagonLocation.hexagon = hexagonGrid.hexagon.createHexagon({
-                    q: -100,
-                    r: -100
-                  });
-                  backgroundTile.components.despawn.despawn();
+                      const isGameFinished = scoring.isGameFinished({ hexagonGridEntity, gameGridSize });
 
-                  const isGameFinished = scoring.isGameFinished({ hexagonGridEntity, gameGridSize });
+                      if (isGameFinished) {
+                        changeState({ state: 'Scoring' });
 
-                  if (isGameFinished) {
-                    changeState({ state: 'Scoring' });
+                        return;
+                      }
 
-                    return;
+                      nextChip = chipStack.pop()!;
+
+                      stateMachineEntity.components.spawn.spawnEntity({
+                        entity: nextChip,
+                        parent: hexagonGridEntity
+                      });
+                    }
                   }
+                });
 
-                  nextChip = chipStack.pop()!;
-
-                  stateMachineEntity.components.spawn.spawnEntity({
-                    entity: nextChip,
-                    parent: hexagonGridEntity
-                  });
-                }
-              });
+                stateMachineEntity.components.spawn.spawnEntity({
+                  entity: backgroundTileEntity,
+                  parent: hexagonGridEntity
+                });
+              }
             },
-            teardownState ({ stateMachineEntity }) {
-              stateMachineEntity.components.onMessage.removeMessageListener({
-                type: messages.hexagonBackgroundTileClicked.type
-              });
+            teardownState () {
+              // Nothing to do here.
             }
           },
           Scoring: {

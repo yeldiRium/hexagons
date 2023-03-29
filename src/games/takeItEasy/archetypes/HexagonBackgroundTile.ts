@@ -1,3 +1,4 @@
+import { noop } from '../../../utils';
 import { color, hexagonGrid } from '../../../framework/math';
 import { createEntity, Entity } from '../../../framework/ecs/Entity';
 import { input, layout, lifeCycle, messaging, rendering, spawning } from '../../../framework/modules';
@@ -23,8 +24,9 @@ type HexagonBackgroundTileArchetype = Entity<HexagonBackgroundTileComponents>;
 
 const defaultBackgroundColor = color.predefined.white;
 
-const createHexagonBackgroundTileEntity = function ({ hexagon, isVisible = true }: {
+const createHexagonBackgroundTileEntity = function ({ hexagon, onClick = { onClick: noop }, isVisible = true }: {
   hexagon: hexagonGrid.hexagon.Hexagon;
+  onClick?: Parameters<typeof input.components.OnClick.createOnClick>[0];
   isVisible?: boolean;
 }): HexagonBackgroundTileArchetype {
   let fillColorBeforeHover: color.Color | undefined;
@@ -32,15 +34,7 @@ const createHexagonBackgroundTileEntity = function ({ hexagon, isVisible = true 
   const hexagonBackgroundTileEntity = createEntity<HexagonBackgroundTileComponents>({
     kind: 'HexagonBackgroundTile',
     components: {
-      ...input.components.OnClick.createOnClick({
-        onClick () {
-          hexagonBackgroundTileEntity.components.sendMessage.sendMessage({
-            message: messages.hexagonBackgroundTileClicked({
-              hexagonBackgroundTile: hexagonBackgroundTileEntity
-            })
-          });
-        }
-      }),
+      ...input.components.OnClick.createOnClick(onClick),
       ...input.components.OnMouseOver.createOnMouseOver({
         onMouseOver () {
           fillColorBeforeHover = hexagonBackgroundTileEntity.components.fillColor.color;
