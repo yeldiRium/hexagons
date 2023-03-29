@@ -22,6 +22,7 @@ window.addEventListener('DOMContentLoaded', (): void => {
 
   const messageDebuggerEntity = MessageDebugger.createMessageDebugger();
 
+  messageDebuggerEntity.name = 'messageDebugger';
   entityManager.addEntity(messageDebuggerEntity);
 
   const viewportEntity = Viewport.createViewportEntity({

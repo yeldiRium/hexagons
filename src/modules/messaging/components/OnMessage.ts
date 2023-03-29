@@ -1,9 +1,11 @@
 import { Entity } from '../../../ecs/Entity.js';
 import { Message, MessageType } from '../Message.js';
 
+type CallbackMap = Map<string, (parameters: { message: Message<string, any> }) => void>;
+
 interface OnMessage {
   onMessage: {
-    callback: Map<string, (parameters: { message: Message<string, any> }) => void>;
+    callbacks: CallbackMap;
     addMessageListener: <TMessage extends Message<string, any>>(parameters: {
       type: MessageType<TMessage>;
       callback: (parameters: { message: TMessage }) => void;
@@ -15,16 +17,18 @@ interface OnMessage {
 }
 
 const createOnMessage = function (): OnMessage {
-  const callbacks = new Map<string, (message: Message<string, any>) => void>();
+  const mCallbacks: CallbackMap = new Map();
 
   return {
     onMessage: {
-      callback: new Map(),
+      get callbacks (): CallbackMap {
+        return mCallbacks;
+      },
       addMessageListener ({ type, callback }): void {
-        callbacks.set(type, callback as any);
+        mCallbacks.set(type, callback as any);
       },
       removeMessageListener ({ type }): void {
-        callbacks.delete(type);
+        mCallbacks.delete(type);
       }
     }
   };

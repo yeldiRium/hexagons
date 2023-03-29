@@ -5,15 +5,23 @@ interface SendMessage {
   sendMessage: {
     messagesToSend: Message<string, any>[];
     sendMessage: (parameters: { message: Message<string, any> }) => void;
+    clearMessages: () => void;
   };
 }
 
 const createSendMessage = function (): SendMessage {
+  let mMessages: Message<string, any>[] = [];
+
   return {
     sendMessage: {
-      messagesToSend: [],
+      get messagesToSend (): Message<string, any>[] {
+        return mMessages;
+      },
       sendMessage ({ message }): void {
-        this.messagesToSend.push(message);
+        mMessages.push(message);
+      },
+      clearMessages (): void {
+        mMessages = [];
       }
     }
   };
