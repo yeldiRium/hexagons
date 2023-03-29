@@ -2,9 +2,10 @@ import { gameChip } from '../gameLogic';
 import { TextHexagon } from '.';
 import { color, hexagonGrid, physics2d } from '../../../framework/math';
 import { createEntity, Entity } from '../../../framework/ecs/Entity';
-import { layout, lifeCycle, messaging, rendering, spawning } from '../../../framework/modules';
+import { data, layout, lifeCycle, messaging, rendering, spawning } from '../../../framework/modules';
 
 type HexagonGameChipComponents =
+  & data.components.Data.Data<gameChip.GameChip>
   & layout.components.AbsoluteLocation.AbsoluteLocation
   & layout.components.TreeNode.TreeNode
   & layout.components.HexagonLocation.HexagonLocation
@@ -36,14 +37,16 @@ const textColors = [
   color.createColor({ r: 200, g: 200, b: 0 })
 ];
 
+const kind = 'HexagonGameChip';
 const createHexagonGameChipEntity = function ({ hexagon, isVisible = true, gameChip: { firstValue, secondValue, thirdValue }}: {
   hexagon: hexagonGrid.hexagon.Hexagon;
   isVisible?: boolean;
   gameChip: gameChip.GameChip;
 }): HexagonGameChipsArchetype {
   const hexagonGameChipEntity = createEntity<HexagonGameChipComponents>({
-    kind: 'HexagonGameChip',
+    kind,
     components: {
+      ...data.components.Data.createData({ data: { firstValue, secondValue, thirdValue } }),
       ...layout.components.AbsoluteLocation.createAbsoluteLocation({
         vector: physics2d.vector2d.zero
       }),
@@ -134,5 +137,6 @@ export type {
   HexagonGameChipsArchetype
 };
 export {
-  createHexagonGameChipEntity
+  createHexagonGameChipEntity,
+  kind
 };

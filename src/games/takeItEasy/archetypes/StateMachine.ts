@@ -1,8 +1,8 @@
 import { EntityManager } from '../../../framework/ecs/EntityManager.js';
-import { gameChip } from '../gameLogic';
 import { color, hexagonGrid, physics2d } from '../../../framework/math';
 import { createEntity, Entity } from '../../../framework/ecs/Entity.js';
-import { HexagonBackgroundTile, HexagonGrid, TextBox, Viewport } from '.';
+import { gameChip, scoring } from '../gameLogic';
+import { HexagonBackgroundTile, HexagonGrid, TextBox, TextHexagon, Viewport } from '.';
 import { layout, messaging, rendering, spawning, stateMachine } from '../../../framework/modules';
 import * as messages from '../messages';
 
@@ -14,6 +14,11 @@ type StateMachineComponents =
   & spawning.components.Spawn.Spawn
   & stateMachine.components.StateMachine.StateMachine<State, StateMachineArchetype>;
 type StateMachineArchetype = Entity<StateMachineComponents>;
+
+const gameGridSize = 5;
+const gameGridEntityName = 'gameGrid';
+const startButtonEntityName = 'startButton';
+const scoreTextEntityName = 'scoreTextBox';
 
 const createStateMachineEntity = function ({ entityManager, canvas, context, rootEntityName }: {
   entityManager: EntityManager;
@@ -41,11 +46,13 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
               const viewPort: Viewport.ViewportArchetype = entityManager.getEntityByName(rootEntityName).unwrapOrThrow();
               const startButtonEntity = TextBox.createTextBoxEntity({
                 context,
-                text: 'Start game',
+                text: {
+                  text: 'Start game'
+                },
                 vector: physics2d.vector2d.zero
               });
 
-              startButtonEntity.name = 'startButton';
+              startButtonEntity.name = startButtonEntityName;
               startButtonEntity.components.onClick = (): void => {
                 changeState({ state: 'Playing' });
               };
@@ -72,7 +79,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
               };
             },
             teardownState ({ stateMachineEntity }) {
-              const startButton: TextBox.TextBoxArchetype = entityManager.getEntityByName('startButton').unwrapOrThrow();
+              const startButton: TextBox.TextBoxArchetype = entityManager.getEntityByName(startButtonEntityName).unwrapOrThrow();
 
               startButton.components.despawn.despawn();
               stateMachineEntity.components.onCanvasSizeChange = (): void => {
@@ -84,12 +91,14 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
             initializeState ({ stateMachineEntity, changeState }) {
               const viewportEntity: Viewport.ViewportArchetype = entityManager.getEntityByName(rootEntityName).unwrapOrThrow();
               const hexagonGridEntity = HexagonGrid.createHexagonGridEntity({
-                orientation: hexagonGrid.orientation.pointyOrientation,
+                orientation: hexagonGrid.orientation.flatOrientation,
                 vector: physics2d.vector2d.zero,
                 size: physics2d.vector2d.zero
               });
 
-              for (const hexagon of hexagonGrid.patterns.createRegularHexagon({ hexagonSize: 5 })) {
+              hexagonGridEntity.name = gameGridEntityName;
+
+              for (const hexagon of hexagonGrid.patterns.createRegularHexagon({ hexagonSize: gameGridSize })) {
                 const backgroundTileEntity = HexagonBackgroundTile.createHexagonBackgroundTileEntity({ hexagon });
 
                 layout.attachChildToParent({ child: backgroundTileEntity, parent: hexagonGridEntity });
@@ -123,8 +132,23 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
                 callback ({ message }): void {
                   const backgroundTile = message.payload.hexagonBackgroundTile;
 
-                  backgroundTile.components.despawn.despawn();
                   nextChip.components.hexagonLocation.hexagon = hexagonGrid.hexagon.clone(backgroundTile.components.hexagonLocation.hexagon);
+
+                  // Move the hexagon out of the way, so that the check for the game ending condition does not stumble
+                  // across it. This is necessary, because the despawning happens after this callback has completed.
+                  backgroundTile.components.hexagonLocation.hexagon = hexagonGrid.hexagon.createHexagon({
+                    q: -100,
+                    r: -100
+                  });
+                  backgroundTile.components.despawn.despawn();
+
+                  const isGameFinished = scoring.isGameFinished({ hexagonGridEntity, gameGridSize });
+
+                  if (isGameFinished) {
+                    changeState({ state: 'Scoring' });
+
+                    return;
+                  }
 
                   nextChip = chipStack.pop()!;
 
@@ -136,15 +160,66 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
               });
             },
             teardownState ({ stateMachineEntity }) {
-              stateMachineEntity.components.onCanvasSizeChange = (): void => {
-                // Remove the previous handler.
-              };
+              stateMachineEntity.components.onMessage.removeMessageListener({
+                type: messages.hexagonBackgroundTileClicked.type
+              });
             }
           },
           Scoring: {
             initializeState () {
+              const hexagonGridEntity: HexagonGrid.HexagonGridArchetype = entityManager.getEntityByName(gameGridEntityName).unwrapOrThrow();
+
+              const scoreResult = scoring.evaluateScore({
+                hexagonGridEntity
+              }).unwrapOrThrow();
+
+              for (const lineScore of scoreResult.lineScores) {
+                const lineScoreTextHexagon = TextHexagon.createTextHexagonEntity({
+                  location: lineScore.displayLocation,
+                  text: {
+                    text: `${lineScore.score}`,
+                    align: 'center'
+                  },
+                  textSizeMultiplier: 0.5
+                });
+
+                stateMachineEntity.components.spawn.spawnEntity({
+                  entity: lineScoreTextHexagon,
+                  parent: hexagonGridEntity
+                });
+              }
+
+              const scoreTextEntity = TextHexagon.createTextHexagonEntity({
+                location: hexagonGrid.hexagon.createHexagon({ q: 0, r: -4 }),
+                text: {
+                  text: `Score: ${scoreResult.overallScore}`,
+                  align: 'center',
+                  bold: true
+                },
+                textSizeMultiplier: 2
+              });
+
+              scoreTextEntity.name = scoreTextEntityName;
+              stateMachineEntity.components.spawn.spawnEntity({
+                entity: scoreTextEntity,
+                parent: hexagonGridEntity
+              });
+
+              stateMachineEntity.components.sendMessage.sendMessage({
+                message: messages.gameScored({ overallScore: scoreResult.overallScore })
+              });
+
+              // TODO: display reset button
             },
             teardownState () {
+              stateMachineEntity.components.onCanvasSizeChange = (): void => {
+                // Remove the previous handler.
+              };
+              const hexagonGridEntity: HexagonGrid.HexagonGridArchetype = entityManager.getEntityByName(gameGridEntityName).unwrapOrThrow();
+              const scoreTextBoxEntity: TextBox.TextBoxArchetype = entityManager.getEntityByName(scoreTextEntityName).unwrapOrThrow();
+
+              hexagonGridEntity.components.despawn.despawn();
+              scoreTextBoxEntity.components.despawn.despawn();
             }
           }
           /* eslint-enable @typescript-eslint/no-shadow, no-param-reassign */

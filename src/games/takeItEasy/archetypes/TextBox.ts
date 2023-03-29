@@ -22,11 +22,11 @@ type TextBoxArchetype = Entity<TextBoxComponents>;
 
 const createTextBoxEntity = function ({ context, text, isVisible = true, vector }: {
   context: CanvasRenderingContext2D;
-  text: string;
+  text: Parameters<typeof Text.createTextEntity>[0];
   isVisible?: boolean;
   vector: vector2d.Vector2d;
 }): TextBoxArchetype {
-  const textMetrics = context.measureText(text);
+  const textMetrics = context.measureText(text.text);
   const topLeft = vector2d.createVector2d({
     x: -textMetrics.actualBoundingBoxLeft - 10,
     y: -textMetrics.actualBoundingBoxAscent - 10
@@ -69,7 +69,10 @@ const createTextBoxEntity = function ({ context, text, isVisible = true, vector 
       ...spawning.components.Despawn.createDespawn()
     }
   });
-  const textEntity = Text.createTextEntity({ text, isVisible });
+  const textEntity = Text.createTextEntity({
+    ...text,
+    isVisible
+  });
 
   layout.attachChildToParent({ child: textEntity, parent: textBoxEntity });
 

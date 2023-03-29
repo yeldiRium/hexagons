@@ -1,7 +1,7 @@
 import { orientation } from '../../../framework/math/hexagonGrid';
 import { vector2d } from '../../../framework/math/physics2d';
 import { createEntity, Entity } from '../../../framework/ecs/Entity.js';
-import { layout, lifeCycle, rendering } from '../../../framework/modules';
+import { layout, lifeCycle, rendering, spawning } from '../../../framework/modules';
 
 type HexagonGridComponents =
   & layout.components.AbsoluteLocation.AbsoluteLocation
@@ -10,7 +10,8 @@ type HexagonGridComponents =
   & layout.components.HexagonLayout.HexagonLayout
   & layout.components.ZIndex.ZIndex
   & lifeCycle.components.LifeCycle.LifeCycle
-  & rendering.components.OnCanvasSizeChange.OnCanvasSizeChange;
+  & rendering.components.OnCanvasSizeChange.OnCanvasSizeChange
+  & spawning.components.Despawn.Despawn;
 type HexagonGridArchetype = Entity<HexagonGridComponents>;
 
 const createHexagonGridEntity = function ({ orientation: o, size, vector: initialVector }: {
@@ -36,7 +37,8 @@ const createHexagonGridEntity = function ({ orientation: o, size, vector: initia
         onCanvasSizeChange () {
           // Set this function later on individual entities.
         }
-      })
+      }),
+      ...spawning.components.Despawn.createDespawn()
     }
   });
 

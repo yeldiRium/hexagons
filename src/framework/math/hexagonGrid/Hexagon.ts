@@ -72,6 +72,7 @@ const neighbor = function (a: Hexagon, d: Direction): Hexagon {
 };
 
 export type {
+  Direction,
   Hexagon
 };
 
@@ -79,6 +80,7 @@ export {
   add,
   clone,
   createHexagon,
+  direction,
   directions,
   distance,
   equal,

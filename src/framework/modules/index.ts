@@ -1,3 +1,4 @@
+export * as data from './data';
 export * as input from './input';
 export * as layout from './layout';
 export * as lifeCycle from './lifeCycle';
