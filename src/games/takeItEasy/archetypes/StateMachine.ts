@@ -193,7 +193,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
                   align: 'center',
                   bold: true
                 },
-                textSizeMultiplier: 0.5
+                textSizeMultiplier: 0.4
               });
 
               scoreTextEntity.name = scoreTextEntityName;
