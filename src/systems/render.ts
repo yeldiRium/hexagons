@@ -1,5 +1,5 @@
 import { point } from '../rendering';
-import { Renderable } from '../components';
+import { Polygon } from '../components';
 import { System } from '../ecs/System.js';
 
 const renderFactory = function ({ canvas }: {
@@ -16,23 +16,20 @@ const renderFactory = function ({ canvas }: {
   return {
     tick ({ entityManager }): void {
       for (const entity of entityManager.getEntities(
-        Renderable.entityHasRenderableComponent
+        Polygon.entityHasPolygon
       )) {
         ctx.lineWidth = 5;
+        ctx.beginPath();
 
-        for (const polygon of entity.components.renderable.polygons) {
-          ctx.beginPath();
+        for (const corner of entity.components.polygon.polygon) {
+          ctx.lineTo(
 
-          for (const corner of polygon) {
-            ctx.lineTo(
-
-              corner.x + offset.x,
-              corner.y + offset.y
-            );
-          }
-          ctx.closePath();
-          ctx.stroke();
+            corner.x + offset.x,
+            corner.y + offset.y
+          );
         }
+        ctx.closePath();
+        ctx.stroke();
       }
     }
   };

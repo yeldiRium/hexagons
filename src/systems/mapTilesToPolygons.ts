@@ -2,7 +2,7 @@ import { Entity } from '../ecs/Entity';
 import { layout } from '../grid';
 import { System } from '../ecs/System.js';
 import { ViewportArchetype } from '../archetypes/Viewport';
-import { HexagonLocation, Renderable } from '../components';
+import { HexagonLocation, Polygon } from '../components';
 
 const mapTilesToScreenPolygonsFactory = function (): System {
   return {
@@ -10,16 +10,14 @@ const mapTilesToScreenPolygonsFactory = function (): System {
       const viewport: ViewportArchetype = entityManager.getEntityByName('viewport').unwrapOrThrow();
 
       for (const entity of entityManager.getEntities(
-        (iEntity: Entity<any>): iEntity is Entity<HexagonLocation.HexagonLocation & Renderable.Renderable> =>
+        (iEntity: Entity<any>): iEntity is Entity<HexagonLocation.HexagonLocation & Polygon.Polygon> =>
           HexagonLocation.entityHasHexagonLocationComponent(iEntity) &&
-          Renderable.entityHasRenderableComponent(iEntity)
+          Polygon.entityHasPolygon(iEntity)
       )) {
-        entity.components.renderable.polygons = [
-          layout.hexagonCorners({
-            layout: viewport.components.viewport.layout,
-            coordinates: entity.components.hexagonLocation.coordinates
-          })
-        ];
+        entity.components.polygon.polygon = layout.hexagonCorners({
+          layout: viewport.components.viewport.layout,
+          coordinates: entity.components.hexagonLocation.coordinates
+        });
       }
     }
   };
