@@ -1,4 +1,5 @@
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 import { vector2d } from '../../../math/physics2d';
 
 type OnMouseOutFunction = (parameters: {
@@ -7,19 +8,23 @@ type OnMouseOutFunction = (parameters: {
 }) => void;
 
 interface OnMouseOut {
-  onMouseOut: OnMouseOutFunction;
+  input: {
+    onMouseOut: OnMouseOutFunction;
+  };
 }
 
 const createOnMouseOut = function ({ onMouseOut }: {
   onMouseOut: OnMouseOutFunction;
 }): OnMouseOut {
   return {
-    onMouseOut
+    input: {
+      onMouseOut
+    }
   };
 };
 
 const entityHasOnMouseOut = function (entity: Entity<any>): entity is Entity<OnMouseOut> {
-  return 'onMouseOut' in entity.components;
+  return has(entity.components, 'input.onMouseOut');
 };
 
 export type {

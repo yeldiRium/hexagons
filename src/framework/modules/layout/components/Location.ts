@@ -1,9 +1,12 @@
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 import { vector2d } from '../../../math/physics2d';
 
 interface Location {
-  location: {
-    vector: vector2d.Vector2d;
+  layout: {
+    location: {
+      vector: vector2d.Vector2d;
+    };
   };
 }
 
@@ -13,19 +16,21 @@ const createLocation = function ({ vector: initialVector }: {
   let mVector = initialVector;
 
   return {
-    location: {
-      get vector (): vector2d.Vector2d {
-        return mVector;
-      },
-      set vector (newVector: vector2d.Vector2d) {
-        mVector = newVector;
+    layout: {
+      location: {
+        get vector (): vector2d.Vector2d {
+          return mVector;
+        },
+        set vector (newVector: vector2d.Vector2d) {
+          mVector = newVector;
+        }
       }
     }
   };
 };
 
 const entityHasLocation = function (entity: Entity<any>): entity is Entity<Location> {
-  return 'location' in entity.components;
+  return has(entity.components, 'layout.location');
 };
 
 export type {

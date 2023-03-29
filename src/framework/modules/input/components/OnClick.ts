@@ -1,4 +1,5 @@
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 import { vector2d } from '../../../math/physics2d';
 
 type OnClickFunction = (parameters: {
@@ -7,19 +8,23 @@ type OnClickFunction = (parameters: {
 }) => void;
 
 interface OnClick {
-  onClick: OnClickFunction;
+  input: {
+    onClick: OnClickFunction;
+  };
 }
 
 const createOnClick = function ({ onClick }: {
   onClick: OnClickFunction;
 }): OnClick {
   return {
-    onClick
+    input: {
+      onClick
+    }
   };
 };
 
 const entityHasOnClick = function (entity: Entity<any>): entity is Entity<OnClick> {
-  return 'onClick' in entity.components;
+  return has(entity.components, 'input.onClick');
 };
 
 export type {

@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 
 interface ZIndex {
-  zIndex: {
-    zIndex: number;
+  layout: {
+    zIndex: {
+      zIndex: number;
+    };
   };
 }
 
@@ -11,19 +14,21 @@ const createZIndex = function (initialZIndex = 0): ZIndex {
   let mZIndex = initialZIndex;
 
   return {
-    zIndex: {
-      get zIndex (): number {
-        return mZIndex;
-      },
-      set zIndex (newZIndex: number) {
-        mZIndex = newZIndex;
+    layout: {
+      zIndex: {
+        get zIndex (): number {
+          return mZIndex;
+        },
+        set zIndex (newZIndex: number) {
+          mZIndex = newZIndex;
+        }
       }
     }
   };
 };
 
 const entityHasZIndex = function (entity: Entity<any>): entity is Entity<ZIndex> {
-  return 'zIndex' in entity.components;
+  return has(entity.components, 'layout.zIndex');
 };
 
 export type {

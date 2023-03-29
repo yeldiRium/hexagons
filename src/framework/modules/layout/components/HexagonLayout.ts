@@ -1,10 +1,13 @@
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 import { vector2d } from '../../../math/physics2d';
 import { layout, orientation } from '../../../math/hexagonGrid';
 
 interface HexagonLayout {
-  hexagonLayout: {
-    layout: layout.Layout;
+  layout: {
+    hexagonLayout: {
+      layout: layout.Layout;
+    };
   };
 }
 
@@ -18,16 +21,18 @@ const createHexagonLayout = function ({ orientation: o, size }: {
   });
 
   return {
-    hexagonLayout: {
-      get layout (): layout.Layout {
-        return mLayout;
+    layout: {
+      hexagonLayout: {
+        get layout (): layout.Layout {
+          return mLayout;
+        }
       }
     }
   };
 };
 
 const entityHasHexagonLayout = function (entity: Entity<any>): entity is Entity<HexagonLayout> {
-  return 'hexagonLayout' in entity.components;
+  return has(entity.components, 'layout.hexagonLayout');
 };
 
 export type {

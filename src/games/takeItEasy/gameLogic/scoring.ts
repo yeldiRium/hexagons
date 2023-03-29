@@ -152,7 +152,7 @@ const evaluateScoringLine = function ({ hexagonGridEntity, scoringLine }: {
 
     const hexagonGameChipEntity: HexagonGameChip.HexagonGameChipsArchetype = hexagonTileEntity;
 
-    valuesInLine.push(hexagonGameChipEntity.components.data[scoringLine.whichValue]);
+    valuesInLine.push(hexagonGameChipEntity.components.data.data[scoringLine.whichValue]);
 
     location = hexagonGrid.hexagon.neighbor(location, scoringLine.direction);
   }

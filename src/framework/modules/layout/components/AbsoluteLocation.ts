@@ -1,9 +1,12 @@
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 import { vector2d } from '../../../math/physics2d';
 
 interface AbsoluteLocation {
-  absoluteLocation: {
-    vector: vector2d.Vector2d;
+  layout: {
+    absoluteLocation: {
+      vector: vector2d.Vector2d;
+    };
   };
 }
 
@@ -13,19 +16,21 @@ const createAbsoluteLocation = function ({ vector: initialVector }: {
   let mVector = initialVector;
 
   return {
-    absoluteLocation: {
-      get vector (): vector2d.Vector2d {
-        return mVector;
-      },
-      set vector (newVector: vector2d.Vector2d) {
-        mVector = newVector;
+    layout: {
+      absoluteLocation: {
+        get vector (): vector2d.Vector2d {
+          return mVector;
+        },
+        set vector (newVector: vector2d.Vector2d) {
+          mVector = newVector;
+        }
       }
     }
   };
 };
 
 const entityHasAbsoluteLocation = function (entity: Entity<any>): entity is Entity<AbsoluteLocation> {
-  return 'absoluteLocation' in entity.components;
+  return has(entity.components, 'layout.absoluteLocation');
 };
 
 export type {

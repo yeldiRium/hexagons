@@ -1,9 +1,12 @@
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 
 interface Despawn {
-  despawn: {
-    shouldDespawn: boolean;
-    despawn: () => void;
+  spawning: {
+    despawn: {
+      shouldDespawn: boolean;
+      despawn: () => void;
+    };
   };
 }
 
@@ -11,19 +14,21 @@ const createDespawn = function (): Despawn {
   let mShouldDespawn = false;
 
   return {
-    despawn: {
-      get shouldDespawn (): boolean {
-        return mShouldDespawn;
-      },
-      despawn (): void {
-        mShouldDespawn = true;
+    spawning: {
+      despawn: {
+        get shouldDespawn (): boolean {
+          return mShouldDespawn;
+        },
+        despawn (): void {
+          mShouldDespawn = true;
+        }
       }
     }
   };
 };
 
 const entityHasDespawn = function (entity: Entity<any>): entity is Entity<Despawn> {
-  return 'despawn' in entity.components;
+  return has(entity.components, 'spawning.despawn');
 };
 
 export type {

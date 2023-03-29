@@ -36,13 +36,13 @@ const createHexagonBackgroundTileEntity = function ({ hexagon, onClick = { onCli
       input.components.OnClick.createOnClick(onClick),
       input.components.OnMouseOver.createOnMouseOver({
         onMouseOver () {
-          fillColorBeforeHover = hexagonBackgroundTileEntity.components.fillColor.color;
-          hexagonBackgroundTileEntity.components.fillColor.color = color.createColor({ r: 180, g: 180, b: 180 });
+          fillColorBeforeHover = hexagonBackgroundTileEntity.components.rendering.fillColor.color;
+          hexagonBackgroundTileEntity.components.rendering.fillColor.color = color.createColor({ r: 180, g: 180, b: 180 });
         }
       }),
       input.components.OnMouseOut.createOnMouseOut({
         onMouseOut () {
-          hexagonBackgroundTileEntity.components.fillColor.color = fillColorBeforeHover ?? defaultBackgroundColor;
+          hexagonBackgroundTileEntity.components.rendering.fillColor.color = fillColorBeforeHover ?? defaultBackgroundColor;
           fillColorBeforeHover = undefined;
         }
       }),

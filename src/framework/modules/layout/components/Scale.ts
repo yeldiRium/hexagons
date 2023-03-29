@@ -1,8 +1,11 @@
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 
 interface Scale {
-  scale: {
-    scale: number;
+  layout: {
+    scale: {
+      scale: number;
+    };
   };
 }
 
@@ -10,14 +13,16 @@ const createScale = function ({ scale: initialScale }: {
   scale: number;
 }): Scale {
   return {
-    scale: {
-      scale: initialScale
+    layout: {
+      scale: {
+        scale: initialScale
+      }
     }
   };
 };
 
 const entityHasScale = function (entity: Entity<any>): entity is Entity<Scale> {
-  return 'scale' in entity.components;
+  return has(entity.components, 'layout.scale');
 };
 
 export type {

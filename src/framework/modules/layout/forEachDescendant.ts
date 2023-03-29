@@ -13,7 +13,7 @@ const forEachDescendant = function ({ entity, callback }: {
     // eslint-disable-next-line callback-return
     callback({ entity: iEntity });
 
-    for (const child of iEntity.components.treeNode.children) {
+    for (const child of iEntity.components.layout.treeNode.children) {
       queue.push(child);
     }
   }

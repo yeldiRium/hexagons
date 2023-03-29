@@ -1,4 +1,5 @@
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 import { vector2d } from '../../../math/physics2d';
 
 type OnMouseOverFunction = (parameters: {
@@ -7,19 +8,23 @@ type OnMouseOverFunction = (parameters: {
 }) => void;
 
 interface OnMouseOver {
-  onMouseOver: OnMouseOverFunction;
+  input: {
+    onMouseOver: OnMouseOverFunction;
+  };
 }
 
 const createOnMouseOver = function ({ onMouseOver }: {
   onMouseOver: OnMouseOverFunction;
 }): OnMouseOver {
   return {
-    onMouseOver
+    input: {
+      onMouseOver
+    }
   };
 };
 
 const entityHasOnMouseOver = function (entity: Entity<any>): entity is Entity<OnMouseOver> {
-  return 'onMouseOver' in entity.components;
+  return has(entity.components, 'input.onMouseOver');
 };
 
 export type {

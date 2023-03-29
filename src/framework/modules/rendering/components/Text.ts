@@ -1,14 +1,17 @@
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 
 type TextAlign = 'left' | 'right' | 'center' | 'start' | 'end';
 
 interface Text {
-  text: {
-    text: string;
-    fontSizePx: number;
-    bold: boolean;
-    italic: boolean;
-    align: TextAlign;
+  rendering: {
+    text: {
+      text: string;
+      fontSizePx: number;
+      bold: boolean;
+      italic: boolean;
+      align: TextAlign;
+    };
   };
 }
 
@@ -26,18 +29,20 @@ const createText = function ({
   align?: TextAlign;
 }): Text {
   return {
-    text: {
-      text,
-      fontSizePx,
-      bold,
-      italic,
-      align
+    rendering: {
+      text: {
+        text,
+        fontSizePx,
+        bold,
+        italic,
+        align
+      }
     }
   };
 };
 
 const entityHasText = function (entity: Entity<any>): entity is Entity<Text> {
-  return 'text' in entity.components;
+  return has(entity.components, 'rendering.text');
 };
 
 export type {

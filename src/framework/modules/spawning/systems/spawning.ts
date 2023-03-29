@@ -10,7 +10,7 @@ const spawningFactory = function (): System {
       for (const despawningEntity of entityManager.getEntities(
         Despawn.entityHasDespawn
       )) {
-        if (despawningEntity.components.despawn.shouldDespawn) {
+        if (despawningEntity.components.spawning.despawn.shouldDespawn) {
           if (TreeNode.entityHasTreeNode(despawningEntity)) {
             removeChildFromParent({ child: despawningEntity });
             entityManager.removeEntityAndChildren(despawningEntity.id);
@@ -23,13 +23,13 @@ const spawningFactory = function (): System {
       for (const lifecycleEntity of entityManager.getEntities(
         LifeCycle.entityHasLifeCycle
       )) {
-        lifecycleEntity.components.lifeCycle.wasJustSpawned = false;
+        lifecycleEntity.components.lifeCycle.lifeCycle.wasJustSpawned = false;
       }
 
       for (const spawnerEntity of entityManager.getEntities(
         Spawn.entityHasSpawn
       )) {
-        for (const spawnInstruction of spawnerEntity.components.spawn.entitiesToSpawn) {
+        for (const spawnInstruction of spawnerEntity.components.spawning.spawn.entitiesToSpawn) {
           const { entity } = spawnInstruction;
 
           entityManager.addEntityAndChildren(entity);
@@ -40,11 +40,11 @@ const spawningFactory = function (): System {
                 callback ({ entity: iEntity }) {
                   if (LifeCycle.entityHasLifeCycle(iEntity)) {
                     // eslint-disable-next-line no-param-reassign
-                    iEntity.components.lifeCycle.wasJustSpawned = true;
+                    iEntity.components.lifeCycle.lifeCycle.wasJustSpawned = true;
                   }
                 } });
             } else {
-              entity.components.lifeCycle.wasJustSpawned = true;
+              entity.components.lifeCycle.lifeCycle.wasJustSpawned = true;
             }
           }
 
@@ -53,7 +53,7 @@ const spawningFactory = function (): System {
           }
         }
 
-        spawnerEntity.components.spawn.clearEntitiesToSpawn();
+        spawnerEntity.components.spawning.spawn.clearEntitiesToSpawn();
       }
     }
   };

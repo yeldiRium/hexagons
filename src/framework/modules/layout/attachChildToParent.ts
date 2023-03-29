@@ -6,8 +6,8 @@ const attachChildToParent = function ({ child, parent }: {
   parent: Entity<TreeNode.TreeNode>;
 }): void {
   /* eslint-disable no-param-reassign */
-  child.components.treeNode.parent = parent;
-  parent.components.treeNode.children.add(child);
+  child.components.layout.treeNode.parent = parent;
+  parent.components.layout.treeNode.children.add(child);
   /* eslint-enable no-param-reassign */
 };
 

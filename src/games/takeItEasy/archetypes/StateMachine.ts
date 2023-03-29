@@ -24,14 +24,11 @@ const playAgainButtonEntityName = 'playAgainButton';
 const clearGameGrid = function ({ hexagonGridEntity }: {
   hexagonGridEntity: HexagonGrid.HexagonGridArchetype;
 }): void {
-  for (const child of hexagonGridEntity.components.treeNode.children) {
-    console.log('maybe despawning', { child });
+  for (const child of hexagonGridEntity.components.layout.treeNode.children) {
     if (spawning.components.Despawn.entityHasDespawn(child)) {
-      console.log('despawning', { child });
-      child.components.despawn.despawn();
+      child.components.spawning.despawn.despawn();
     }
   }
-  console.log('clearing', { hexagonGridEntity });
 };
 
 const createStateMachineEntity = function ({ entityManager, canvas, rootEntityName }: {
@@ -64,18 +61,18 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
               });
 
               hexagonGridEntity.name = gameGridEntityName;
-              stateMachineEntity.components.spawn.spawnEntity({
+              stateMachineEntity.components.spawning.spawn.spawnEntity({
                 entity: hexagonGridEntity,
                 parent: viewportEntity
               });
-              stateMachineEntity.components.onCanvasSizeChange.onCanvasSizeChange = ({ newSize }): void => {
+              stateMachineEntity.components.rendering.onCanvasSizeChange.onCanvasSizeChange = ({ newSize }): void => {
                 const { x: width, y: height } = newSize;
 
                 const layoutSizeReference = width < height ? width : height;
                 const layoutSize = layoutSizeReference / 20;
 
-                hexagonGridEntity.components.hexagonLayout.layout.size = physics2d.vector2d.createVector2d({ x: layoutSize, y: layoutSize });
-                hexagonGridEntity.components.location.vector = physics2d.vector2d.createVector2d({ x: width / 2, y: height / 2 });
+                hexagonGridEntity.components.layout.hexagonLayout.layout.size = physics2d.vector2d.createVector2d({ x: layoutSize, y: layoutSize });
+                hexagonGridEntity.components.layout.location.vector = physics2d.vector2d.createVector2d({ x: width / 2, y: height / 2 });
               };
 
               const startButtonEntity = TextHexagon.createTextHexagonEntity({
@@ -89,18 +86,18 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
               });
 
               startButtonEntity.name = startButtonEntityName;
-              startButtonEntity.components.onClick = (): void => {
+              startButtonEntity.components.input.onClick = (): void => {
                 changeState({ state: 'Playing' });
               };
-              startButtonEntity.components.onMouseOver = (): void => {
-                startButtonEntity.components.strokeColor.color = color.predefined.black;
+              startButtonEntity.components.input.onMouseOver = (): void => {
+                startButtonEntity.components.rendering.strokeColor.color = color.predefined.black;
                 canvas.style.cursor = 'pointer';
               };
-              startButtonEntity.components.onMouseOut = (): void => {
-                startButtonEntity.components.strokeColor.color = color.predefined.transparent;
+              startButtonEntity.components.input.onMouseOut = (): void => {
+                startButtonEntity.components.rendering.strokeColor.color = color.predefined.transparent;
                 canvas.style.cursor = 'auto';
               };
-              stateMachineEntity.components.spawn.spawnEntity({
+              stateMachineEntity.components.spawning.spawn.spawnEntity({
                 entity: startButtonEntity,
                 parent: hexagonGridEntity
               });
@@ -120,7 +117,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
               });
               let nextChip = chipStack.pop()!;
 
-              stateMachineEntity.components.spawn.spawnEntity({
+              stateMachineEntity.components.spawning.spawn.spawnEntity({
                 entity: nextChip,
                 parent: hexagonGridEntity
               });
@@ -131,15 +128,15 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
                   onClick: {
                     // eslint-disable-next-line @typescript-eslint/no-loop-func
                     onClick (): void {
-                      nextChip.components.hexagonLocation.hexagon = hexagonGrid.hexagon.clone(backgroundTileEntity.components.hexagonLocation.hexagon);
+                      nextChip.components.layout.hexagonLocation.hexagon = hexagonGrid.hexagon.clone(backgroundTileEntity.components.layout.hexagonLocation.hexagon);
 
                       // Move the hexagon out of the way, so that the check for the game ending condition does not stumble
                       // across it. This is necessary, because the despawning happens after this callback has completed.
-                      backgroundTileEntity.components.hexagonLocation.hexagon = hexagonGrid.hexagon.createHexagon({
+                      backgroundTileEntity.components.layout.hexagonLocation.hexagon = hexagonGrid.hexagon.createHexagon({
                         q: -100,
                         r: -100
                       });
-                      backgroundTileEntity.components.despawn.despawn();
+                      backgroundTileEntity.components.spawning.despawn.despawn();
 
                       const isGameFinished = scoring.isGameFinished({ hexagonGridEntity, gameGridSize });
 
@@ -151,7 +148,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
 
                       nextChip = chipStack.pop()!;
 
-                      stateMachineEntity.components.spawn.spawnEntity({
+                      stateMachineEntity.components.spawning.spawn.spawnEntity({
                         entity: nextChip,
                         parent: hexagonGridEntity
                       });
@@ -159,7 +156,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
                   }
                 });
 
-                stateMachineEntity.components.spawn.spawnEntity({
+                stateMachineEntity.components.spawning.spawn.spawnEntity({
                   entity: backgroundTileEntity,
                   parent: hexagonGridEntity
                 });
@@ -184,7 +181,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
                   score: lineScore.score
                 });
 
-                stateMachineEntity.components.spawn.spawnEntity({
+                stateMachineEntity.components.spawning.spawn.spawnEntity({
                   entity: lineScoreChipEntity,
                   parent: hexagonGridEntity
                 });
@@ -201,12 +198,12 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
               });
 
               scoreTextEntity.name = scoreTextEntityName;
-              stateMachineEntity.components.spawn.spawnEntity({
+              stateMachineEntity.components.spawning.spawn.spawnEntity({
                 entity: scoreTextEntity,
                 parent: hexagonGridEntity
               });
 
-              stateMachineEntity.components.sendMessage.sendMessage({
+              stateMachineEntity.components.messaging.sendMessage.sendMessage({
                 message: messages.gameScored({ overallScore: scoreResult.overallScore })
               });
 
@@ -221,18 +218,18 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
               });
 
               playAgainButtonEntity.name = playAgainButtonEntityName;
-              playAgainButtonEntity.components.onClick = (): void => {
+              playAgainButtonEntity.components.input.onClick = (): void => {
                 changeState({ state: 'Playing' });
               };
-              playAgainButtonEntity.components.onMouseOver = (): void => {
-                playAgainButtonEntity.components.strokeColor.color = color.predefined.black;
+              playAgainButtonEntity.components.input.onMouseOver = (): void => {
+                playAgainButtonEntity.components.rendering.strokeColor.color = color.predefined.black;
                 canvas.style.cursor = 'pointer';
               };
-              playAgainButtonEntity.components.onMouseOut = (): void => {
-                playAgainButtonEntity.components.strokeColor.color = color.predefined.transparent;
+              playAgainButtonEntity.components.input.onMouseOut = (): void => {
+                playAgainButtonEntity.components.rendering.strokeColor.color = color.predefined.transparent;
                 canvas.style.cursor = 'auto';
               };
-              stateMachineEntity.components.spawn.spawnEntity({
+              stateMachineEntity.components.spawning.spawn.spawnEntity({
                 entity: playAgainButtonEntity,
                 parent: hexagonGridEntity
               });
@@ -250,7 +247,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
   });
 
   // Debugging message bus
-  stateMachineEntity.components.onMessage.addMessageListener({
+  stateMachineEntity.components.messaging.onMessage.addMessageListener({
     type: '*',
     callback ({ message }) {
       console.log(`message: ${message.type}`, { payload: message.payload });

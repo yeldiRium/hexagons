@@ -27,7 +27,7 @@ const createEntityManager = function (): EntityManager {
       this.addEntity(entity);
 
       if (layout.components.TreeNode.entityHasTreeNode(entity)) {
-        for (const child of entity.components.treeNode.children) {
+        for (const child of entity.components.layout.treeNode.children) {
           this.addEntityAndChildren(child);
         }
       }
@@ -43,7 +43,7 @@ const createEntityManager = function (): EntityManager {
       }
       this.removeEntity(id);
       if (layout.components.TreeNode.entityHasTreeNode(entity)) {
-        for (const child of entity.components.treeNode.children) {
+        for (const child of entity.components.layout.treeNode.children) {
           this.removeEntityAndChildren(child.id);
         }
       }

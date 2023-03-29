@@ -1,9 +1,12 @@
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 import { polygon2d } from '../../../math/physics2d';
 
 interface Polygon {
-  polygon: {
-    polygon: polygon2d.Polygon2d;
+  rendering: {
+    polygon: {
+      polygon: polygon2d.Polygon2d;
+    };
   };
 }
 
@@ -13,19 +16,21 @@ const createPolygon = function ({ polygon: initialPolygon }: {
   let mPolygon = initialPolygon;
 
   return {
-    polygon: {
-      get polygon (): polygon2d.Polygon2d {
-        return mPolygon;
-      },
-      set polygon (newPolygon: polygon2d.Polygon2d) {
-        mPolygon = newPolygon;
+    rendering: {
+      polygon: {
+        get polygon (): polygon2d.Polygon2d {
+          return mPolygon;
+        },
+        set polygon (newPolygon: polygon2d.Polygon2d) {
+          mPolygon = newPolygon;
+        }
       }
     }
   };
 };
 
 const entityHasPolygon = function (entity: Entity<any>): entity is Entity<Polygon> {
-  return 'polygon' in entity.components;
+  return has(entity.components, 'rendering.polygon');
 };
 
 export type {

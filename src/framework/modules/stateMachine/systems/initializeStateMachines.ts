@@ -12,16 +12,16 @@ const initializeStateMachinesFactory = function (): System {
         }
 
         const changeState = ({ state: newState }: { state: string }): void => {
-          const currentState = stateMachineEntity.components.stateMachine.currentState;
+          const currentState = stateMachineEntity.components.stateMachine.stateMachine.currentState;
 
-          stateMachineEntity.components.stateMachine.stateHandlers[currentState].teardownState({ stateMachineEntity });
-          stateMachineEntity.components.stateMachine.stateHandlers[newState].initializeState({ stateMachineEntity, changeState });
-          stateMachineEntity.components.stateMachine.currentState = newState;
+          stateMachineEntity.components.stateMachine.stateMachine.stateHandlers[currentState].teardownState({ stateMachineEntity });
+          stateMachineEntity.components.stateMachine.stateMachine.stateHandlers[newState].initializeState({ stateMachineEntity, changeState });
+          stateMachineEntity.components.stateMachine.stateMachine.currentState = newState;
         };
 
-        const currentState = stateMachineEntity.components.stateMachine.currentState;
+        const currentState = stateMachineEntity.components.stateMachine.stateMachine.currentState;
 
-        stateMachineEntity.components.stateMachine.stateHandlers[currentState].initializeState({
+        stateMachineEntity.components.stateMachine.stateMachine.stateHandlers[currentState].initializeState({
           stateMachineEntity,
           changeState
         });

@@ -1,4 +1,5 @@
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 import { vector2d } from '../../../math/physics2d';
 
 type OnCanvasSizeChangeFunction = (parameters: {
@@ -7,9 +8,11 @@ type OnCanvasSizeChangeFunction = (parameters: {
 }) => void;
 
 interface OnCanvasSizeChange {
-  onCanvasSizeChange: {
-    onCanvasSizeChange: OnCanvasSizeChangeFunction;
-    forceRelayout: boolean;
+  rendering: {
+    onCanvasSizeChange: {
+      onCanvasSizeChange: OnCanvasSizeChangeFunction;
+      forceRelayout: boolean;
+    };
   };
 }
 
@@ -17,15 +20,17 @@ const createOnCanvasSizeChange = function ({ onCanvasSizeChange }: {
   onCanvasSizeChange: OnCanvasSizeChangeFunction;
 }): OnCanvasSizeChange {
   return {
-    onCanvasSizeChange: {
-      onCanvasSizeChange,
-      forceRelayout: true
+    rendering: {
+      onCanvasSizeChange: {
+        onCanvasSizeChange,
+        forceRelayout: true
+      }
     }
   };
 };
 
 const entityHasOnCanvasSizeChange = function (entity: Entity<any>): entity is Entity<OnCanvasSizeChange> {
-  return 'onCanvasSizeChange' in entity.components;
+  return has(entity.components, 'rendering.onCanvasSizeChange');
 };
 
 export type {

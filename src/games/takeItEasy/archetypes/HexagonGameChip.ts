@@ -115,16 +115,16 @@ const createHexagonGameChipEntity = function ({ hexagon, isVisible = true, gameC
   layout.attachChildToParent({ child: secondValueText, parent: hexagonGameChipEntity });
   layout.attachChildToParent({ child: thirdValueText, parent: hexagonGameChipEntity });
 
-  hexagonGameChipEntity.components.onCanvasSizeChange.onCanvasSizeChange = (): void => {
-    const hexagonLayout = hexagonGameChipEntity.components.treeNode.parent;
+  hexagonGameChipEntity.components.rendering.onCanvasSizeChange.onCanvasSizeChange = (): void => {
+    const hexagonLayout = hexagonGameChipEntity.components.layout.treeNode.parent;
 
     if (hexagonLayout !== undefined) {
       if (!layout.components.HexagonLayout.entityHasHexagonLayout(hexagonLayout)) {
         throw new Error('Hexagon game chip must be the child of a hexagon layout.');
       }
 
-      hexagonGameChipEntity.components.hexagonLayout.layout.size = physics2d.vector2d.mul(
-        hexagonLayout.components.hexagonLayout.layout.size,
+      hexagonGameChipEntity.components.layout.hexagonLayout.layout.size = physics2d.vector2d.mul(
+        hexagonLayout.components.layout.hexagonLayout.layout.size,
         0.3
       );
     }

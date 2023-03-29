@@ -19,21 +19,21 @@ const calculateHexagonPolygonsFactory = function (): System {
       for (const hexagonLayout of entityManager.getEntities(
         entityIsHexagonLayoutWithChildren
       )) {
-        const children = [ ...hexagonLayout.components.treeNode.children.values() ].filter(
+        const children = [ ...hexagonLayout.components.layout.treeNode.children.values() ].filter(
           (entity): entity is Entity<TreeNode.TreeNode & HexagonLocation.HexagonLocation & Polygon.Polygon> => entityIsHexagonLocationWithPolygon(entity)
         );
 
         for (const child of children) {
-          let layout = hexagonLayout.components.hexagonLayout.layout;
+          let layout = hexagonLayout.components.layout.hexagonLayout.layout;
 
           if (Scale.entityHasScale(child)) {
             layout = hexagonGrid.layout.createLayout({
               orientation: layout.orientation,
-              size: physics2d.vector2d.mul(layout.size, child.components.scale.scale)
+              size: physics2d.vector2d.mul(layout.size, child.components.layout.scale.scale)
             });
           }
 
-          child.components.polygon.polygon = physics2d.polygon2d.createPolygon2d({
+          child.components.rendering.polygon.polygon = physics2d.polygon2d.createPolygon2d({
             points: hexagonGrid.layout.hexagonCornerOffsets({
               layout
             })

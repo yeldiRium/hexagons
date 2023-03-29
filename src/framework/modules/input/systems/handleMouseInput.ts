@@ -40,8 +40,8 @@ const handleMouseInput = function ({ rootElement }: {
         entity => polygon2d.containsVector({
           vector: cursorPosition,
           polygon: polygon2d.translate({
-            polygon: entity.components.polygon.polygon,
-            vector: entity.components.absoluteLocation.vector
+            polygon: entity.components.rendering.polygon.polygon,
+            vector: entity.components.layout.absoluteLocation.vector
           })
         })
       );
@@ -52,7 +52,7 @@ const handleMouseInput = function ({ rootElement }: {
       const hoverableEntityWithHighestZIndex = entitiesThatContainCursor.
         filter((entity): entity is Entity<RequiredCursorReceiverComponents & OnMouseOver.OnMouseOver> => OnMouseOver.entityHasOnMouseOver(entity)).
         sort(
-          (a, b) => a.components.zIndex.zIndex - b.components.zIndex.zIndex
+          (a, b) => a.components.layout.zIndex.zIndex - b.components.layout.zIndex.zIndex
         ).at(-1);
 
       if (hoverableEntityWithHighestZIndex === undefined) {
@@ -60,26 +60,26 @@ const handleMouseInput = function ({ rootElement }: {
           lastHoveredEntity !== undefined &&
           OnMouseOut.entityHasOnMouseOut(lastHoveredEntity)
         ) {
-          lastHoveredEntity.components.onMouseOut({
+          lastHoveredEntity.components.input.onMouseOut({
             absoluteCursorCoordinates: cursorPosition,
-            relativeCursorCoordinates: vector2d.sub(cursorPosition, lastHoveredEntity.components.absoluteLocation.vector)
+            relativeCursorCoordinates: vector2d.sub(cursorPosition, lastHoveredEntity.components.layout.absoluteLocation.vector)
           });
         }
 
         lastHoveredEntity = undefined;
       } else if (hoverableEntityWithHighestZIndex !== lastHoveredEntity) {
-        hoverableEntityWithHighestZIndex.components.onMouseOver({
+        hoverableEntityWithHighestZIndex.components.input.onMouseOver({
           absoluteCursorCoordinates: cursorPosition,
-          relativeCursorCoordinates: vector2d.sub(cursorPosition, hoverableEntityWithHighestZIndex.components.absoluteLocation.vector)
+          relativeCursorCoordinates: vector2d.sub(cursorPosition, hoverableEntityWithHighestZIndex.components.layout.absoluteLocation.vector)
         });
 
         if (
           lastHoveredEntity !== undefined &&
             OnMouseOut.entityHasOnMouseOut(lastHoveredEntity)
         ) {
-          lastHoveredEntity.components.onMouseOut({
+          lastHoveredEntity.components.input.onMouseOut({
             absoluteCursorCoordinates: cursorPosition,
-            relativeCursorCoordinates: vector2d.sub(cursorPosition, lastHoveredEntity.components.absoluteLocation.vector)
+            relativeCursorCoordinates: vector2d.sub(cursorPosition, lastHoveredEntity.components.layout.absoluteLocation.vector)
           });
         }
 
@@ -91,15 +91,15 @@ const handleMouseInput = function ({ rootElement }: {
       if (unhandledClickEvents.length > 0) {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         const clickableEntityWithHighestZIndex = entitiesThatContainCursor.filter((entity): entity is Entity<RequiredCursorReceiverComponents & OnClick.OnClick> => OnClick.entityHasOnClick(entity)).sort(
-          (a, b) => a.components.zIndex.zIndex - b.components.zIndex.zIndex
+          (a, b) => a.components.layout.zIndex.zIndex - b.components.layout.zIndex.zIndex
         ).at(-1);
 
         if (clickableEntityWithHighestZIndex !== undefined) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           for (const event of unhandledClickEvents) {
-            clickableEntityWithHighestZIndex.components.onClick({
+            clickableEntityWithHighestZIndex.components.input.onClick({
               absoluteCursorCoordinates: cursorPosition,
-              relativeCursorCoordinates: vector2d.sub(cursorPosition, clickableEntityWithHighestZIndex.components.absoluteLocation.vector)
+              relativeCursorCoordinates: vector2d.sub(cursorPosition, clickableEntityWithHighestZIndex.components.layout.absoluteLocation.vector)
             });
           }
         }

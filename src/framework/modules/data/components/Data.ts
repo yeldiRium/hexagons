@@ -1,19 +1,24 @@
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 
 interface Data<TData> {
-  data: TData;
+  data: {
+    data: TData;
+  };
 }
 
 const createData = function <TData>({ data }: {
   data: TData;
 }): Data<TData> {
   return {
-    data
+    data: {
+      data
+    }
   };
 };
 
 const entityHasData = function (entity: Entity<any>): entity is Entity<any> {
-  return 'data' in entity.components;
+  return has(entity.components, 'data.data');
 };
 
 export type {

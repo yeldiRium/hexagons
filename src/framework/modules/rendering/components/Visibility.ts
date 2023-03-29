@@ -1,8 +1,11 @@
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 
 interface Visibility {
-  visibility: {
-    isVisible: boolean;
+  rendering: {
+    visibility: {
+      isVisible: boolean;
+    };
   };
 }
 
@@ -10,19 +13,21 @@ const createVisibility = function (nitialIsVisible: boolean): Visibility {
   let mIsVisible = nitialIsVisible;
 
   return {
-    visibility: {
-      get isVisible (): boolean {
-        return mIsVisible;
-      },
-      set isVisible (newIsVisible: boolean) {
-        mIsVisible = newIsVisible;
+    rendering: {
+      visibility: {
+        get isVisible (): boolean {
+          return mIsVisible;
+        },
+        set isVisible (newIsVisible: boolean) {
+          mIsVisible = newIsVisible;
+        }
       }
     }
   };
 };
 
 const entityHasVisibility = function (entity: Entity<any>): entity is Entity<Visibility> {
-  return 'visibility' in entity.components;
+  return has(entity.components, 'rendering.visibility');
 };
 
 export type {

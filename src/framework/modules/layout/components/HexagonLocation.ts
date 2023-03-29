@@ -1,9 +1,12 @@
 import { Entity } from '../../../ecs/Entity.js';
+import has from 'lodash/has';
 import { hexagon } from '../../../math/hexagonGrid';
 
 interface HexagonLocation {
-  hexagonLocation: {
-    hexagon: hexagon.Hexagon;
+  layout: {
+    hexagonLocation: {
+      hexagon: hexagon.Hexagon;
+    };
   };
 }
 
@@ -13,19 +16,21 @@ const createHexagonLocation = function ({ hexagon: initialHexagon }: {
   let mHexagon = initialHexagon;
 
   return {
-    hexagonLocation: {
-      get hexagon (): hexagon.Hexagon {
-        return mHexagon;
-      },
-      set hexagon (coordinates: hexagon.Hexagon) {
-        mHexagon = coordinates;
+    layout: {
+      hexagonLocation: {
+        get hexagon (): hexagon.Hexagon {
+          return mHexagon;
+        },
+        set hexagon (coordinates: hexagon.Hexagon) {
+          mHexagon = coordinates;
+        }
       }
     }
   };
 };
 
 const entityHasHexagonLocation = function (entity: Entity<any>): entity is Entity<HexagonLocation> {
-  return 'hexagonLocation' in entity.components;
+  return has(entity.components, 'layout.hexagonLocation');
 };
 
 export type {

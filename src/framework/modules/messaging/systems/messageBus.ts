@@ -11,7 +11,7 @@ const messageBusFactory = function (): System {
       for (const messageSender of entityManager.getEntities(
         SendMessage.entityHasSendMessage
       )) {
-        for (const message of messageSender.components.sendMessage.messagesToSend) {
+        for (const message of messageSender.components.messaging.sendMessage.messagesToSend) {
           allMessages.push(message);
 
           if (!messagesByType.has(message.type)) {
@@ -21,13 +21,13 @@ const messageBusFactory = function (): System {
           messagesByType.get(message.type)!.push(message);
         }
 
-        messageSender.components.sendMessage.clearMessages();
+        messageSender.components.messaging.sendMessage.clearMessages();
       }
 
       for (const messageReceiver of entityManager.getEntities(
         OnMessage.entityHasOnMessage
       )) {
-        for (const [ messageType, onMessage ] of messageReceiver.components.onMessage.callbacks.entries()) {
+        for (const [ messageType, onMessage ] of messageReceiver.components.messaging.onMessage.callbacks.entries()) {
           if (messageType === '*') {
             for (const message of allMessages) {
               onMessage({ message });

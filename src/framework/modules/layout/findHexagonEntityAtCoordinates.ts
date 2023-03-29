@@ -8,7 +8,7 @@ const findHexagonEntitiesAtCoordinates = function ({ hexagonLayout, coordinates 
 }): Set<Entity<HexagonLocation.HexagonLocation & TreeNode.TreeNode>> {
   const foundEntities = new Set<Entity<HexagonLocation.HexagonLocation & TreeNode.TreeNode>>();
 
-  for (const child of hexagonLayout.components.treeNode.children) {
+  for (const child of hexagonLayout.components.layout.treeNode.children) {
     if (
       !HexagonLocation.entityHasHexagonLocation(child) ||
       !TreeNode.entityHasTreeNode(child)
@@ -16,7 +16,7 @@ const findHexagonEntitiesAtCoordinates = function ({ hexagonLayout, coordinates 
       continue;
     }
 
-    if (hexagonGrid.hexagon.equal(coordinates, child.components.hexagonLocation.hexagon)) {
+    if (hexagonGrid.hexagon.equal(coordinates, child.components.layout.hexagonLocation.hexagon)) {
       foundEntities.add(child);
     }
   }

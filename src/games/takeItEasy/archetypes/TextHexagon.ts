@@ -85,18 +85,18 @@ const createTextHexagonEntity = function ({
 
   layout.attachChildToParent({ child: textEntity, parent: textHexagonEntity });
 
-  textHexagonEntity.components.onCanvasSizeChange.onCanvasSizeChange = (): void => {
-    const hexagonLayout = textHexagonEntity.components.treeNode.parent;
+  textHexagonEntity.components.rendering.onCanvasSizeChange.onCanvasSizeChange = (): void => {
+    const hexagonLayout = textHexagonEntity.components.layout.treeNode.parent;
 
     if (hexagonLayout !== undefined) {
       if (!layout.components.HexagonLayout.entityHasHexagonLayout(hexagonLayout)) {
         throw new Error('Text hexagon must be the child of a hexagon layout.');
       }
 
-      const fontSizePx = hexagonLayout.components.hexagonLayout.layout.size.y * textSizeMultiplier;
+      const fontSizePx = hexagonLayout.components.layout.hexagonLayout.layout.size.y * textSizeMultiplier;
 
-      textEntity.components.text.fontSizePx = fontSizePx;
-      textEntity.components.location.vector = physics2d.vector2d.createVector2d({
+      textEntity.components.rendering.text.fontSizePx = fontSizePx;
+      textEntity.components.layout.location.vector = physics2d.vector2d.createVector2d({
         x: 0,
 
         // Font alignments are shit.
