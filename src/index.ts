@@ -6,6 +6,7 @@ import { HexagonGrid, HexTile } from './archetypes';
 
 window.addEventListener('DOMContentLoaded', (): void => {
   const canvas = document.getElementById('game')! as HTMLCanvasElement;
+  const context = canvas.getContext('2d')!;
   const engine = engineFactory({ systems: [
     rendering.systems.trackCanvasSizeFactory({ canvas }),
     grid.systems.mapTilesToScreenPolygonsFactory(),
@@ -36,6 +37,8 @@ window.addEventListener('DOMContentLoaded', (): void => {
   const frame = (): void => {
     const newTime = Date.now();
     const dt = newTime - time;
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
     engine.runTick({ dt });
     time = newTime;
