@@ -15,6 +15,7 @@
     "defekt": "9.3.0",
     "lodash": "4.17.21",
     "normalize.css": "8.0.1",
+    "type-fest": "2.19.0",
     "uuid": "8.3.2"
   },
   "devDependencies": {

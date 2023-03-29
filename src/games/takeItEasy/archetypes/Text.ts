@@ -36,21 +36,21 @@ const createTextEntity = function ({
   italic?: boolean;
   align?: rendering.components.Text.TextAlign;
 }): TextArchetype {
-  return createEntity<TextComponents>({
+  return createEntity({
     kind: 'Text',
-    components: {
-      ...layout.components.AbsoluteLocation.createAbsoluteLocation({
+    components: [
+      layout.components.AbsoluteLocation.createAbsoluteLocation({
         vector: vector2d.zero
       }),
-      ...layout.components.TreeNode.createTreeNode(),
-      ...layout.components.Location.createLocation({ vector: location }),
-      ...layout.components.ZIndex.createZIndex(),
-      ...lifeCycle.components.LifeCycle.createLifeCycle(),
-      ...rendering.components.Text.createText({ text, fontSizePx, bold, italic, align }),
-      ...rendering.components.FillColor.createFillColor(fillColor),
-      ...rendering.components.StrokeColor.createStrokeColor(strokeColor),
-      ...rendering.components.Visibility.createVisibility(isVisible)
-    }
+      layout.components.TreeNode.createTreeNode(),
+      layout.components.Location.createLocation({ vector: location }),
+      layout.components.ZIndex.createZIndex(),
+      lifeCycle.components.LifeCycle.createLifeCycle(),
+      rendering.components.Text.createText({ text, fontSizePx, bold, italic, align }),
+      rendering.components.FillColor.createFillColor(fillColor),
+      rendering.components.StrokeColor.createStrokeColor(strokeColor),
+      rendering.components.Visibility.createVisibility(isVisible)
+    ]
   });
 };
 

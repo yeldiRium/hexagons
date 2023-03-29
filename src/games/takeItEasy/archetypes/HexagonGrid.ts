@@ -19,27 +19,27 @@ const createHexagonGridEntity = function ({ orientation: o, size, vector: initia
   size: vector2d.Vector2d;
   vector: vector2d.Vector2d;
 }): HexagonGridArchetype {
-  const hexagonGrid = createEntity<HexagonGridComponents>({
+  const hexagonGrid = createEntity({
     kind: 'HexagonGrid',
-    components: {
-      ...layout.components.AbsoluteLocation.createAbsoluteLocation({
+    components: [
+      layout.components.AbsoluteLocation.createAbsoluteLocation({
         vector: vector2d.zero
       }),
-      ...layout.components.TreeNode.createTreeNode(),
-      ...layout.components.Location.createLocation({ vector: initialVector }),
-      ...layout.components.HexagonLayout.createHexagonLayout({
+      layout.components.TreeNode.createTreeNode(),
+      layout.components.Location.createLocation({ vector: initialVector }),
+      layout.components.HexagonLayout.createHexagonLayout({
         orientation: o,
         size
       }),
-      ...layout.components.ZIndex.createZIndex(),
-      ...lifeCycle.components.LifeCycle.createLifeCycle(),
-      ...rendering.components.OnCanvasSizeChange.createOnCanvasSizeChange({
+      layout.components.ZIndex.createZIndex(),
+      lifeCycle.components.LifeCycle.createLifeCycle(),
+      rendering.components.OnCanvasSizeChange.createOnCanvasSizeChange({
         onCanvasSizeChange () {
           // Set this function later on individual entities.
         }
       }),
-      ...spawning.components.Despawn.createDespawn()
-    }
+      spawning.components.Despawn.createDespawn()
+    ]
   });
 
   return hexagonGrid;

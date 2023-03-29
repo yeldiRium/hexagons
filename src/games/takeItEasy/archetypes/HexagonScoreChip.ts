@@ -23,32 +23,32 @@ const createHexagonScoreChip = function ({ hexagon, orientation, score, isVisibl
   score: number;
   isVisible?: boolean;
 }): HexagonScoreChipArchetype {
-  const hexagonGameChipEntity = createEntity<HexagonScoreChipComponents>({
+  const hexagonGameChipEntity = createEntity({
     kind,
-    components: {
-      ...layout.components.AbsoluteLocation.createAbsoluteLocation({
+    components: [
+      layout.components.AbsoluteLocation.createAbsoluteLocation({
         vector: physics2d.vector2d.zero
       }),
-      ...layout.components.TreeNode.createTreeNode(),
-      ...layout.components.HexagonLocation.createHexagonLocation({ hexagon }),
-      ...layout.components.HexagonLayout.createHexagonLayout({
+      layout.components.TreeNode.createTreeNode(),
+      layout.components.HexagonLocation.createHexagonLocation({ hexagon }),
+      layout.components.HexagonLayout.createHexagonLayout({
         orientation: hexagonGrid.orientation.flatOrientation,
         size: physics2d.vector2d.zero
       }),
-      ...layout.components.ZIndex.createZIndex(),
-      ...lifeCycle.components.LifeCycle.createLifeCycle(),
-      ...messaging.components.SendMessage.createSendMessage(),
-      ...rendering.components.Polygon.createPolygon({
+      layout.components.ZIndex.createZIndex(),
+      lifeCycle.components.LifeCycle.createLifeCycle(),
+      messaging.components.SendMessage.createSendMessage(),
+      rendering.components.Polygon.createPolygon({
         polygon: physics2d.polygon2d.createPolygon2d({ points: []})
       }),
-      ...rendering.components.Visibility.createVisibility(isVisible),
-      ...rendering.components.OnCanvasSizeChange.createOnCanvasSizeChange({
+      rendering.components.Visibility.createVisibility(isVisible),
+      rendering.components.OnCanvasSizeChange.createOnCanvasSizeChange({
         onCanvasSizeChange () {
           // Set this later.
         }
       }),
-      ...spawning.components.Despawn.createDespawn()
-    }
+      spawning.components.Despawn.createDespawn()
+    ]
   });
 
   const scoreText = TextHexagon.createTextHexagonEntity({

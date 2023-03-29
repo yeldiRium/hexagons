@@ -30,36 +30,36 @@ const createHexagonBackgroundTileEntity = function ({ hexagon, onClick = { onCli
 }): HexagonBackgroundTileArchetype {
   let fillColorBeforeHover: color.Color | undefined;
 
-  const hexagonBackgroundTileEntity = createEntity<HexagonBackgroundTileComponents>({
+  const hexagonBackgroundTileEntity = createEntity({
     kind: 'HexagonBackgroundTile',
-    components: {
-      ...input.components.OnClick.createOnClick(onClick),
-      ...input.components.OnMouseOver.createOnMouseOver({
+    components: [
+      input.components.OnClick.createOnClick(onClick),
+      input.components.OnMouseOver.createOnMouseOver({
         onMouseOver () {
           fillColorBeforeHover = hexagonBackgroundTileEntity.components.fillColor.color;
           hexagonBackgroundTileEntity.components.fillColor.color = color.createColor({ r: 180, g: 180, b: 180 });
         }
       }),
-      ...input.components.OnMouseOut.createOnMouseOut({
+      input.components.OnMouseOut.createOnMouseOut({
         onMouseOut () {
           hexagonBackgroundTileEntity.components.fillColor.color = fillColorBeforeHover ?? defaultBackgroundColor;
           fillColorBeforeHover = undefined;
         }
       }),
-      ...layout.components.AbsoluteLocation.createAbsoluteLocation({
+      layout.components.AbsoluteLocation.createAbsoluteLocation({
         vector: vector2d.zero
       }),
-      ...layout.components.TreeNode.createTreeNode(),
-      ...layout.components.HexagonLocation.createHexagonLocation({ hexagon }),
-      ...layout.components.ZIndex.createZIndex(),
-      ...lifeCycle.components.LifeCycle.createLifeCycle(),
-      ...messaging.components.SendMessage.createSendMessage(),
-      ...rendering.components.Polygon.createPolygon({ polygon: polygon2d.createPolygon2d({ points: []}) }),
-      ...rendering.components.StrokeColor.createStrokeColor(color.predefined.black),
-      ...rendering.components.FillColor.createFillColor(defaultBackgroundColor),
-      ...rendering.components.Visibility.createVisibility(isVisible),
-      ...spawning.components.Despawn.createDespawn()
-    }
+      layout.components.TreeNode.createTreeNode(),
+      layout.components.HexagonLocation.createHexagonLocation({ hexagon }),
+      layout.components.ZIndex.createZIndex(),
+      lifeCycle.components.LifeCycle.createLifeCycle(),
+      messaging.components.SendMessage.createSendMessage(),
+      rendering.components.Polygon.createPolygon({ polygon: polygon2d.createPolygon2d({ points: []}) }),
+      rendering.components.StrokeColor.createStrokeColor(color.predefined.black),
+      rendering.components.FillColor.createFillColor(defaultBackgroundColor),
+      rendering.components.Visibility.createVisibility(isVisible),
+      spawning.components.Despawn.createDespawn()
+    ]
   });
 
   return hexagonBackgroundTileEntity;

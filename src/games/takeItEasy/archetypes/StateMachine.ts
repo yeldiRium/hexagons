@@ -25,10 +25,13 @@ const clearGameGrid = function ({ hexagonGridEntity }: {
   hexagonGridEntity: HexagonGrid.HexagonGridArchetype;
 }): void {
   for (const child of hexagonGridEntity.components.treeNode.children) {
+    console.log('maybe despawning', { child });
     if (spawning.components.Despawn.entityHasDespawn(child)) {
+      console.log('despawning', { child });
       child.components.despawn.despawn();
     }
   }
+  console.log('clearing', { hexagonGridEntity });
 };
 
 const createStateMachineEntity = function ({ entityManager, canvas, rootEntityName }: {
@@ -36,18 +39,18 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
   canvas: HTMLCanvasElement;
   rootEntityName: string;
 }): StateMachineArchetype {
-  const stateMachineEntity = createEntity<StateMachineComponents>({
+  const stateMachineEntity = createEntity({
     kind: 'StateMachine',
-    components: {
-      ...messaging.components.OnMessage.createOnMessage(),
-      ...messaging.components.SendMessage.createSendMessage(),
-      ...rendering.components.OnCanvasSizeChange.createOnCanvasSizeChange({
+    components: [
+      messaging.components.OnMessage.createOnMessage(),
+      messaging.components.SendMessage.createSendMessage(),
+      rendering.components.OnCanvasSizeChange.createOnCanvasSizeChange({
         onCanvasSizeChange () {
           // This will be set later.
         }
       }),
-      ...spawning.components.Spawn.createSpawn(),
-      ...stateMachine.components.StateMachine.createStateMachine<State, StateMachineArchetype>({
+      spawning.components.Spawn.createSpawn(),
+      stateMachine.components.StateMachine.createStateMachine<State, StateMachineArchetype>({
         initialState: 'Menu',
         stateHandlers: {
           /* eslint-disable @typescript-eslint/no-shadow, no-param-reassign */
@@ -243,7 +246,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
           /* eslint-enable @typescript-eslint/no-shadow, no-param-reassign */
         }
       })
-    }
+    ]
   });
 
   // Debugging message bus

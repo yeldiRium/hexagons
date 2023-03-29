@@ -11,15 +11,15 @@ type ViewportArchetype = Entity<ViewportComponents>;
 const createViewportEntity = function ({ location: initialLocation }: {
   location: vector2d.Vector2d;
 }): ViewportArchetype {
-  return createEntity<ViewportComponents>({
+  return createEntity({
     kind: 'Viewport',
-    components: {
-      ...layout.components.AbsoluteLocation.createAbsoluteLocation({
+    components: [
+      layout.components.AbsoluteLocation.createAbsoluteLocation({
         vector: initialLocation
       }),
-      ...layout.components.TreeNode.createTreeNode(),
-      ...layout.components.ZIndex.createZIndex()
-    }
+      layout.components.TreeNode.createTreeNode(),
+      layout.components.ZIndex.createZIndex()
+    ]
   });
 };
 

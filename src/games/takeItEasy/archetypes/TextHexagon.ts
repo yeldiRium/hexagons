@@ -40,43 +40,43 @@ const createTextHexagonEntity = function ({
   textStrokeColor?: color.Color;
   isVisible?: boolean;
 }): TextHexagonArchetype {
-  const textHexagonEntity = createEntity<TextHexagonComponents>({
+  const textHexagonEntity = createEntity({
     kind: 'TextHexagon',
-    components: {
-      ...input.components.OnClick.createOnClick({
+    components: [
+      input.components.OnClick.createOnClick({
         onClick () {
           // Set this later.
         }
       }),
-      ...input.components.OnMouseOver.createOnMouseOver({
+      input.components.OnMouseOver.createOnMouseOver({
         onMouseOver () {
           // Set this later.
         }
       }),
-      ...input.components.OnMouseOut.createOnMouseOut({
+      input.components.OnMouseOut.createOnMouseOut({
         onMouseOut () {
           // Set this later.
         }
       }),
-      ...layout.components.AbsoluteLocation.createAbsoluteLocation({
+      layout.components.AbsoluteLocation.createAbsoluteLocation({
         vector: physics2d.vector2d.zero
       }),
-      ...layout.components.TreeNode.createTreeNode(),
-      ...layout.components.HexagonLocation.createHexagonLocation({ hexagon: location }),
-      ...layout.components.Scale.createScale({ scale: hexagonScale }),
-      ...layout.components.ZIndex.createZIndex(),
-      ...lifeCycle.components.LifeCycle.createLifeCycle(),
-      ...rendering.components.OnCanvasSizeChange.createOnCanvasSizeChange({
+      layout.components.TreeNode.createTreeNode(),
+      layout.components.HexagonLocation.createHexagonLocation({ hexagon: location }),
+      layout.components.Scale.createScale({ scale: hexagonScale }),
+      layout.components.ZIndex.createZIndex(),
+      lifeCycle.components.LifeCycle.createLifeCycle(),
+      rendering.components.OnCanvasSizeChange.createOnCanvasSizeChange({
         onCanvasSizeChange () {
           // Set this later.
         }
       }),
-      ...rendering.components.Polygon.createPolygon({ polygon: physics2d.polygon2d.createPolygon2d({ points: []}) }),
-      ...rendering.components.StrokeColor.createStrokeColor(strokeColor),
-      ...rendering.components.FillColor.createFillColor(fillColor),
-      ...rendering.components.Visibility.createVisibility(isVisible),
-      ...spawning.components.Despawn.createDespawn()
-    }
+      rendering.components.Polygon.createPolygon({ polygon: physics2d.polygon2d.createPolygon2d({ points: []}) }),
+      rendering.components.StrokeColor.createStrokeColor(strokeColor),
+      rendering.components.FillColor.createFillColor(fillColor),
+      rendering.components.Visibility.createVisibility(isVisible),
+      spawning.components.Despawn.createDespawn()
+    ]
   });
   const textEntity = Text.createTextEntity({
     ...text,

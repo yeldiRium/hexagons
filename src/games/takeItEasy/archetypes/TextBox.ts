@@ -37,37 +37,37 @@ const createTextBoxEntity = function ({ context, text, isVisible = true, vector 
   });
   const rect = rect2d.createRect2d({ topLeft, bottomRight });
 
-  const textBoxEntity = createEntity<TextBoxComponents>({
+  const textBoxEntity = createEntity({
     kind: 'TextBox',
-    components: {
-      ...input.components.OnClick.createOnClick({
+    components: [
+      input.components.OnClick.createOnClick({
         onClick () {
           // Set this later.
         }
       }),
-      ...input.components.OnMouseOver.createOnMouseOver({
+      input.components.OnMouseOver.createOnMouseOver({
         onMouseOver () {
           // Set this later.
         }
       }),
-      ...input.components.OnMouseOut.createOnMouseOut({
+      input.components.OnMouseOut.createOnMouseOut({
         onMouseOut () {
           // Set this later.
         }
       }),
-      ...layout.components.AbsoluteLocation.createAbsoluteLocation({
+      layout.components.AbsoluteLocation.createAbsoluteLocation({
         vector: vector2d.zero
       }),
-      ...layout.components.TreeNode.createTreeNode(),
-      ...layout.components.Location.createLocation({ vector }),
-      ...layout.components.ZIndex.createZIndex(),
-      ...lifeCycle.components.LifeCycle.createLifeCycle(),
-      ...rendering.components.Polygon.createPolygon({ polygon: rect2d.toPolygon({ rect }) }),
-      ...rendering.components.StrokeColor.createStrokeColor(color.predefined.transparent),
-      ...rendering.components.FillColor.createFillColor(color.predefined.transparent),
-      ...rendering.components.Visibility.createVisibility(isVisible),
-      ...spawning.components.Despawn.createDespawn()
-    }
+      layout.components.TreeNode.createTreeNode(),
+      layout.components.Location.createLocation({ vector }),
+      layout.components.ZIndex.createZIndex(),
+      lifeCycle.components.LifeCycle.createLifeCycle(),
+      rendering.components.Polygon.createPolygon({ polygon: rect2d.toPolygon({ rect }) }),
+      rendering.components.StrokeColor.createStrokeColor(color.predefined.transparent),
+      rendering.components.FillColor.createFillColor(color.predefined.transparent),
+      rendering.components.Visibility.createVisibility(isVisible),
+      spawning.components.Despawn.createDespawn()
+    ]
   });
   const textEntity = Text.createTextEntity({
     ...text,
