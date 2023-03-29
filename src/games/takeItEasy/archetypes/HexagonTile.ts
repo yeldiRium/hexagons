@@ -26,6 +26,8 @@ const createHexagonTileEntity = function ({ hexagon, isVisible = true }: {
   hexagon: hexagonGrid.hexagon.Hexagon;
   isVisible?: boolean;
 }): HexagonTileArchetype {
+  let fillColorBeforeHover: color.Color | undefined;
+
   const hexagonTileEntity = createEntity<HexagonTileComponents>({
     components: {
       ...input.components.OnClick.createOnClick({
@@ -39,6 +41,7 @@ const createHexagonTileEntity = function ({ hexagon, isVisible = true }: {
       }),
       ...input.components.OnMouseOver.createOnMouseOver({
         onMouseOver () {
+          fillColorBeforeHover = hexagonTileEntity.components.fillColor.color;
           hexagonTileEntity.components.fillColor.color = color.createColor({ r: 255, g: 0, b: 0 });
           hexagonTileEntity.components.sendMessage.sendMessage({
             message: messages.hexagonTileMouseOver({
@@ -49,7 +52,8 @@ const createHexagonTileEntity = function ({ hexagon, isVisible = true }: {
       }),
       ...input.components.OnMouseOut.createOnMouseOut({
         onMouseOut () {
-          hexagonTileEntity.components.fillColor.color = defaultBackgroundColor;
+          hexagonTileEntity.components.fillColor.color = fillColorBeforeHover ?? defaultBackgroundColor;
+          fillColorBeforeHover = undefined;
           hexagonTileEntity.components.sendMessage.sendMessage({
             message: messages.hexagonTileMouseOut({
               hexagon: hexagonTileEntity.components.hexagonLocation.hexagon

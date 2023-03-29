@@ -1,11 +1,15 @@
+import { color, physics2d } from '../../../framework/math';
+import { HexagonTile, Text } from '.';
 import { EntityManager } from '../../../framework/ecs/EntityManager.js';
 import { layout, messaging, spawning } from '../../../framework/modules';
 import { createEntity, Entity } from '../../../framework/ecs/Entity.js';
 import * as messages from '../messages';
+import { attachChildToParent } from '../../../framework/modules/layout';
 
 type GameLogicComponents =
   & messaging.components.OnMessage.OnMessage
-  & messaging.components.SendMessage.SendMessage;
+  & messaging.components.SendMessage.SendMessage
+  & spawning.components.Spawn.Spawn;
 type GameLogicArchetype = Entity<GameLogicComponents>;
 
 const createGameLogicEntity = function ({ entityManager, rootHexagonGridName }: {
@@ -15,7 +19,8 @@ const createGameLogicEntity = function ({ entityManager, rootHexagonGridName }: 
   const gameLogicEntity = createEntity<GameLogicComponents>({
     components: {
       ...messaging.components.OnMessage.createOnMessage(),
-      ...messaging.components.SendMessage.createSendMessage()
+      ...messaging.components.SendMessage.createSendMessage(),
+      ...spawning.components.Spawn.createSpawn()
     }
   });
 
@@ -30,7 +35,11 @@ const createGameLogicEntity = function ({ entityManager, rootHexagonGridName }: 
     type: messages.hexagonTileClicked.type,
     callback ({ message }) {
       const hexagonGrid = entityManager.getEntityByName(rootHexagonGridName).unwrapOrThrow();
-      const hexagonTiles = layout.findHexagonEntitiesAtCoordinates({ hexagonLayout: hexagonGrid, coordinates: message.payload.hexagon });
+      const hexagonCoordinates = message.payload.hexagon;
+      const hexagonTiles = layout.findHexagonEntitiesAtCoordinates({
+        hexagonLayout: hexagonGrid,
+        coordinates: hexagonCoordinates
+      });
 
       if (hexagonTiles.size === 0) {
         return;
@@ -38,11 +47,19 @@ const createGameLogicEntity = function ({ entityManager, rootHexagonGridName }: 
 
       const clickedTile = hexagonTiles.values().next().value;
 
-      console.log({ clickedTile });
-
       if (spawning.components.Despawn.entityHasDespawn(clickedTile)) {
         clickedTile.components.despawn.despawn();
       }
+      const newHexagonTile = HexagonTile.createHexagonTileEntity({
+        hexagon: hexagonCoordinates
+      });
+      const newText = Text.createTextEntity({ text: 'foobar' });
+
+      newText.components.location.vector = physics2d.vector2d.createVector2d({ x: -20, y: 5 });
+      newHexagonTile.components.fillColor.color = color.createColor({ r: 0, g: 150, b: 0 });
+
+      attachChildToParent({ child: newText, parent: newHexagonTile });
+      gameLogicEntity.components.spawn.spawnEntity({ entity: newHexagonTile, parent: hexagonGrid });
     }
   });
 
