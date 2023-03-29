@@ -16,7 +16,8 @@ const isWatchMode = process.env.WATCH === 'true';
 await build({
   entryPoints: [ path.join('src', 'index.html') ],
 
-  assetNames: '[name]',
+  assetNames: '[name]-[hash]',
+  chunkNames: '[ext]/[name]-[hash]',
   outdir: 'build',
 
   bundle: true,
