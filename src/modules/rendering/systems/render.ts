@@ -1,7 +1,8 @@
 import { AbsoluteLocation } from '../../layout/components';
+import { color } from '../../../math';
 import { Entity } from '../../../ecs/Entity.js';
-import { Polygon } from '../components';
 import { System } from '../../../ecs/System.js';
+import { Polygon, StrokeColor } from '../components';
 
 const isRenderable = function (entity: Entity<any>): entity is Entity<Polygon.Polygon & AbsoluteLocation.AbsoluteLocation> {
   return (
@@ -20,6 +21,12 @@ const renderFactory = function ({ canvas }: {
       for (const entity of entityManager.getEntities(
         isRenderable
       )) {
+        if (StrokeColor.entityHasStrokeColor(entity)) {
+          ctx.strokeStyle = color.toHexString({ color: entity.components.strokeColor.color });
+        } else {
+          ctx.strokeStyle = color.toHexString({ color: color.predefined.black });
+        }
+
         ctx.lineWidth = 5;
         ctx.beginPath();
 
