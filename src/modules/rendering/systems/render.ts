@@ -2,7 +2,7 @@ import { AbsoluteLocation } from '../../layout/components';
 import { color } from '../../../math';
 import { Entity } from '../../../ecs/Entity.js';
 import { System } from '../../../ecs/System.js';
-import { Polygon, StrokeColor } from '../components';
+import { FillColor, Polygon, StrokeColor } from '../components';
 
 const isRenderable = function (entity: Entity<any>): entity is Entity<Polygon.Polygon & AbsoluteLocation.AbsoluteLocation> {
   return (
@@ -26,6 +26,11 @@ const renderFactory = function ({ canvas }: {
         } else {
           ctx.strokeStyle = color.toHexString({ color: color.predefined.black });
         }
+        if (FillColor.entityHasFillColor(entity)) {
+          ctx.fillStyle = color.toHexString({ color: entity.components.fillColor.color });
+        } else {
+          ctx.fillStyle = color.toHexString({ color: color.predefined.white });
+        }
 
         ctx.lineWidth = 5;
         ctx.beginPath();
@@ -37,6 +42,7 @@ const renderFactory = function ({ canvas }: {
           );
         }
         ctx.closePath();
+        ctx.fill();
         ctx.stroke();
       }
     }
