@@ -33,6 +33,9 @@ const directions = [
 const direction = function (d: Direction): Hexagon {
   return directions[d];
 };
+const oppositeDirection = function (d: Direction): Direction {
+  return (d + 3) % 6 as Direction;
+};
 
 const equal = function (a: Hexagon, b: Hexagon): boolean {
   return a.q === b.q && a.r === b.r;
@@ -87,5 +90,6 @@ export {
   length,
   multiply,
   neighbor,
+  oppositeDirection,
   subtract
 };

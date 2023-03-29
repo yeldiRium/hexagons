@@ -129,6 +129,7 @@ const scoringLines: ScoringLine[] = [
 interface LineScore {
   displayLocation: hexagonGrid.hexagon.Hexagon;
   score: number;
+  direction: hexagonGrid.hexagon.Direction;
 }
 
 const evaluateScoringLine = function ({ hexagonGridEntity, scoringLine }: {
@@ -161,7 +162,8 @@ const evaluateScoringLine = function ({ hexagonGridEntity, scoringLine }: {
 
   return value({
     score,
-    displayLocation: location
+    displayLocation: location,
+    direction: scoringLine.direction
   });
 };
 
@@ -196,6 +198,10 @@ const evaluateScore = function ({ hexagonGridEntity }: {
   });
 };
 
+export type {
+  LineScore,
+  Score
+};
 export {
   evaluateScore,
   isGameFinished

@@ -2,7 +2,7 @@ import { EntityManager } from '../../../framework/ecs/EntityManager.js';
 import { color, hexagonGrid, physics2d } from '../../../framework/math';
 import { createEntity, Entity } from '../../../framework/ecs/Entity.js';
 import { gameChip, scoring } from '../gameLogic';
-import { HexagonBackgroundTile, HexagonGrid, TextBox, TextHexagon, Viewport } from '.';
+import { HexagonBackgroundTile, HexagonGrid, HexagonScoreChip, TextHexagon, Viewport } from '.';
 import { messaging, rendering, spawning, stateMachine } from '../../../framework/modules';
 import * as messages from '../messages';
 
@@ -174,17 +174,14 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
               }).unwrapOrThrow();
 
               for (const lineScore of scoreResult.lineScores) {
-                const lineScoreTextHexagon = TextHexagon.createTextHexagonEntity({
-                  location: lineScore.displayLocation,
-                  text: {
-                    text: `${lineScore.score}`,
-                    align: 'center'
-                  },
-                  textSizeMultiplier: 0.5
+                const lineScoreChipEntity = HexagonScoreChip.createHexagonScoreChip({
+                  hexagon: lineScore.displayLocation,
+                  orientation: hexagonGrid.hexagon.oppositeDirection(lineScore.direction),
+                  score: lineScore.score
                 });
 
                 stateMachineEntity.components.spawn.spawnEntity({
-                  entity: lineScoreTextHexagon,
+                  entity: lineScoreChipEntity,
                   parent: hexagonGridEntity
                 });
               }
