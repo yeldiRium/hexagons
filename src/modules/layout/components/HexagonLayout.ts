@@ -1,5 +1,5 @@
 import { Entity } from '../../../ecs/Entity.js';
-import { vector } from '../../../math';
+import { vector2d } from '../../../math/physics2d';
 import { layout, orientation } from '../../../math/hexagonGrid';
 
 interface HexagonLayout {
@@ -10,7 +10,7 @@ interface HexagonLayout {
 
 const createHexagonLayout = function ({ orientation: o, size }: {
   orientation: orientation.Orientation;
-  size: vector.Vector;
+  size: vector2d.Vector2d;
 }): HexagonLayout {
   const mLayout = layout.createLayout({
     orientation: o,

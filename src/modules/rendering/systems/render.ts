@@ -38,10 +38,10 @@ const renderFactory = function ({ canvas }: {
           ctx.lineWidth = 5;
           ctx.beginPath();
 
-          for (const corner of entity.components.polygon.polygon) {
+          for (const point of entity.components.polygon.polygon.points) {
             ctx.lineTo(
-              corner.x + entity.components.absoluteLocation.vector.x,
-              corner.y + entity.components.absoluteLocation.vector.y
+              point.x + entity.components.absoluteLocation.vector.x,
+              point.y + entity.components.absoluteLocation.vector.y
             );
           }
           ctx.closePath();

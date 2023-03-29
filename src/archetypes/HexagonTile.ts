@@ -1,8 +1,11 @@
-import { color, hexagonGrid, vector } from '../math';
+import { color, hexagonGrid } from '../math';
 import { createEntity, Entity } from '../ecs/Entity';
-import { layout, rendering } from '../modules';
+import { input, layout, rendering } from '../modules';
+import { polygon2d, vector2d } from '../math/physics2d';
 
 type HexagonTileComponents =
+  & input.components.OnMouseOver.OnMouseOver
+  & input.components.OnMouseOut.OnMouseOut
   & layout.components.AbsoluteLocation.AbsoluteLocation
   & layout.components.TreeNode.TreeNode
   & layout.components.HexagonLocation.HexagonLocation
@@ -12,22 +15,36 @@ type HexagonTileComponents =
   & rendering.components.FillColor.FillColor;
 type HexagonTileArchetype = Entity<HexagonTileComponents>;
 
+const defaultBackgroundColor = color.predefined.white;
+
 const createHexagonTileEntity = function ({ hexagon }: {
   hexagon: hexagonGrid.hexagon.Hexagon;
 }): HexagonTileArchetype {
-  return createEntity<HexagonTileComponents>({
+  const hexagonTileEntity = createEntity<HexagonTileComponents>({
     components: {
+      ...input.components.OnMouseOver.createOnMouseOver({
+        onMouseOver () {
+          hexagonTileEntity.components.fillColor.color = color.createColor({ r: 255, g: 0, b: 0 });
+        }
+      }),
+      ...input.components.OnMouseOut.createOnMouseOut({
+        onMouseOut () {
+          hexagonTileEntity.components.fillColor.color = defaultBackgroundColor;
+        }
+      }),
       ...layout.components.AbsoluteLocation.createAbsoluteLocation({
-        vector: vector.zero
+        vector: vector2d.zero
       }),
       ...layout.components.TreeNode.createTreeNode(),
       ...layout.components.HexagonLocation.createHexagonLocation({ hexagon }),
       ...layout.components.ZIndex.createZIndex(),
-      ...rendering.components.Polygon.createPolygon([]),
+      ...rendering.components.Polygon.createPolygon({ polygon: polygon2d.createPolygon2d({ points: []}) }),
       ...rendering.components.StrokeColor.createStrokeColor(color.predefined.black),
-      ...rendering.components.FillColor.createFillColor(color.predefined.white)
+      ...rendering.components.FillColor.createFillColor(defaultBackgroundColor)
     }
   });
+
+  return hexagonTileEntity;
 };
 
 export type {

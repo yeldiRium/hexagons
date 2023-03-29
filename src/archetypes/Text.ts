@@ -1,4 +1,5 @@
-import { color, vector } from '../math';
+import { color } from '../math';
+import { vector2d } from '../math/physics2d';
 import { createEntity, Entity } from '../ecs/Entity';
 import { layout, rendering } from '../modules';
 
@@ -17,10 +18,10 @@ const createTextEntity = function ({ text }: {
   return createEntity<TextComponents>({
     components: {
       ...layout.components.AbsoluteLocation.createAbsoluteLocation({
-        vector: vector.zero
+        vector: vector2d.zero
       }),
       ...layout.components.TreeNode.createTreeNode(),
-      ...layout.components.Location.createLocation({ vector: vector.zero }),
+      ...layout.components.Location.createLocation({ vector: vector2d.zero }),
       ...layout.components.ZIndex.createZIndex(),
       ...rendering.components.Text.createText(text),
       ...rendering.components.FillColor.createFillColor(color.predefined.black)

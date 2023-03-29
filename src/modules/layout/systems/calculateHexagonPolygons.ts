@@ -1,5 +1,5 @@
 import { Entity } from '../../../ecs/Entity.js';
-import { hexagonGrid } from '../../../math';
+import { hexagonGrid, physics2d } from '../../../math';
 import { Polygon } from '../../rendering/components';
 import { System } from '../../../ecs/System.js';
 import { HexagonLayout, HexagonLocation, TreeNode } from '../components';
@@ -24,8 +24,10 @@ const calculateHexagonPolygonsFactory = function (): System {
         );
 
         for (const child of children) {
-          child.components.polygon.polygon = hexagonGrid.layout.hexagonCornerOffsets({
-            layout: hexagonLayout.components.hexagonLayout.layout
+          child.components.polygon.polygon = physics2d.polygon2d.createPolygon2d({
+            points: hexagonGrid.layout.hexagonCornerOffsets({
+              layout: hexagonLayout.components.hexagonLayout.layout
+            })
           });
         }
       }

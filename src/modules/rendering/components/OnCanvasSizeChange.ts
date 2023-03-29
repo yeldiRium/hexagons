@@ -1,9 +1,9 @@
 import { Entity } from '../../../ecs/Entity.js';
-import { vector } from '../../../math';
+import { vector2d } from '../../../math/physics2d';
 
 type OnCanvasSizeChangeFunction = (parameters: {
-  oldSize?: vector.Vector;
-  newSize: vector.Vector;
+  oldSize?: vector2d.Vector2d;
+  newSize: vector2d.Vector2d;
 }) => void;
 
 interface OnCanvasSizeChange {

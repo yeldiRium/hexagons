@@ -1,7 +1,8 @@
 import { Entity } from '../../../ecs/Entity.js';
+import { hexagonGrid } from '../../../math';
 import { System } from '../../../ecs/System.js';
+import { vector2d } from '../../../math/physics2d';
 import { AbsoluteLocation, HexagonLayout, HexagonLocation, Location, TreeNode } from '../components';
-import { hexagonGrid, vector } from '../../../math';
 
 const isInnerTreeNode = function (entity: Entity<any>): entity is Entity<AbsoluteLocation.AbsoluteLocation & TreeNode.TreeNode & Location.Location> {
   return AbsoluteLocation.entityHasAbsoluteLocation(entity) &&
@@ -57,7 +58,7 @@ const resolveAbsoluteLocationsFactory = function ({ rootElementName }: {
             coordinates: element.components.hexagonLocation.hexagon
           });
 
-          element.components.absoluteLocation.vector = vector.createVector({
+          element.components.absoluteLocation.vector = vector2d.createVector2d({
             x: hexagonCenter.x + parent.components.absoluteLocation.vector.x,
             y: hexagonCenter.y + parent.components.absoluteLocation.vector.y
           });
@@ -65,7 +66,7 @@ const resolveAbsoluteLocationsFactory = function ({ rootElementName }: {
           Location.entityHasLocation(element)
         ) {
           element.components.absoluteLocation.vector =
-            vector.add(element.components.location.vector, parent.components.absoluteLocation.vector);
+            vector2d.add(element.components.location.vector, parent.components.absoluteLocation.vector);
         } else {
           element.components.absoluteLocation.vector = parent.components.absoluteLocation.vector;
         }

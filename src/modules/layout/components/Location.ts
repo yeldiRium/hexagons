@@ -1,23 +1,23 @@
 import { Entity } from '../../../ecs/Entity.js';
-import { vector } from '../../../math';
+import { vector2d } from '../../../math/physics2d';
 
 interface Location {
   location: {
-    vector: vector.Vector;
+    vector: vector2d.Vector2d;
   };
 }
 
 const createLocation = function ({ vector: initialVector }: {
-  vector: vector.Vector;
+  vector: vector2d.Vector2d;
 }): Location {
   let mVector = initialVector;
 
   return {
     location: {
-      get vector (): vector.Vector {
+      get vector (): vector2d.Vector2d {
         return mVector;
       },
-      set vector (newVector: vector.Vector) {
+      set vector (newVector: vector2d.Vector2d) {
         mVector = newVector;
       }
     }

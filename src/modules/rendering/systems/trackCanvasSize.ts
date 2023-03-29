@@ -1,23 +1,23 @@
 import { OnCanvasSizeChange } from '../components';
 import { System } from '../../../ecs/System.js';
-import { vector } from '../../../math';
+import { vector2d } from '../../../math/physics2d';
 
 const trackCanvasSizeFactory = function ({ canvas }: {
   canvas: HTMLCanvasElement;
 }): System {
-  let oldSize: vector.Vector | undefined;
+  let oldSize: vector2d.Vector2d | undefined;
 
   return {
     tick ({ entityManager }): void {
       const currentCanvasRect = canvas.getBoundingClientRect();
-      const newSize = vector.createVector({
+      const newSize = vector2d.createVector2d({
         x: currentCanvasRect.width,
         y: currentCanvasRect.height
       });
 
       if (
         oldSize !== undefined &&
-        vector.equal(oldSize, newSize)
+        vector2d.equal(oldSize, newSize)
       ) {
         return;
       }

@@ -1,7 +1,8 @@
 import { engineFactory } from './ecs/Engine';
-import { hexagonGrid, vector } from './math';
+import { hexagonGrid } from './math';
+import { vector2d } from './math/physics2d';
 import { HexagonGrid, HexagonTile, Text, Viewport } from './archetypes';
-import { layout, rendering } from './modules';
+import { input, layout, rendering } from './modules';
 
 window.addEventListener('DOMContentLoaded', (): void => {
   const rootElementName = 'viewport';
@@ -12,21 +13,22 @@ window.addEventListener('DOMContentLoaded', (): void => {
     rendering.systems.trackCanvasSizeFactory({ canvas }),
     layout.systems.resolveAbsoluteLocationsFactory({ rootElementName }),
     layout.systems.calculateHexagonPolygonsFactory(),
+    input.systems.handleMouseInputFactory({ window }),
     rendering.systems.renderFactory({ canvas })
   ]});
 
   const entityManager = engine.getEntityManager();
 
   const viewportEntity = Viewport.createViewportEntity({
-    location: vector.createVector({ x: 0, y: 0 })
+    location: vector2d.createVector2d({ x: 0, y: 0 })
   });
 
   viewportEntity.name = rootElementName;
   entityManager.addEntity(viewportEntity);
 
   const hexagonGridEntity = HexagonGrid.createHexagonGridEntity({
-    vector: vector.zero,
-    size: vector.zero,
+    vector: vector2d.zero,
+    size: vector2d.zero,
     orientation: hexagonGrid.orientation.pointyOrientation
   });
 

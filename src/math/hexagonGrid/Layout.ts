@@ -1,15 +1,15 @@
 import { Hexagon } from './Hexagon.js';
 import { Orientation } from './Orientation.js';
-import { vector } from '..';
+import { vector2d } from '../physics2d';
 
 interface Layout {
   orientation: Orientation;
-  size: vector.Vector;
+  size: vector2d.Vector2d;
 }
 
 const createLayout = function ({ orientation, size }: {
   orientation: Orientation;
-  size: vector.Vector;
+  size: vector2d.Vector2d;
 }): Layout {
   return {
     orientation,
@@ -20,8 +20,8 @@ const createLayout = function ({ orientation, size }: {
 const coordinatesToScreen = function ({ layout, coordinates }: {
   layout: Layout;
   coordinates: Hexagon;
-}): vector.Vector {
-  return vector.createVector({
+}): vector2d.Vector2d {
+  return vector2d.createVector2d({
     x: ((layout.orientation.f0 * coordinates.q) + (layout.orientation.f1 * coordinates.r)) * layout.size.x,
     y: ((layout.orientation.f2 * coordinates.q) + (layout.orientation.f3 * coordinates.r)) * layout.size.y
   });
@@ -30,10 +30,10 @@ const coordinatesToScreen = function ({ layout, coordinates }: {
 const hexagonCornerOffset = function ({ layout, corner }: {
   layout: Layout;
   corner: number;
-}): vector.Vector {
+}): vector2d.Vector2d {
   const angle = 2 * Math.PI * (layout.orientation.startAngle + corner) / 6;
 
-  return vector.createVector({
+  return vector2d.createVector2d({
     x: layout.size.x * Math.cos(angle),
     y: layout.size.y * Math.sin(angle)
   });
@@ -41,7 +41,7 @@ const hexagonCornerOffset = function ({ layout, corner }: {
 
 const hexagonCornerOffsets = function ({ layout }: {
   layout: Layout;
-}): vector.Vector[] {
+}): vector2d.Vector2d[] {
   const corners = [];
 
   for (let i = 0; i < 6; i++) {
@@ -54,13 +54,13 @@ const hexagonCornerOffsets = function ({ layout }: {
 const hexagonCorners = function ({ layout, coordinates }: {
   layout: Layout;
   coordinates: Hexagon;
-}): vector.Vector[] {
+}): vector2d.Vector2d[] {
   const corners = [];
 
   const center = coordinatesToScreen({ layout, coordinates });
 
   for (const cornerOffset of hexagonCornerOffsets({ layout })) {
-    corners.push(vector.createVector({
+    corners.push(vector2d.createVector2d({
       x: center.x + cornerOffset.x,
       y: center.y + cornerOffset.y
     }));
