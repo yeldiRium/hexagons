@@ -1,4 +1,4 @@
-const noop = () => {
+const noop = (): void => {
   // Do nothing.
 };
 
