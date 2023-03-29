@@ -4,6 +4,14 @@ interface Hexagon {
   s: number;
 }
 
+const clone = function (hexagon: Hexagon): Hexagon {
+  return {
+    q: hexagon.q,
+    r: hexagon.r,
+    s: hexagon.s
+  };
+};
+
 const createHexagon = function ({ q, r }: { q: number; r: number }): Hexagon {
   return {
     q,
@@ -69,6 +77,7 @@ export type {
 
 export {
   add,
+  clone,
   createHexagon,
   directions,
   distance,

@@ -34,8 +34,8 @@ const createHexagonBackgroundTileEntity = function ({ hexagon, isVisible = true 
       ...input.components.OnClick.createOnClick({
         onClick () {
           hexagonBackgroundTileEntity.components.sendMessage.sendMessage({
-            message: messages.hexagonTileClicked({
-              hexagon: hexagonBackgroundTileEntity.components.hexagonLocation.hexagon
+            message: messages.hexagonBackgroundTileClicked({
+              hexagonBackgroundTile: hexagonBackgroundTileEntity
             })
           });
         }
@@ -44,22 +44,12 @@ const createHexagonBackgroundTileEntity = function ({ hexagon, isVisible = true 
         onMouseOver () {
           fillColorBeforeHover = hexagonBackgroundTileEntity.components.fillColor.color;
           hexagonBackgroundTileEntity.components.fillColor.color = color.createColor({ r: 180, g: 180, b: 180 });
-          hexagonBackgroundTileEntity.components.sendMessage.sendMessage({
-            message: messages.hexagonTileMouseOver({
-              hexagon: hexagonBackgroundTileEntity.components.hexagonLocation.hexagon
-            })
-          });
         }
       }),
       ...input.components.OnMouseOut.createOnMouseOut({
         onMouseOut () {
           hexagonBackgroundTileEntity.components.fillColor.color = fillColorBeforeHover ?? defaultBackgroundColor;
           fillColorBeforeHover = undefined;
-          hexagonBackgroundTileEntity.components.sendMessage.sendMessage({
-            message: messages.hexagonTileMouseOut({
-              hexagon: hexagonBackgroundTileEntity.components.hexagonLocation.hexagon
-            })
-          });
         }
       }),
       ...layout.components.AbsoluteLocation.createAbsoluteLocation({
