@@ -1,5 +1,5 @@
-import { Entity } from '../ecs/Entity.js';
-import { point } from '../rendering';
+import { Entity } from '../../../ecs/Entity.js';
+import { point } from '../../../math';
 
 interface Polygon {
   polygon: {

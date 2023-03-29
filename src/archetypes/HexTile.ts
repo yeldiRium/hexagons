@@ -1,13 +1,16 @@
 import { createEntity, Entity } from '../ecs/Entity';
-import { HexagonLocation, Polygon } from '../components';
+import { grid, rendering } from '../modules';
 
-type HexTileArchetype = Entity<HexagonLocation.HexagonLocation & Polygon.Polygon>;
+type HexTileComponents =
+  & grid.components.HexagonLocation.HexagonLocation
+  & rendering.components.Polygon.Polygon;
+type HexTileArchetype = Entity<HexTileComponents>;
 
 const createHexTileEntity = function (q: number, r: number): HexTileArchetype {
-  return createEntity<HexagonLocation.HexagonLocation & Polygon.Polygon>({
+  return createEntity<HexTileComponents>({
     components: {
-      ...HexagonLocation.createHexagonLocation(q, r),
-      ...Polygon.createPolygon([])
+      ...grid.components.HexagonLocation.createHexagonLocation(q, r),
+      ...rendering.components.Polygon.createPolygon([])
     }
   });
 };

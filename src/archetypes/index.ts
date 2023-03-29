@@ -1,2 +1,2 @@
 export * as HexTile from './HexTile.js';
-export * as Viewport from './Viewport.js';
+export * as HexagonGrid from './HexagonGrid.js';

@@ -1,5 +1,5 @@
-import { Entity } from '../ecs/Entity.js';
-import { hexagon } from '../grid';
+import { Entity } from '../../../ecs/Entity.js';
+import { hexagon } from '../../../math/grid';
 
 interface HexagonLocation {
   hexagonLocation: {

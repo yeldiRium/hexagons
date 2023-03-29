@@ -1,6 +1,6 @@
-import { Hexagon } from './Hexagon';
-import { Orientation } from './Orientation';
-import { point } from '../rendering';
+import { Hexagon } from './Hexagon.js';
+import { Orientation } from './Orientation.js';
+import { point } from '..';
 
 interface Layout {
   orientation: Orientation;

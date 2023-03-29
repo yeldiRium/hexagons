@@ -1,6 +1,6 @@
-import { point } from '../rendering';
+import { point } from '../../../math';
 import { Polygon } from '../components';
-import { System } from '../ecs/System.js';
+import { System } from '../../../ecs/System.js';
 
 const renderFactory = function ({ canvas }: {
   canvas: HTMLCanvasElement;

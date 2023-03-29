@@ -1,28 +1,28 @@
 import { engineFactory } from './ecs/Engine';
-import { orientation } from './grid';
-import { point } from './rendering';
-import { HexTile, Viewport } from './archetypes';
-import { mapTilesToScreenPolygonsFactory, renderFactory, scaleUiFactory } from './systems';
+import { orientation } from './math/grid';
+import { point } from './math';
+import { grid, rendering } from './modules';
+import { HexagonGrid, HexTile } from './archetypes';
 
 window.addEventListener('DOMContentLoaded', (): void => {
   const canvas = document.getElementById('game')! as HTMLCanvasElement;
   const engine = engineFactory({ systems: [
-    scaleUiFactory({ canvas }),
-    mapTilesToScreenPolygonsFactory(),
-    renderFactory({ canvas })
+    grid.systems.scaleHexagonGrid({ canvas }),
+    grid.systems.mapTilesToScreenPolygonsFactory(),
+    rendering.systems.renderFactory({ canvas })
   ]});
 
   const entityManager = engine.getEntityManager();
 
-  const viewportEntity = Viewport.createViewportEntity({
+  const hexagonGridEntity = HexagonGrid.createHexagonGridEntity({
     o: orientation.pointyOrientation,
     size: point.createPoint({ x: 0, y: 0 }),
     origin: point.createPoint({ x: 0, y: 0 })
   });
 
-  viewportEntity.name = 'viewport';
+  hexagonGridEntity.name = 'hexagonGrid';
 
-  entityManager.addEntity(viewportEntity);
+  entityManager.addEntity(hexagonGridEntity);
 
   for (const entity of [
     HexTile.createHexTileEntity(0, 0),
