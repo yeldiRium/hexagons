@@ -1,9 +1,8 @@
 import { gameChip } from '../gameLogic';
-import { Text } from '.';
 import { color, hexagonGrid, physics2d } from '../../../framework/math';
 import { createEntity, Entity } from '../../../framework/ecs/Entity';
+import { HexagonGrid, TextHexagon } from '.';
 import { layout, lifeCycle, messaging, rendering, spawning } from '../../../framework/modules';
-import { polygon2d, vector2d } from '../../../framework/math/physics2d';
 
 type HexagonGameChipComponents =
   & layout.components.AbsoluteLocation.AbsoluteLocation
@@ -45,69 +44,87 @@ const createHexagonGameChipEntity = function ({ hexagon, isVisible = true, gameC
   const hexagonGameChipEntity = createEntity<HexagonGameChipComponents>({
     components: {
       ...layout.components.AbsoluteLocation.createAbsoluteLocation({
-        vector: vector2d.zero
+        vector: physics2d.vector2d.zero
       }),
       ...layout.components.TreeNode.createTreeNode(),
       ...layout.components.HexagonLocation.createHexagonLocation({ hexagon }),
-      ...layout.components.HexagonLayout.createHexagonLayout({ orientation: hexagonGrid.orientation.flatOrientation, size: vector2d.zero }),
+      ...layout.components.HexagonLayout.createHexagonLayout({
+        orientation: hexagonGrid.orientation.flatOrientation,
+        size: physics2d.vector2d.zero,
+      }),
       ...layout.components.ZIndex.createZIndex(),
       ...lifeCycle.components.LifeCycle.createLifeCycle(),
       ...messaging.components.SendMessage.createSendMessage(),
-      ...rendering.components.Polygon.createPolygon({ polygon: polygon2d.createPolygon2d({ points: []}) }),
+      ...rendering.components.Polygon.createPolygon({
+        polygon: physics2d.polygon2d.createPolygon2d({ points: []})
+      }),
       ...rendering.components.StrokeColor.createStrokeColor(chipBorderColor),
       ...rendering.components.FillColor.createFillColor(chipBackgroundColor),
       ...rendering.components.Visibility.createVisibility(isVisible),
       ...rendering.components.OnCanvasSizeChange.createOnCanvasSizeChange({
         onCanvasSizeChange () {
-          const hexagonLayout = hexagonGameChipEntity.components.treeNode.parent;
-
-          if (hexagonLayout !== undefined) {
-            if (!layout.components.HexagonLayout.entityHasHexagonLayout(hexagonLayout)) {
-              throw new Error('Hexagon game chip must be the child of a hexagon layout.');
-            }
-
-            const width = hexagonLayout.components.hexagonLayout.layout.size.x;
-            const height = hexagonLayout.components.hexagonLayout.layout.size.y;
-
-            // TODO: set text positions.
-          }
+          // Set this later.
         }
       }),
       ...spawning.components.Despawn.createDespawn()
     }
   });
 
-  const firstValueText = Text.createTextEntity({
-    text: `${firstValue}`,
-    align: 'center',
-    location: physics2d.vector2d.createVector2d({ x: 0, y: -12 }),
-    fillColor: textColors[firstValue],
-    strokeColor: color.predefined.white,
-    bold: true,
-    fontSizePx: 20
+  const firstValueText = TextHexagon.createTextHexagonEntity({
+    location: hexagonGrid.hexagon.createHexagon({ q: 0, r: -1 }),
+    text: {
+      text: `${firstValue}`,
+      align: 'center',
+      fillColor: textColors[firstValue],
+      strokeColor: color.predefined.white,
+      bold: true,
+      fontSizePx: 20
+    },
+    textSizeMultiplier: 2
   });
-  const secondValueText = Text.createTextEntity({
-    text: `${secondValue}`,
-    align: 'center',
-    location: physics2d.vector2d.createVector2d({ x: -18, y: 18 }),
-    fillColor: textColors[secondValue],
-    strokeColor: color.predefined.white,
-    bold: true,
-    fontSizePx: 20
+  const secondValueText = TextHexagon.createTextHexagonEntity({
+    location: hexagonGrid.hexagon.createHexagon({ q: -1, r: 1 }),
+    text: {
+      text: `${secondValue}`,
+      align: 'center',
+      fillColor: textColors[secondValue],
+      strokeColor: color.predefined.white,
+      bold: true,
+      fontSizePx: 20
+    },
+    textSizeMultiplier: 2
   });
-  const thirdValueText = Text.createTextEntity({
-    text: `${thirdValue}`,
-    align: 'center',
-    location: physics2d.vector2d.createVector2d({ x: 18, y: 18 }),
-    fillColor: textColors[thirdValue],
-    strokeColor: color.predefined.white,
-    bold: true,
-    fontSizePx: 20
+  const thirdValueText = TextHexagon.createTextHexagonEntity({
+    location: hexagonGrid.hexagon.createHexagon({ q: 1, r: 0 }),
+    text: {
+      text: `${thirdValue}`,
+      align: 'center',
+      fillColor: textColors[thirdValue],
+      strokeColor: color.predefined.white,
+      bold: true,
+      fontSizePx: 20
+    },
+    textSizeMultiplier: 2
   });
 
   layout.attachChildToParent({ child: firstValueText, parent: hexagonGameChipEntity });
   layout.attachChildToParent({ child: secondValueText, parent: hexagonGameChipEntity });
   layout.attachChildToParent({ child: thirdValueText, parent: hexagonGameChipEntity });
+
+  hexagonGameChipEntity.components.onCanvasSizeChange = (): void => {
+    const hexagonLayout = hexagonGameChipEntity.components.treeNode.parent;
+
+    if (hexagonLayout !== undefined) {
+      if (!layout.components.HexagonLayout.entityHasHexagonLayout(hexagonLayout)) {
+        throw new Error('Hexagon game chip must be the child of a hexagon layout.');
+      }
+
+      hexagonGameChipEntity.components.hexagonLayout.layout.size = physics2d.vector2d.mul(
+        hexagonLayout.components.hexagonLayout.layout.size,
+        0.3
+      );
+    }
+  };
 
   return hexagonGameChipEntity;
 };
