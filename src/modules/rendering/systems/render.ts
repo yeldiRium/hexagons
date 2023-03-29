@@ -1,15 +1,7 @@
 import { AbsoluteLocation } from '../../layout/components';
 import { color } from '../../../math';
-import { Entity } from '../../../ecs/Entity.js';
 import { System } from '../../../ecs/System.js';
-import { FillColor, Polygon, StrokeColor } from '../components';
-
-const isRenderable = function (entity: Entity<any>): entity is Entity<Polygon.Polygon & AbsoluteLocation.AbsoluteLocation> {
-  return (
-    Polygon.entityHasPolygon(entity) &&
-      AbsoluteLocation.entityHasAbsoluteLocation(entity)
-  );
-};
+import { FillColor, Polygon, StrokeColor, Text } from '../components';
 
 const renderFactory = function ({ canvas }: {
   canvas: HTMLCanvasElement;
@@ -19,7 +11,7 @@ const renderFactory = function ({ canvas }: {
   return {
     tick ({ entityManager }): void {
       for (const entity of entityManager.getEntities(
-        isRenderable
+        AbsoluteLocation.entityHasAbsoluteLocation
       )) {
         if (StrokeColor.entityHasStrokeColor(entity)) {
           ctx.strokeStyle = color.toHexString({ color: entity.components.strokeColor.color });
@@ -32,18 +24,36 @@ const renderFactory = function ({ canvas }: {
           ctx.fillStyle = color.toHexString({ color: color.predefined.white });
         }
 
-        ctx.lineWidth = 5;
-        ctx.beginPath();
+        if (Polygon.entityHasPolygon(entity)) {
+          ctx.lineWidth = 5;
+          ctx.beginPath();
 
-        for (const corner of entity.components.polygon.polygon) {
-          ctx.lineTo(
-            corner.x + entity.components.absoluteLocation.vector.x,
-            corner.y + entity.components.absoluteLocation.vector.y
-          );
+          for (const corner of entity.components.polygon.polygon) {
+            ctx.lineTo(
+              corner.x + entity.components.absoluteLocation.vector.x,
+              corner.y + entity.components.absoluteLocation.vector.y
+            );
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
         }
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
+        if (Text.entityHasText(entity)) {
+          if (FillColor.entityHasFillColor(entity)) {
+            ctx.fillText(
+              entity.components.text.text,
+              entity.components.absoluteLocation.vector.x,
+              entity.components.absoluteLocation.vector.y
+            );
+          }
+          if (StrokeColor.entityHasStrokeColor(entity)) {
+            ctx.strokeText(
+              entity.components.text.text,
+              entity.components.absoluteLocation.vector.x,
+              entity.components.absoluteLocation.vector.y
+            );
+          }
+        }
       }
     }
   };
