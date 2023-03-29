@@ -1,2 +1,2 @@
-export { calculateHexagonPolygons } from './calculateHexagonPolygons.js';
-export { resolveAbsoluteLocationsSystem } from './resolveAbsoluteLocations.js';
+export { calculateHexagonPolygonsFactory } from './calculateHexagonPolygons.js';
+export { resolveAbsoluteLocationsFactory } from './resolveAbsoluteLocations.js';

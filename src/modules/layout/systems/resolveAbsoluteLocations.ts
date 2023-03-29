@@ -9,7 +9,7 @@ const isInnerTreeNode = function (entity: Entity<any>): entity is Entity<Absolut
     Location.entityHasLocation(entity);
 };
 
-const resolveAbsoluteLocationsSystem = function ({ rootElementName }: {
+const resolveAbsoluteLocationsFactory = function ({ rootElementName }: {
   rootElementName: string;
 }): System {
   return {
@@ -89,5 +89,5 @@ const resolveAbsoluteLocationsSystem = function ({ rootElementName }: {
 };
 
 export {
-  resolveAbsoluteLocationsSystem
+  resolveAbsoluteLocationsFactory
 };

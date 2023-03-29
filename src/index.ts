@@ -10,8 +10,8 @@ window.addEventListener('DOMContentLoaded', (): void => {
   const context = canvas.getContext('2d')!;
   const engine = engineFactory({ systems: [
     rendering.systems.trackCanvasSizeFactory({ canvas }),
-    layout.systems.resolveAbsoluteLocationsSystem({ rootElementName }),
-    layout.systems.calculateHexagonPolygons(),
+    layout.systems.resolveAbsoluteLocationsFactory({ rootElementName }),
+    layout.systems.calculateHexagonPolygonsFactory(),
     rendering.systems.renderFactory({ canvas })
   ]});
 

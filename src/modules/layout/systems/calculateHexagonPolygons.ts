@@ -13,7 +13,7 @@ const entityIsHexagonLocationWithPolygon = function (entity: Entity<any>): entit
     Polygon.entityHasPolygon(entity);
 };
 
-const calculateHexagonPolygons = function (): System {
+const calculateHexagonPolygonsFactory = function (): System {
   return {
     tick ({ entityManager }): void {
       for (const hexagonLayout of entityManager.getEntities(
@@ -34,5 +34,5 @@ const calculateHexagonPolygons = function (): System {
 };
 
 export {
-  calculateHexagonPolygons
+  calculateHexagonPolygonsFactory
 };
