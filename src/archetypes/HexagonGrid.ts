@@ -30,11 +30,8 @@ const createHexagonGridEntity = function ({ orientation: o, size, vector: initia
       }),
       ...layout.components.ZIndex.createZIndex(),
       ...rendering.components.OnCanvasSizeChange.createOnCanvasSizeChange({
-        onCanvasSizeChange ({ newSize }) {
-          const { x: width, y: height } = newSize;
-
-          hexagonGrid.components.hexagonLayout.layout.size = vector2d.createVector2d({ x: height / 20, y: height / 20 });
-          hexagonGrid.components.location.vector = vector2d.createVector2d({ x: width / 2, y: height / 2 });
+        onCanvasSizeChange () {
+          // Set this function later on individual entities.
         }
       })
     }

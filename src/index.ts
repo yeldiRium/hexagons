@@ -38,6 +38,13 @@ window.addEventListener('DOMContentLoaded', (): void => {
     orientation: hexagonGrid.orientation.pointyOrientation
   });
 
+  hexagonGridEntity.components.onCanvasSizeChange = function ({ newSize }): void {
+    const { x: width, y: height } = newSize;
+
+    hexagonGridEntity.components.hexagonLayout.layout.size = vector2d.createVector2d({ x: height / 20, y: height / 20 });
+    hexagonGridEntity.components.location.vector = vector2d.createVector2d({ x: width / 2, y: height / 2 });
+  };
+
   layout.attachChildToParent({ child: hexagonGridEntity, parent: viewportEntity });
 
   for (const hexagon of hexagonGrid.patterns.createRegularHexagon({ hexagonSize: 5 })) {
