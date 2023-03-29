@@ -2,6 +2,7 @@ import { color, hexagonGrid } from '../../../framework/math';
 import { createEntity, Entity } from '../../../framework/ecs/Entity';
 import { input, layout, messaging, rendering } from '../../../framework/modules';
 import { polygon2d, vector2d } from '../../../framework/math/physics2d';
+import * as messages from '../messages';
 
 type HexagonTileComponents =
   & input.components.OnClick.OnClick
@@ -29,12 +30,9 @@ const createHexagonTileEntity = function ({ hexagon, isVisible = true }: {
       ...input.components.OnClick.createOnClick({
         onClick () {
           hexagonTileEntity.components.sendMessage.sendMessage({
-            message: {
-              type: 'hexagonTileClicked',
-              payload: {
-                hexagon: hexagonTileEntity.components.hexagonLocation.hexagon
-              }
-            }
+            message: messages.hexagonTileClicked({
+              hexagon: hexagonTileEntity.components.hexagonLocation.hexagon
+            })
           });
         }
       }),
@@ -42,10 +40,9 @@ const createHexagonTileEntity = function ({ hexagon, isVisible = true }: {
         onMouseOver () {
           hexagonTileEntity.components.fillColor.color = color.createColor({ r: 255, g: 0, b: 0 });
           hexagonTileEntity.components.sendMessage.sendMessage({
-            message: {
-              type: 'mouseOver',
-              payload: { hexagon }
-            }
+            message: messages.hexagonTileMouseOver({
+              hexagon: hexagonTileEntity.components.hexagonLocation.hexagon
+            })
           });
         }
       }),
@@ -53,10 +50,9 @@ const createHexagonTileEntity = function ({ hexagon, isVisible = true }: {
         onMouseOut () {
           hexagonTileEntity.components.fillColor.color = defaultBackgroundColor;
           hexagonTileEntity.components.sendMessage.sendMessage({
-            message: {
-              type: 'mouseOut',
-              payload: { hexagon }
-            }
+            message: messages.hexagonTileMouseOut({
+              hexagon: hexagonTileEntity.components.hexagonLocation.hexagon
+            })
           });
         }
       }),
