@@ -16,14 +16,16 @@ interface GameChip {
   thirdValue: ThirdValue;
 }
 
-const generateChipStack = function (): HexagonGameChip.HexagonGameChipsArchetype[] {
+const generateChipStack = function ({ chipLocation }: {
+  chipLocation: hexagonGrid.hexagon.Hexagon;
+}): HexagonGameChip.HexagonGameChipsArchetype[] {
   const gameChips: HexagonGameChip.HexagonGameChipsArchetype[] = [];
 
   for (const firstValue of firstValues) {
     for (const secondValue of secondValues) {
       for (const thirdValue of thirdValues) {
         const chip = HexagonGameChip.createHexagonGameChipEntity({
-          hexagon: hexagonGrid.hexagon.createHexagon({ q: -2, r: -2 }),
+          hexagon: chipLocation,
           gameChip: {
             firstValue,
             secondValue,

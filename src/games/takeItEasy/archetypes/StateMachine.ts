@@ -3,7 +3,7 @@ import { color, hexagonGrid, physics2d } from '../../../framework/math';
 import { createEntity, Entity } from '../../../framework/ecs/Entity.js';
 import { gameChip, scoring } from '../gameLogic';
 import { HexagonBackgroundTile, HexagonGrid, TextBox, TextHexagon, Viewport } from '.';
-import { layout, messaging, rendering, spawning, stateMachine } from '../../../framework/modules';
+import { messaging, rendering, spawning, stateMachine } from '../../../framework/modules';
 import * as messages from '../messages';
 
 type State = 'Menu' | 'Playing' | 'Scoring';
@@ -20,6 +20,16 @@ const gameGridEntityName = 'gameGrid';
 const startButtonEntityName = 'startButton';
 const scoreTextEntityName = 'scoreTextBox';
 const playAgainButtonEntityName = 'playAgainButton';
+
+const clearGameGrid = function ({ hexagonGridEntity }: {
+  hexagonGridEntity: HexagonGrid.HexagonGridArchetype;
+}): void {
+  for (const child of hexagonGridEntity.components.treeNode.children) {
+    if (spawning.components.Despawn.entityHasDespawn(child)) {
+      child.components.despawn.despawn();
+    }
+  }
+};
 
 const createStateMachineEntity = function ({ entityManager, canvas, rootEntityName }: {
   entityManager: EntityManager;
@@ -63,7 +73,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
               };
 
               const startButtonEntity = TextHexagon.createTextHexagonEntity({
-                location: hexagonGrid.hexagon.createHexagon({ q: 0, r: -4 }),
+                location: hexagonGrid.hexagon.createHexagon({ q: 0, r: 0 }),
                 text: {
                   text: 'Start game',
                   align: 'center'
@@ -89,9 +99,9 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
               });
             },
             teardownState () {
-              const startButton: TextBox.TextBoxArchetype = entityManager.getEntityByName(startButtonEntityName).unwrapOrThrow();
+              const hexagonGridEntity: HexagonGrid.HexagonGridArchetype = entityManager.getEntityByName(gameGridEntityName).unwrapOrThrow();
 
-              startButton.components.despawn.despawn();
+              clearGameGrid({ hexagonGridEntity });
             }
           },
           Playing: {
@@ -107,7 +117,9 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
                 });
               }
 
-              const chipStack = gameChip.generateChipStack();
+              const chipStack = gameChip.generateChipStack({
+                chipLocation: hexagonGrid.hexagon.createHexagon({ q: -4, r: 2 })
+              });
               let nextChip = chipStack.pop()!;
 
               stateMachineEntity.components.spawn.spawnEntity({
@@ -206,7 +218,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
                 textSizeMultiplier: 0.5
               });
 
-              playAgainButtonEntity.name = startButtonEntityName;
+              playAgainButtonEntity.name = playAgainButtonEntityName;
               playAgainButtonEntity.components.onClick = (): void => {
                 changeState({ state: 'Playing' });
               };
@@ -224,20 +236,9 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
               });
             },
             teardownState () {
-              stateMachineEntity.components.onCanvasSizeChange = (): void => {
-                // Remove the previous handler.
-              };
               const hexagonGridEntity: HexagonGrid.HexagonGridArchetype = entityManager.getEntityByName(gameGridEntityName).unwrapOrThrow();
 
-              for (const child of hexagonGridEntity.components.treeNode.children) {
-                if (spawning.components.Despawn.entityHasDespawn(child)) {
-                  child.components.despawn.despawn();
-                }
-              }
-
-              const scoreTextBoxEntity: TextBox.TextBoxArchetype = entityManager.getEntityByName(scoreTextEntityName).unwrapOrThrow();
-
-              scoreTextBoxEntity.components.despawn.despawn();
+              clearGameGrid({ hexagonGridEntity });
             }
           }
           /* eslint-enable @typescript-eslint/no-shadow, no-param-reassign */
