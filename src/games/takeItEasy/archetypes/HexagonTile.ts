@@ -1,6 +1,6 @@
 import { color, hexagonGrid } from '../../../framework/math';
 import { createEntity, Entity } from '../../../framework/ecs/Entity';
-import { input, layout, messaging, rendering } from '../../../framework/modules';
+import { input, layout, messaging, rendering, spawning } from '../../../framework/modules';
 import { polygon2d, vector2d } from '../../../framework/math/physics2d';
 import * as messages from '../messages';
 
@@ -16,7 +16,8 @@ type HexagonTileComponents =
   & rendering.components.Polygon.Polygon
   & rendering.components.StrokeColor.StrokeColor
   & rendering.components.FillColor.FillColor
-  & rendering.components.Visibility.Visibility;
+  & rendering.components.Visibility.Visibility
+  & spawning.components.Despawn.Despawn;
 type HexagonTileArchetype = Entity<HexagonTileComponents>;
 
 const defaultBackgroundColor = color.predefined.white;
@@ -66,7 +67,8 @@ const createHexagonTileEntity = function ({ hexagon, isVisible = true }: {
       ...rendering.components.Polygon.createPolygon({ polygon: polygon2d.createPolygon2d({ points: []}) }),
       ...rendering.components.StrokeColor.createStrokeColor(color.predefined.black),
       ...rendering.components.FillColor.createFillColor(defaultBackgroundColor),
-      ...rendering.components.Visibility.createVisibility(isVisible)
+      ...rendering.components.Visibility.createVisibility(isVisible),
+      ...spawning.components.Despawn.createDespawn()
     }
   });
 

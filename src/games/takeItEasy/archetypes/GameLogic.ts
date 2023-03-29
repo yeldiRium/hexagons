@@ -1,5 +1,5 @@
 import { EntityManager } from '../../../framework/ecs/EntityManager.js';
-import { layout, messaging } from '../../../framework/modules';
+import { layout, messaging, spawning } from '../../../framework/modules';
 import { createEntity, Entity } from '../../../framework/ecs/Entity.js';
 import * as messages from '../messages';
 
@@ -36,7 +36,13 @@ const createGameLogicEntity = function ({ entityManager, rootHexagonGridName }: 
         return;
       }
 
-      console.log(`clicked on:`, { hexagonTile: hexagonTiles.values().next().value });
+      const clickedTile = hexagonTiles.values().next().value;
+
+      console.log({ clickedTile });
+
+      if (spawning.components.Despawn.entityHasDespawn(clickedTile)) {
+        clickedTile.components.despawn.despawn();
+      }
     }
   });
 
