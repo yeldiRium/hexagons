@@ -8,7 +8,9 @@ const spawningFactory = function (): System {
       for (const despawningEntity of entityManager.getEntities(
         Despawn.entityHasDespawn
       )) {
-        entityManager.removeEntityAndChildren(despawningEntity.id);
+        if (despawningEntity.components.despawn.shouldDespawn) {
+          entityManager.removeEntityAndChildren(despawningEntity.id);
+        }
       }
 
       for (const spawnerEntity of entityManager.getEntities(
