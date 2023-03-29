@@ -2,7 +2,7 @@ import { createEntityManager } from './engine/EntityManager';
 import { orientation } from './grid';
 import { point } from './rendering';
 import { HexTile, Viewport } from './archetypes';
-import { mapTilesToScreenPolygons, renderFactory, scaleUiFactory } from './systems';
+import { mapTilesToScreenPolygonsFactory, renderFactory, scaleUiFactory } from './systems';
 
 window.addEventListener('DOMContentLoaded', (): void => {
   const canvas = document.getElementById('game')! as HTMLCanvasElement;
@@ -28,17 +28,20 @@ window.addEventListener('DOMContentLoaded', (): void => {
   }
 
   const scaleUiSystem = scaleUiFactory({ canvas });
-  const mapTilesToScreenSystem = mapTilesToScreenPolygons();
+  const mapTilesToScreenSystem = mapTilesToScreenPolygonsFactory();
   const renderingSystem = renderFactory({ canvas });
 
   // Main loop
-  scaleUiSystem({
+  scaleUiSystem.tick({
+    dt: 0,
     entityManager
   });
-  mapTilesToScreenSystem({
+  mapTilesToScreenSystem.tick({
+    dt: 0,
     entityManager
   });
-  renderingSystem({
+  renderingSystem.tick({
+    dt: 0,
     entityManager
   });
 });

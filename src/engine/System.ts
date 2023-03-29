@@ -1,8 +1,11 @@
 import { EntityManager } from './EntityManager';
 
-type System = (parameters: {
-  entityManager: EntityManager;
-}) => void;
+interface System {
+  tick: (parameters: {
+    entityManager: EntityManager;
+    dt: number;
+  }) => void;
+}
 
 export type {
   System

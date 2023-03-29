@@ -13,25 +13,26 @@ const renderFactory = function ({ canvas }: {
     y: height / 2
   });
 
-  return ({ entityManager }): void => {
-    for (const entity of entityManager.getEntities(
-      Renderable.entityHasRenderableComponent
-    )) {
-      ctx.lineWidth = 5;
+  return {
+    tick ({ entityManager }): void {
+      for (const entity of entityManager.getEntities(
+        Renderable.entityHasRenderableComponent
+      )) {
+        ctx.lineWidth = 5;
 
-      for (const polygon of entity.components.renderable.polygons) {
-        ctx.beginPath();
+        for (const polygon of entity.components.renderable.polygons) {
+          ctx.beginPath();
 
-        for (const corner of polygon) {
-          ctx.lineTo(
-            /* eslint-disable @typescript-eslint/restrict-plus-operands */
-            corner.x + offset.x,
-            corner.y + offset.y
-            /* eslint-enable @typescript-eslint/restrict-plus-operands */
-          );
+          for (const corner of polygon) {
+            ctx.lineTo(
+
+              corner.x + offset.x,
+              corner.y + offset.y
+            );
+          }
+          ctx.closePath();
+          ctx.stroke();
         }
-        ctx.closePath();
-        ctx.stroke();
       }
     }
   };
