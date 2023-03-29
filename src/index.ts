@@ -30,18 +30,17 @@ window.addEventListener('DOMContentLoaded', (): void => {
     orientation: hexagonGrid.orientation.pointyOrientation
   });
 
-  entityManager.addEntity(hexagonGridEntity);
   layout.attachChildToParent({ child: hexagonGridEntity, parent: viewportEntity });
 
   for (const hexagon of hexagonGrid.patterns.createRegularHexagon({ hexagonSize: 5 })) {
     const hexagonEntity = HexagonTile.createHexagonTileEntity({ hexagon });
     const textEntity = Text.createTextEntity({ text: `${hexagon.r} / ${hexagon.q}` });
 
-    entityManager.addEntity(hexagonEntity);
     layout.attachChildToParent({ child: hexagonEntity, parent: hexagonGridEntity });
-    entityManager.addEntity(textEntity);
     layout.attachChildToParent({ child: textEntity, parent: hexagonEntity });
   }
+
+  entityManager.addEntityAndChildren(hexagonGridEntity);
 
   let time = Date.now();
   const frame = (): void => {
