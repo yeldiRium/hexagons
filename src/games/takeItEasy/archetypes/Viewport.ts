@@ -1,6 +1,6 @@
-import { layout } from '../modules';
-import { vector2d } from '../math/physics2d';
-import { createEntity, Entity } from '../ecs/Entity.js';
+import { layout } from '../../../framework/modules';
+import { vector2d } from '../../../framework/math/physics2d';
+import { createEntity, Entity } from '../../../framework/ecs/Entity.js';
 
 type ViewportComponents =
   & layout.components.AbsoluteLocation.AbsoluteLocation

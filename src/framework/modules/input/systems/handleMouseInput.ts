@@ -14,20 +14,20 @@ const canReceiveCursor = function (entity: Entity<any>): entity is Entity<Requir
   );
 };
 
-const handleMouseInput = function ({ window }: {
-  window: Window;
+const handleMouseInput = function ({ rootElement }: {
+  rootElement: HTMLElement;
 }): System {
   let cursorPosition = vector2d.zero;
   let lastHoveredEntity: Entity<RequiredCursorReceiverComponents> | undefined;
   let unhandledClickEvents: MouseEvent[] = [];
 
-  window.addEventListener('mousemove', (event): void => {
+  rootElement.addEventListener('mousemove', (event): void => {
     cursorPosition = vector2d.createVector2d({
       x: event.clientX,
       y: event.clientY
     });
   });
-  window.addEventListener('click', (event): void => {
+  rootElement.addEventListener('click', (event): void => {
     unhandledClickEvents.push(event);
   });
 

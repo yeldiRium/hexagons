@@ -1,7 +1,7 @@
-import { orientation } from '../math/hexagonGrid';
-import { vector2d } from '../math/physics2d';
-import { createEntity, Entity } from '../ecs/Entity.js';
-import { layout, rendering } from '../modules';
+import { orientation } from '../../../framework/math/hexagonGrid';
+import { vector2d } from '../../../framework/math/physics2d';
+import { createEntity, Entity } from '../../../framework/ecs/Entity.js';
+import { layout, rendering } from '../../../framework/modules';
 
 type HexagonGridComponents =
   & layout.components.AbsoluteLocation.AbsoluteLocation

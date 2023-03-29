@@ -1,7 +1,7 @@
-import { color, hexagonGrid } from '../math';
-import { createEntity, Entity } from '../ecs/Entity';
-import { input, layout, messaging, rendering } from '../modules';
-import { polygon2d, vector2d } from '../math/physics2d';
+import { color, hexagonGrid } from '../../../framework/math';
+import { createEntity, Entity } from '../../../framework/ecs/Entity';
+import { input, layout, messaging, rendering } from '../../../framework/modules';
+import { polygon2d, vector2d } from '../../../framework/math/physics2d';
 
 type HexagonTileComponents =
   & input.components.OnClick.OnClick

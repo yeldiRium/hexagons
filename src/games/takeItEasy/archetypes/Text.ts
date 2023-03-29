@@ -1,7 +1,7 @@
-import { color } from '../math';
-import { vector2d } from '../math/physics2d';
-import { createEntity, Entity } from '../ecs/Entity';
-import { layout, rendering } from '../modules';
+import { color } from '../../../framework/math';
+import { vector2d } from '../../../framework/math/physics2d';
+import { createEntity, Entity } from '../../../framework/ecs/Entity';
+import { layout, rendering } from '../../../framework/modules';
 
 type TextComponents =
   & layout.components.AbsoluteLocation.AbsoluteLocation

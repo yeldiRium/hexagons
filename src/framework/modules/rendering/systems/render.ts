@@ -12,13 +12,12 @@ const isRenderable = function (entity: Entity<any>): entity is Entity<AbsoluteLo
   );
 };
 
-const renderFactory = function ({ canvas }: {
-  canvas: HTMLCanvasElement;
+const renderFactory = function ({ context }: {
+  context: CanvasRenderingContext2D;
 }): System {
-  const ctx = canvas.getContext('2d')!;
-
   return {
     tick ({ entityManager }): void {
+      /* eslint-disable no-param-reassign */
       const renderableEntities = entityManager.getEntities(
         isRenderable
       );
@@ -30,40 +29,40 @@ const renderFactory = function ({ canvas }: {
 
       for (const entity of zIndexSortedVisibleEntities) {
         if (FillColor.entityHasFillColor(entity)) {
-          ctx.fillStyle = color.toHexString({ color: entity.components.fillColor.color });
+          context.fillStyle = color.toHexString({ color: entity.components.fillColor.color });
         }
         if (StrokeColor.entityHasStrokeColor(entity)) {
-          ctx.strokeStyle = color.toHexString({ color: entity.components.strokeColor.color });
+          context.strokeStyle = color.toHexString({ color: entity.components.strokeColor.color });
         }
 
         if (Polygon.entityHasPolygon(entity)) {
-          ctx.lineWidth = 5;
-          ctx.beginPath();
+          context.lineWidth = 5;
+          context.beginPath();
 
           for (const point of entity.components.polygon.polygon.points) {
-            ctx.lineTo(
+            context.lineTo(
               point.x + entity.components.absoluteLocation.vector.x,
               point.y + entity.components.absoluteLocation.vector.y
             );
           }
-          ctx.closePath();
+          context.closePath();
           if (FillColor.entityHasFillColor(entity)) {
-            ctx.fill();
+            context.fill();
           }
           if (StrokeColor.entityHasStrokeColor(entity)) {
-            ctx.stroke();
+            context.stroke();
           }
         }
         if (Text.entityHasText(entity)) {
           if (FillColor.entityHasFillColor(entity)) {
-            ctx.fillText(
+            context.fillText(
               entity.components.text.text,
               entity.components.absoluteLocation.vector.x,
               entity.components.absoluteLocation.vector.y
             );
           }
           if (StrokeColor.entityHasStrokeColor(entity)) {
-            ctx.strokeText(
+            context.strokeText(
               entity.components.text.text,
               entity.components.absoluteLocation.vector.x,
               entity.components.absoluteLocation.vector.y
@@ -71,6 +70,7 @@ const renderFactory = function ({ canvas }: {
           }
         }
       }
+      /* eslint-enable no-param-reassign */
     }
   };
 };

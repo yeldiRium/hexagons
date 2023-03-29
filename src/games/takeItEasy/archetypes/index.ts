@@ -1,4 +1,4 @@
-export * as GameController from './GameController.js';
+export * as GameLogic from './GameLogic.js';
 export * as HexagonTile from './HexagonTile.js';
 export * as HexagonGrid from './HexagonGrid.js';
 export * as MessageDebugger from './MessageDebugger.js';

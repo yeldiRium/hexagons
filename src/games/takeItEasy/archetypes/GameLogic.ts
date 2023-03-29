@@ -1,5 +1,5 @@
-import { messaging } from '../modules';
-import { createEntity, Entity } from '../ecs/Entity.js';
+import { messaging } from '../../../framework/modules';
+import { createEntity, Entity } from '../../../framework/ecs/Entity.js';
 
 type GameControllerComponents =
   & messaging.components.OnMessage.OnMessage

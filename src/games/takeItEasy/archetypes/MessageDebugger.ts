@@ -1,5 +1,5 @@
-import { messaging } from '../modules';
-import { createEntity, Entity } from '../ecs/Entity';
+import { messaging } from '../../../framework/modules';
+import { createEntity, Entity } from '../../../framework/ecs/Entity';
 
 type MessageDebuggerComponents =
   & messaging.components.OnMessage.OnMessage;
