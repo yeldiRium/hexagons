@@ -38,7 +38,8 @@ const toHexString = function ({ color }: {
 
 const predefined = {
   black: createColor({ r: 0, g: 0, b: 0, a: 255 }),
-  white: createColor({ r: 255, g: 255, b: 255, a: 255 })
+  white: createColor({ r: 255, g: 255, b: 255, a: 255 }),
+  transparent: createColor({ r: 0, g: 0, b: 0, a: 0 })
 };
 
 export type {
