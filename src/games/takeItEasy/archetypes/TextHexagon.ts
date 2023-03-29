@@ -81,7 +81,7 @@ const createTextHexagonEntity = function ({
 
   layout.attachChildToParent({ child: textEntity, parent: textHexagonEntity });
 
-  textHexagonEntity.components.onCanvasSizeChange = (): void => {
+  textHexagonEntity.components.onCanvasSizeChange.onCanvasSizeChange = (): void => {
     const hexagonLayout = textHexagonEntity.components.treeNode.parent;
 
     if (hexagonLayout !== undefined) {

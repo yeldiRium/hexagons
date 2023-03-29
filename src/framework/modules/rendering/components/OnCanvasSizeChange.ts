@@ -7,14 +7,20 @@ type OnCanvasSizeChangeFunction = (parameters: {
 }) => void;
 
 interface OnCanvasSizeChange {
-  onCanvasSizeChange: OnCanvasSizeChangeFunction;
+  onCanvasSizeChange: {
+    onCanvasSizeChange: OnCanvasSizeChangeFunction;
+    forceRelayout: boolean;
+  };
 }
 
 const createOnCanvasSizeChange = function ({ onCanvasSizeChange }: {
   onCanvasSizeChange: OnCanvasSizeChangeFunction;
 }): OnCanvasSizeChange {
   return {
-    onCanvasSizeChange
+    onCanvasSizeChange: {
+      onCanvasSizeChange,
+      forceRelayout: true
+    }
   };
 };
 

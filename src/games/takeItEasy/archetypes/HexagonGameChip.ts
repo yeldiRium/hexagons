@@ -115,7 +115,7 @@ const createHexagonGameChipEntity = function ({ hexagon, isVisible = true, gameC
   layout.attachChildToParent({ child: secondValueText, parent: hexagonGameChipEntity });
   layout.attachChildToParent({ child: thirdValueText, parent: hexagonGameChipEntity });
 
-  hexagonGameChipEntity.components.onCanvasSizeChange = (): void => {
+  hexagonGameChipEntity.components.onCanvasSizeChange.onCanvasSizeChange = (): void => {
     const hexagonLayout = hexagonGameChipEntity.components.treeNode.parent;
 
     if (hexagonLayout !== undefined) {

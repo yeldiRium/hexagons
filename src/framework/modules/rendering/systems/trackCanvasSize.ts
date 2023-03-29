@@ -30,7 +30,10 @@ const trackCanvasSizeFactory = function ({ canvas }: {
       )) {
         allReceivers.push(entity);
 
-        if (LifeCycle.entityHasLifeCycle(entity) && entity.components.lifeCycle.wasJustSpawned) {
+        if (
+          entity.components.onCanvasSizeChange.forceRelayout ||
+          (LifeCycle.entityHasLifeCycle(entity) && entity.components.lifeCycle.wasJustSpawned)
+        ) {
           receiverIfNotChanged.push(entity);
         }
       }
@@ -40,14 +43,14 @@ const trackCanvasSizeFactory = function ({ canvas }: {
         vector2d.equal(oldSize, newSize)
       ) {
         for (const receiver of receiverIfNotChanged) {
-          receiver.components.onCanvasSizeChange(onCanvasChangeParams);
+          receiver.components.onCanvasSizeChange.onCanvasSizeChange(onCanvasChangeParams);
         }
 
         return;
       }
 
       for (const receiver of allReceivers) {
-        receiver.components.onCanvasSizeChange(onCanvasChangeParams);
+        receiver.components.onCanvasSizeChange.onCanvasSizeChange(onCanvasChangeParams);
       }
 
       oldSize = newSize;

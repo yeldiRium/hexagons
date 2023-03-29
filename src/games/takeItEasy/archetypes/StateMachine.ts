@@ -65,7 +65,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
                 entity: hexagonGridEntity,
                 parent: viewportEntity
               });
-              stateMachineEntity.components.onCanvasSizeChange = ({ newSize }): void => {
+              stateMachineEntity.components.onCanvasSizeChange.onCanvasSizeChange = ({ newSize }): void => {
                 const { x: width, y: height } = newSize;
 
                 const layoutSizeReference = width < height ? width : height;

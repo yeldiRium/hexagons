@@ -65,7 +65,7 @@ const createHexagonScoreChip = function ({ hexagon, orientation, score, isVisibl
     parent: hexagonGameChipEntity
   });
 
-  hexagonGameChipEntity.components.onCanvasSizeChange = (): void => {
+  hexagonGameChipEntity.components.onCanvasSizeChange.onCanvasSizeChange = (): void => {
     const hexagonLayout = hexagonGameChipEntity.components.treeNode.parent;
 
     if (hexagonLayout !== undefined) {
