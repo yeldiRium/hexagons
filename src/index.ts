@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', (): void => {
   const entityManager = engine.getEntityManager();
 
   const hexagonGridEntity = HexagonGrid.createHexagonGridEntity({
-    o: orientation.pointyOrientation,
+    orientation: orientation.pointyOrientation,
     size: vector.createVector({ x: 0, y: 0 }),
     origin: vector.createVector({ x: 0, y: 0 })
   });

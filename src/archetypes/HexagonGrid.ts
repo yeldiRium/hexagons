@@ -8,14 +8,14 @@ type HexagonGridComponents =
   & rendering.components.OnCanvasSizeChange.OnCanvasSizeChange;
 type HexagonGridArchetype = Entity<HexagonGridComponents>;
 
-const createHexagonGridEntity = function ({ o, size, origin }: {
-  o: orientation.Orientation;
+const createHexagonGridEntity = function ({ orientation: o, size, origin }: {
+  orientation: orientation.Orientation;
   size: vector.Vector;
   origin: vector.Vector;
 }): HexagonGridArchetype {
   const hexagonGrid = createEntity<HexagonGridComponents>({
     components: {
-      ...grid.components.HexagonGrid.createHexagonGrid({ o, size, origin }),
+      ...grid.components.HexagonGrid.createHexagonGrid({ orientation: o, size, origin }),
       ...rendering.components.OnCanvasSizeChange.createOnCanvasSizeChange({
         onCanvasSizeChange ({ newSize }): void {
           const { x: width, y: height } = newSize;

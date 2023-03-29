@@ -8,8 +8,8 @@ interface HexagonGrid {
   };
 }
 
-const createHexagonGrid = function ({ o, size, origin }: {
-  o: orientation.Orientation;
+const createHexagonGrid = function ({ orientation: o, size, origin }: {
+  orientation: orientation.Orientation;
   size: vector.Vector;
   origin: vector.Vector;
 }): HexagonGrid {
