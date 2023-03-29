@@ -29,6 +29,8 @@ const spawningFactory = function (): System {
             attachChildToParent({ child: spawnInstruction.entity, parent: spawnInstruction.parent });
           }
         }
+
+        spawnerEntity.components.spawn.clearEntitiesToSpawn();
       }
     }
   };
