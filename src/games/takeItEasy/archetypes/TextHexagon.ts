@@ -10,6 +10,7 @@ type TextHexagonComponents =
   & layout.components.AbsoluteLocation.AbsoluteLocation
   & layout.components.TreeNode.TreeNode
   & layout.components.HexagonLocation.HexagonLocation
+  & layout.components.Scale.Scale
   & layout.components.ZIndex.ZIndex
   & lifeCycle.components.LifeCycle.LifeCycle
   & rendering.components.OnCanvasSizeChange.OnCanvasSizeChange
@@ -22,6 +23,7 @@ type TextHexagonArchetype = Entity<TextHexagonComponents>;
 
 const createTextHexagonEntity = function ({
   location,
+  hexagonScale = 1,
   fillColor = color.predefined.transparent,
   strokeColor = color.predefined.transparent,
   textSizeMultiplier = 1,
@@ -29,6 +31,7 @@ const createTextHexagonEntity = function ({
   isVisible = true
 }: {
   location: hexagonGrid.hexagon.Hexagon;
+  hexagonScale?: number;
   fillColor?: color.Color;
   strokeColor?: color.Color;
   textSizeMultiplier?: number;
@@ -60,6 +63,7 @@ const createTextHexagonEntity = function ({
       }),
       ...layout.components.TreeNode.createTreeNode(),
       ...layout.components.HexagonLocation.createHexagonLocation({ hexagon: location }),
+      ...layout.components.Scale.createScale({ scale: hexagonScale }),
       ...layout.components.ZIndex.createZIndex(),
       ...lifeCycle.components.LifeCycle.createLifeCycle(),
       ...rendering.components.OnCanvasSizeChange.createOnCanvasSizeChange({

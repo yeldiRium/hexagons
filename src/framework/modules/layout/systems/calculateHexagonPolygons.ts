@@ -2,7 +2,7 @@ import { Entity } from '../../../ecs/Entity.js';
 import { Polygon } from '../../rendering/components';
 import { System } from '../../../ecs/System.js';
 import { hexagonGrid, physics2d } from '../../../math';
-import { HexagonLayout, HexagonLocation, TreeNode } from '../components';
+import { HexagonLayout, HexagonLocation, Scale, TreeNode } from '../components';
 
 const entityIsHexagonLayoutWithChildren = function (entity: Entity<any>): entity is Entity<TreeNode.TreeNode & HexagonLayout.HexagonLayout> {
   return HexagonLayout.entityHasHexagonLayout(entity) &&
@@ -24,9 +24,18 @@ const calculateHexagonPolygonsFactory = function (): System {
         );
 
         for (const child of children) {
+          let layout = hexagonLayout.components.hexagonLayout.layout;
+
+          if (Scale.entityHasScale(child)) {
+            layout = hexagonGrid.layout.createLayout({
+              orientation: layout.orientation,
+              size: physics2d.vector2d.mul(layout.size, child.components.scale.scale)
+            });
+          }
+
           child.components.polygon.polygon = physics2d.polygon2d.createPolygon2d({
             points: hexagonGrid.layout.hexagonCornerOffsets({
-              layout: hexagonLayout.components.hexagonLayout.layout
+              layout
             })
           });
         }

@@ -70,12 +70,14 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
 
                 const layoutSizeReference = width < height ? width : height;
                 const layoutSize = layoutSizeReference / 20;
+
                 hexagonGridEntity.components.hexagonLayout.layout.size = physics2d.vector2d.createVector2d({ x: layoutSize, y: layoutSize });
                 hexagonGridEntity.components.location.vector = physics2d.vector2d.createVector2d({ x: width / 2, y: height / 2 });
               };
 
               const startButtonEntity = TextHexagon.createTextHexagonEntity({
                 location: hexagonGrid.hexagon.createHexagon({ q: 0, r: 0 }),
+                hexagonScale: 2,
                 text: {
                   text: 'Start game',
                   align: 'center'
@@ -186,7 +188,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
               }
 
               const scoreTextEntity = TextHexagon.createTextHexagonEntity({
-                location: hexagonGrid.hexagon.createHexagon({ q: 0, r: -4 }),
+                location: hexagonGrid.hexagon.createHexagon({ q: 0, r: -3 }),
                 text: {
                   text: `Score: ${scoreResult.overallScore}`,
                   align: 'center',
@@ -206,7 +208,8 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
               });
 
               const playAgainButtonEntity = TextHexagon.createTextHexagonEntity({
-                location: hexagonGrid.hexagon.createHexagon({ q: 0, r: -3 }),
+                location: hexagonGrid.hexagon.createHexagon({ q: 0, r: -4 }),
+                hexagonScale: 1.5,
                 text: {
                   text: 'Play again',
                   align: 'center'
