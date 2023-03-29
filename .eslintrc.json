@@ -1,0 +1,9 @@
+{
+  "extends": "es/node",
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "id-length": "off"
+  }
+}

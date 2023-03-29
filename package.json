@@ -1,0 +1,38 @@
+{
+  "name": "hexagons",
+  "version": "0.0.1",
+  "description": "hexagon gebastel.",
+  "contributors": [
+    {
+      "name": "Hannes Leutloff",
+      "email": "hannes.leutloff@yeldirum.de",
+      "url": "https://yeldirium.de/"
+    }
+  ],
+  "private": false,
+  "type": "module",
+  "dependencies": {
+    "normalize.css": "8.0.1",
+    "uuid": "8.3.2"
+  },
+  "devDependencies": {
+    "@chialab/esbuild-plugin-html": "0.16.1",
+    "assertthat": "6.5.2",
+    "esbuild": "0.14.49",
+    "http-server": "14.1.1",
+    "roboter": "13.1.0",
+    "ts-node": "10.9.1"
+  },
+  "scripts": {
+    "build": "node --loader ts-node/esm --experimental-specifier-resolution=node --no-warnings ./scripts/build.ts",
+    "build:production": "NODE_ENV=production npm run build",
+    "build:watch": "WATCH=true npm run build",
+    "serve": "http-server build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/yeldirium/hexagons.git"
+  },
+  "keywords": [],
+  "license": "MIT"
+}

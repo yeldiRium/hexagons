@@ -1,0 +1,6 @@
+@import 'normalize.css';
+
+canvas {
+    width: 100vw;
+    height: 99vh;
+}
