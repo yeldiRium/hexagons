@@ -2,12 +2,13 @@ import { color } from '../../../math';
 import { Entity } from '../../../ecs/Entity.js';
 import { System } from '../../../ecs/System.js';
 import { AbsoluteLocation, ZIndex } from '../../layout/components';
-import { FillColor, Polygon, StrokeColor, Text } from '../components';
+import { FillColor, Polygon, StrokeColor, Text, Visibility } from '../components';
 
-const isRenderable = function (entity: Entity<any>): entity is Entity<AbsoluteLocation.AbsoluteLocation & ZIndex.ZIndex> {
+const isRenderable = function (entity: Entity<any>): entity is Entity<AbsoluteLocation.AbsoluteLocation & ZIndex.ZIndex & Visibility.Visibility> {
   return (
     AbsoluteLocation.entityHasAbsoluteLocation(entity) &&
-      ZIndex.entityHasZIndex(entity)
+      ZIndex.entityHasZIndex(entity) &&
+      Visibility.entityHasVisibility(entity)
   );
 };
 
@@ -21,12 +22,13 @@ const renderFactory = function ({ canvas }: {
       const renderableEntities = entityManager.getEntities(
         isRenderable
       );
-      const zIndexSortedRenderableEntities = renderableEntities.sort(
+      const visibleEntities = renderableEntities.filter(entity => entity.components.visibility.isVisible);
+      const zIndexSortedVisibleEntities = visibleEntities.sort(
         (a, b): number =>
           a.components.zIndex.zIndex - b.components.zIndex.zIndex
       );
 
-      for (const entity of zIndexSortedRenderableEntities) {
+      for (const entity of zIndexSortedVisibleEntities) {
         if (FillColor.entityHasFillColor(entity)) {
           ctx.fillStyle = color.toHexString({ color: entity.components.fillColor.color });
         }

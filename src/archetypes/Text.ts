@@ -9,11 +9,13 @@ type TextComponents =
   & layout.components.Location.Location
   & layout.components.ZIndex.ZIndex
   & rendering.components.Text.Text
-  & rendering.components.FillColor.FillColor;
+  & rendering.components.FillColor.FillColor
+  & rendering.components.Visibility.Visibility;
 type TextArchetype = Entity<TextComponents>;
 
-const createTextEntity = function ({ text }: {
+const createTextEntity = function ({ text, isVisible = true }: {
   text: string;
+  isVisible?: boolean;
 }): TextArchetype {
   return createEntity<TextComponents>({
     components: {
@@ -24,7 +26,8 @@ const createTextEntity = function ({ text }: {
       ...layout.components.Location.createLocation({ vector: vector2d.zero }),
       ...layout.components.ZIndex.createZIndex(),
       ...rendering.components.Text.createText(text),
-      ...rendering.components.FillColor.createFillColor(color.predefined.black)
+      ...rendering.components.FillColor.createFillColor(color.predefined.black),
+      ...rendering.components.Visibility.createVisibility(isVisible)
     }
   });
 };

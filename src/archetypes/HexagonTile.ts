@@ -14,13 +14,15 @@ type HexagonTileComponents =
   & messaging.components.SendMessage.SendMessage
   & rendering.components.Polygon.Polygon
   & rendering.components.StrokeColor.StrokeColor
-  & rendering.components.FillColor.FillColor;
+  & rendering.components.FillColor.FillColor
+  & rendering.components.Visibility.Visibility;
 type HexagonTileArchetype = Entity<HexagonTileComponents>;
 
 const defaultBackgroundColor = color.predefined.white;
 
-const createHexagonTileEntity = function ({ hexagon }: {
+const createHexagonTileEntity = function ({ hexagon, isVisible = true }: {
   hexagon: hexagonGrid.hexagon.Hexagon;
+  isVisible?: boolean;
 }): HexagonTileArchetype {
   const hexagonTileEntity = createEntity<HexagonTileComponents>({
     components: {
@@ -67,7 +69,8 @@ const createHexagonTileEntity = function ({ hexagon }: {
       ...messaging.components.SendMessage.createSendMessage(),
       ...rendering.components.Polygon.createPolygon({ polygon: polygon2d.createPolygon2d({ points: []}) }),
       ...rendering.components.StrokeColor.createStrokeColor(color.predefined.black),
-      ...rendering.components.FillColor.createFillColor(defaultBackgroundColor)
+      ...rendering.components.FillColor.createFillColor(defaultBackgroundColor),
+      ...rendering.components.Visibility.createVisibility(isVisible)
     }
   });
 
