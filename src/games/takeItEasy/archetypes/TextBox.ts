@@ -27,12 +27,12 @@ const createTextBoxEntity = function ({ context, text, isVisible = true, vector 
 }): TextBoxArchetype {
   const textMetrics = context.measureText(text);
   const topLeft = vector2d.createVector2d({
-    x: vector.x - textMetrics.actualBoundingBoxLeft - 10,
-    y: vector.y - textMetrics.actualBoundingBoxAscent - 10
+    x: -textMetrics.actualBoundingBoxLeft - 10,
+    y: -textMetrics.actualBoundingBoxAscent - 10
   });
   const bottomRight = vector2d.createVector2d({
-    x: vector.x + textMetrics.actualBoundingBoxRight + 10,
-    y: vector.y + textMetrics.actualBoundingBoxDescent + 10
+    x: textMetrics.actualBoundingBoxRight + 10,
+    y: textMetrics.actualBoundingBoxDescent + 10
   });
   const rect = rect2d.createRect2d({ topLeft, bottomRight });
 

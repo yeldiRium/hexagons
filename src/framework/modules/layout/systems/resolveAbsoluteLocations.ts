@@ -10,22 +10,22 @@ const isInnerTreeNode = function (entity: Entity<any>): entity is Entity<Absolut
     Location.entityHasLocation(entity);
 };
 
-const resolveAbsoluteLocationsFactory = function ({ rootElementName }: {
-  rootElementName: string;
+const resolveAbsoluteLocationsFactory = function ({ rootEntityName }: {
+  rootEntityName: string;
 }): System {
   return {
     tick ({ entityManager }): void {
-      const rootElementResult = entityManager.getEntityByName(rootElementName);
+      const rootEntityResult = entityManager.getEntityByName(rootEntityName);
 
-      if (rootElementResult.hasError()) {
+      if (rootEntityResult.hasError()) {
         throw new Error('No root element found.');
       }
 
-      const rootElement = rootElementResult.value;
+      const rootEntity = rootEntityResult.value;
 
       if (
-        !AbsoluteLocation.entityHasAbsoluteLocation(rootElement) ||
-        !TreeNode.entityHasTreeNode(rootElement)
+        !AbsoluteLocation.entityHasAbsoluteLocation(rootEntity) ||
+        !TreeNode.entityHasTreeNode(rootEntity)
       ) {
         throw new Error('Root element does not fulfil requirements. It must have an AbsoluteLocation and a TreeNode.');
       }
@@ -35,13 +35,13 @@ const resolveAbsoluteLocationsFactory = function ({ rootElementName }: {
         element: Entity<AbsoluteLocation.AbsoluteLocation & TreeNode.TreeNode>;
       }[] = [];
 
-      for (const child of rootElement.components.treeNode.children) {
+      for (const child of rootEntity.components.treeNode.children) {
         if (!isInnerTreeNode(child)) {
           continue;
         }
 
         elementQueue.push({
-          parent: rootElement,
+          parent: rootEntity,
           element: child
         });
       }

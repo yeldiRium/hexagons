@@ -40,11 +40,23 @@ const toPolygon = function ({ rect }: {
   });
 };
 
+const toXYWH = function ({ rect }: {
+  rect: Rect2d;
+}): { x: number; y: number; width: number; height: number } {
+  return {
+    x: rect.topLeft.x,
+    y: rect.topLeft.y,
+    width: rect.bottomRight.x - rect.topLeft.x,
+    height: rect.bottomRight.y - rect.topLeft.y
+  };
+};
+
 export type {
   Rect2d
 };
 export {
   createRect2d,
   containsVector,
-  toPolygon
+  toPolygon,
+  toXYWH
 };

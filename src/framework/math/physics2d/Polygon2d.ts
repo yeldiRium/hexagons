@@ -83,6 +83,7 @@ export type {
 export {
   createPolygon2d,
   containsVector,
+  getBoundingRect,
   toLines,
   translate
 };
