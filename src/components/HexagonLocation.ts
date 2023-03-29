@@ -22,7 +22,7 @@ const createHexagonLocation = function (q: number, r: number): HexagonLocation {
   };
 };
 
-const entityHasHexagonLocationComponent = function (entity: Entity<any>): entity is Entity<HexagonLocation> {
+const entityHasHexagonLocation = function (entity: Entity<any>): entity is Entity<HexagonLocation> {
   return 'hexagonLocation' in entity.components;
 };
 
@@ -31,5 +31,5 @@ export type {
 };
 export {
   createHexagonLocation,
-  entityHasHexagonLocationComponent
+  entityHasHexagonLocation
 };

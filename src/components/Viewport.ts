@@ -28,7 +28,7 @@ const createViewportComponent = function ({ o, size, origin }: {
   };
 };
 
-const entityHasViewportComponent = function (entity: Entity<any>): entity is Entity<Viewport> {
+const entityHasViewport = function (entity: Entity<any>): entity is Entity<Viewport> {
   return 'viewport' in entity.components;
 };
 
@@ -37,5 +37,5 @@ export type {
 };
 export {
   createViewportComponent,
-  entityHasViewportComponent
+  entityHasViewport
 };

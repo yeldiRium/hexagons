@@ -11,7 +11,7 @@ const mapTilesToScreenPolygonsFactory = function (): System {
 
       for (const entity of entityManager.getEntities(
         (iEntity: Entity<any>): iEntity is Entity<HexagonLocation.HexagonLocation & Polygon.Polygon> =>
-          HexagonLocation.entityHasHexagonLocationComponent(iEntity) &&
+          HexagonLocation.entityHasHexagonLocation(iEntity) &&
           Polygon.entityHasPolygon(iEntity)
       )) {
         entity.components.polygon.polygon = layout.hexagonCorners({
