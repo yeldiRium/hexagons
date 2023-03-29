@@ -2,27 +2,17 @@ import { EntityManager } from '../../../framework/ecs/EntityManager.js';
 import { color, hexagonGrid, physics2d } from '../../../framework/math';
 import { createEntity, Entity } from '../../../framework/ecs/Entity.js';
 import { HexagonBackgroundTile, HexagonGrid, TextBox, Viewport } from '.';
-import { layout, messaging, rendering, spawning } from '../../../framework/modules';
-import * as messages from '../messages';
+import { layout, messaging, rendering, spawning, stateMachine } from '../../../framework/modules';
 
+type State = 'Menu' | 'Playing' | 'Scoring';
 type StateMachineComponents =
   & messaging.components.OnMessage.OnMessage
   & messaging.components.SendMessage.SendMessage
   & rendering.components.OnCanvasSizeChange.OnCanvasSizeChange
-  & spawning.components.Spawn.Spawn;
+  & spawning.components.Spawn.Spawn
+  & stateMachine.components.StateMachine.StateMachine<State, StateMachineArchetype>;
 type StateMachineArchetype = Entity<StateMachineComponents>;
 
-enum State {
-  Menu = 'Menu',
-  Playing = 'Playing',
-  Scoring = 'Scoring'
-}
-type ChangeStateFunction = (parameters: { state: State }) => void;
-
-interface StateHandler {
-  initializeState: (parameters: { stateMachineEntity: StateMachineArchetype; changeState: ChangeStateFunction }) => void;
-  teardownState: (parameters: { stateMachineEntity: StateMachineArchetype }) => void;
-}
 
 const createStateMachineEntity = function ({ entityManager, canvas, context, rootEntityName }: {
   entityManager: EntityManager;
@@ -30,9 +20,9 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
   context: CanvasRenderingContext2D;
   rootEntityName: string;
 }): StateMachineArchetype {
-  const stateHandlers: Record<State, StateHandler> = {
+  const stateHandlers: stateMachine.components.StateMachine.StateHandlers<State, StateMachineArchetype> = {
     /* eslint-disable no-param-reassign */
-    [State.Menu]: {
+    Menu: {
       initializeState ({ stateMachineEntity, changeState }) {
         console.log('initialize menu');
         const viewPort: Viewport.ViewportArchetype = entityManager.getEntityByName(rootEntityName).unwrapOrThrow();
@@ -44,7 +34,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
 
         startButtonEntity.name = 'startButton';
         startButtonEntity.components.onClick = (): void => {
-          changeState({ state: State.Playing });
+          changeState({ state: 'Playing' });
         };
         startButtonEntity.components.onMouseOver = (): void => {
           startButtonEntity.components.strokeColor.color = color.predefined.black;
@@ -78,7 +68,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
         };
       }
     },
-    [State.Playing]: {
+    Playing: {
       initializeState ({ stateMachineEntity, changeState }) {
         console.log('initialize playing');
         const viewportEntity: Viewport.ViewportArchetype = entityManager.getEntityByName(rootEntityName).unwrapOrThrow();
@@ -116,7 +106,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
         };
       }
     },
-    [State.Scoring]: {
+    Scoring: {
       initializeState () {
         console.log('initialize scoring');
       },
@@ -136,7 +126,11 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
           // This will be set later.
         }
       }),
-      ...spawning.components.Spawn.createSpawn()
+      ...spawning.components.Spawn.createSpawn(),
+      ...stateMachine.components.StateMachine.createStateMachine<State, StateMachineArchetype>({
+        initialState: 'Menu',
+        stateHandlers
+      })
     }
   });
 
@@ -147,22 +141,6 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
       console.log(`message: ${message.type}`, { payload: message.payload });
     }
   });
-
-  let currentState: State | undefined;
-  const changeState = ({ state: newState }: {
-    state: State;
-  }): void => {
-    if (currentState !== undefined) {
-      stateHandlers[currentState].teardownState({ stateMachineEntity });
-    }
-    stateHandlers[newState].initializeState({ stateMachineEntity, changeState });
-    stateMachineEntity.components.sendMessage.sendMessage({
-      message: messages.gameStateChanged({ newState })
-    });
-    currentState = newState;
-  };
-
-  changeState({ state: State.Menu });
 
   return stateMachineEntity;
 };

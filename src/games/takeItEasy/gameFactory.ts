@@ -1,7 +1,7 @@
 import { engineFactory } from '../../framework/ecs/Engine';
 import { vector2d } from '../../framework/math/physics2d';
 import { GameController, gameControllerFactory } from '../../framework/GameController.js';
-import { input, layout, messaging, rendering, spawning } from '../../framework/modules';
+import { input, layout, messaging, rendering, spawning, stateMachine } from '../../framework/modules';
 import { StateMachine, Viewport } from './archetypes';
 
 const gameFactory = function (): GameController {
@@ -10,6 +10,7 @@ const gameFactory = function (): GameController {
       const rootEntityName = 'viewport';
 
       const engine = engineFactory({ systems: [
+        stateMachine.systems.initializeStateMachinesFactory(),
         spawning.systems.spawningFactory(),
         rendering.systems.trackCanvasSizeFactory({ canvas }),
         layout.systems.resolveAbsoluteLocationsFactory({ rootEntityName }),
