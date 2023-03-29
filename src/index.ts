@@ -1,8 +1,8 @@
 import { engineFactory } from './ecs/Engine';
 import { hexagonGrid } from './math';
 import { vector2d } from './math/physics2d';
-import { HexagonGrid, HexagonTile, Text, Viewport } from './archetypes';
-import { input, layout, rendering } from './modules';
+import { HexagonGrid, HexagonTile, MessageDebugger, Text, Viewport } from './archetypes';
+import { input, layout, messaging, rendering } from './modules';
 
 window.addEventListener('DOMContentLoaded', (): void => {
   const rootElementName = 'viewport';
@@ -14,10 +14,15 @@ window.addEventListener('DOMContentLoaded', (): void => {
     layout.systems.resolveAbsoluteLocationsFactory({ rootElementName }),
     layout.systems.calculateHexagonPolygonsFactory(),
     input.systems.handleMouseInputFactory({ window }),
+    messaging.systems.messageBusFactory(),
     rendering.systems.renderFactory({ canvas })
   ]});
 
   const entityManager = engine.getEntityManager();
+
+  const messageDebuggerEntity = MessageDebugger.createMessageDebugger();
+
+  entityManager.addEntity(messageDebuggerEntity);
 
   const viewportEntity = Viewport.createViewportEntity({
     location: vector2d.createVector2d({ x: 0, y: 0 })
