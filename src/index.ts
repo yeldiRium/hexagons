@@ -1,6 +1,6 @@
 import { engineFactory } from './ecs/Engine';
 import { hexagonGrid, vector } from './math';
-import { HexagonGrid, HexagonTile, Viewport } from './archetypes';
+import { HexagonGrid, HexagonTile, Text, Viewport } from './archetypes';
 import { layout, rendering } from './modules';
 
 window.addEventListener('DOMContentLoaded', (): void => {
@@ -35,9 +35,12 @@ window.addEventListener('DOMContentLoaded', (): void => {
 
   for (const hexagon of hexagonGrid.patterns.createRegularHexagon({ hexagonSize: 5 })) {
     const hexagonEntity = HexagonTile.createHexagonTileEntity({ hexagon });
+    const textEntity = Text.createTextEntity({ text: `${hexagon.r} / ${hexagon.q}` });
 
     entityManager.addEntity(hexagonEntity);
     layout.attachChildToParent({ child: hexagonEntity, parent: hexagonGridEntity });
+    entityManager.addEntity(textEntity);
+    layout.attachChildToParent({ child: textEntity, parent: hexagonEntity });
   }
 
   let time = Date.now();
