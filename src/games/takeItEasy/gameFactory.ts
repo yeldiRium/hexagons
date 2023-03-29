@@ -9,6 +9,7 @@ const gameFactory = function (): GameController {
   return gameControllerFactory({
     initializeEngine ({ canvas, context }) {
       const rootElementName = 'viewport';
+      const rootHexagonGridName = 'rootHexagonGrid';
 
       const engine = engineFactory({ systems: [
         rendering.systems.trackCanvasSizeFactory({ canvas }),
@@ -22,7 +23,10 @@ const gameFactory = function (): GameController {
 
       const entityManager = engine.getEntityManager();
 
-      const gameLogicEntity = GameLogic.createGameControllerEntity();
+      const gameLogicEntity = GameLogic.createGameLogicEntity({
+        entityManager,
+        rootHexagonGridName
+      });
 
       gameLogicEntity.name = 'gameLogic';
       entityManager.addEntity(gameLogicEntity);
@@ -40,6 +44,7 @@ const gameFactory = function (): GameController {
         orientation: hexagonGrid.orientation.pointyOrientation
       });
 
+      hexagonGridEntity.name = rootHexagonGridName;
       hexagonGridEntity.components.onCanvasSizeChange = function ({ newSize }): void {
         const { x: width, y: height } = newSize;
 

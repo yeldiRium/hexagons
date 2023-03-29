@@ -68,12 +68,13 @@ export type {
 };
 
 export {
-  directions,
-  createHexagon,
   add,
-  subtract,
-  multiply,
-  length,
+  createHexagon,
+  directions,
   distance,
-  neighbor
+  equal,
+  length,
+  multiply,
+  neighbor,
+  subtract
 };
