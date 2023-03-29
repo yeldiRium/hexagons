@@ -1,17 +1,10 @@
-import { point } from '../../../math';
 import { Polygon } from '../components';
 import { System } from '../../../ecs/System.js';
 
 const renderFactory = function ({ canvas }: {
   canvas: HTMLCanvasElement;
 }): System {
-  const { width, height } = canvas.getBoundingClientRect();
   const ctx = canvas.getContext('2d')!;
-
-  const offset = point.createPoint({
-    x: width / 2,
-    y: height / 2
-  });
 
   return {
     tick ({ entityManager }): void {
@@ -23,9 +16,8 @@ const renderFactory = function ({ canvas }: {
 
         for (const corner of entity.components.polygon.polygon) {
           ctx.lineTo(
-
-            corner.x + offset.x,
-            corner.y + offset.y
+            corner.x,
+            corner.y
           );
         }
         ctx.closePath();

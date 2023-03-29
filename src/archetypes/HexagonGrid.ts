@@ -25,8 +25,6 @@ const createHexagonGridEntity = function ({ o, size, origin }: {
 
           hexagonGrid.components.hexagonGrid.layout.size = size;
           hexagonGrid.components.hexagonGrid.layout.origin = origin;
-
-          console.log('canvas has changed', { width, height, size, origin });
         }
       })
     }

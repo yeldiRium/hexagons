@@ -24,9 +24,12 @@ const coordinatesToScreen = function ({ layout, coordinates }: {
   layout: Layout;
   coordinates: Hexagon;
 }): point.Point {
+  const x = ((layout.orientation.f0 * coordinates.q) + (layout.orientation.f1 * coordinates.r)) * layout.size.x;
+  const y = ((layout.orientation.f2 * coordinates.q) + (layout.orientation.f3 * coordinates.r)) * layout.size.y;
+
   return point.createPoint({
-    x: ((layout.orientation.f0 * coordinates.q) + (layout.orientation.f1 * coordinates.r)) * layout.size.x,
-    y: ((layout.orientation.f2 * coordinates.q) + (layout.orientation.f3 * coordinates.r)) * layout.size.y
+    x: x + layout.origin.x,
+    y: y + layout.origin.y
   });
 };
 
