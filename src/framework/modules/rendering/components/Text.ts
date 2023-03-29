@@ -1,22 +1,37 @@
 import { Entity } from '../../../ecs/Entity.js';
 
+type TextAlign = 'left' | 'right' | 'center' | 'start' | 'end';
+
 interface Text {
   text: {
     text: string;
+    fontSizePx: number;
+    bold: boolean;
+    italic: boolean;
+    align: TextAlign;
   };
 }
 
-const createText = function (initialText: string): Text {
-  let mText = initialText;
-
+const createText = function ({
+  text,
+  fontSizePx = 10,
+  bold = false,
+  italic = false,
+  align = 'start'
+}: {
+  text: string;
+  fontSizePx?: number;
+  bold?: boolean;
+  italic?: boolean;
+  align?: TextAlign;
+}): Text {
   return {
     text: {
-      get text (): string {
-        return mText;
-      },
-      set text (newText: string) {
-        mText = newText;
-      }
+      text,
+      fontSizePx,
+      bold,
+      italic,
+      align
     }
   };
 };
@@ -26,7 +41,8 @@ const entityHasText = function (entity: Entity<any>): entity is Entity<Text> {
 };
 
 export type {
-  Text
+  Text,
+  TextAlign
 };
 export {
   createText,

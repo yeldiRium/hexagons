@@ -54,16 +54,20 @@ const renderFactory = function ({ context }: {
           }
         }
         if (Text.entityHasText(entity)) {
-          if (FillColor.entityHasFillColor(entity)) {
-            context.fillText(
-              entity.components.text.text,
+          const { fontSizePx, bold, italic, text, align } = entity.components.text;
+
+          context.font = `${italic ? 'italic ' : ''}${bold ? 'bold ' : ''}${fontSizePx}px sans-serif`;
+          context.textAlign = align;
+          if (StrokeColor.entityHasStrokeColor(entity)) {
+            context.strokeText(
+              text,
               entity.components.absoluteLocation.vector.x,
               entity.components.absoluteLocation.vector.y
             );
           }
-          if (StrokeColor.entityHasStrokeColor(entity)) {
-            context.strokeText(
-              entity.components.text.text,
+          if (FillColor.entityHasFillColor(entity)) {
+            context.fillText(
+              text,
               entity.components.absoluteLocation.vector.x,
               entity.components.absoluteLocation.vector.y
             );
