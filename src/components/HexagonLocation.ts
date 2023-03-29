@@ -8,9 +8,16 @@ interface HexagonLocation {
 }
 
 const createHexagonLocation = function (q: number, r: number): HexagonLocation {
+  let mCoordinates = hexagon.createHexagon({ q, r });
+
   return {
     hexagonLocation: {
-      coordinates: hexagon.createHexagon({ q, r })
+      get coordinates (): hexagon.Hexagon {
+        return mCoordinates;
+      },
+      set coordinates (coordinates: hexagon.Hexagon) {
+        mCoordinates = coordinates;
+      }
     }
   };
 };

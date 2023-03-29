@@ -8,9 +8,16 @@ interface Renderable {
 }
 
 const createRenderable = function (polygons: point.Point[][]): Renderable {
+  let mPolygons = polygons;
+
   return {
     renderable: {
-      polygons
+      get polygons (): point.Point[][] {
+        return mPolygons;
+      },
+      set polygons (polygons: point.Point[][]) {
+        mPolygons = polygons;
+      }
     }
   };
 };

@@ -13,13 +13,17 @@ const createViewportComponent = function ({ o, size, origin }: {
   size: point.Point;
   origin: point.Point;
 }): Viewport {
+  const mLayout = layout.createLayout({
+    orientation: o,
+    size,
+    origin
+  });
+
   return {
     viewport: {
-      layout: layout.createLayout({
-        orientation: o,
-        size,
-        origin
-      })
+      get layout (): layout.Layout {
+        return mLayout;
+      }
     }
   };
 };

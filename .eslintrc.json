@@ -4,6 +4,7 @@
     "browser": true
   },
   "rules": {
+    "@typescript-eslint/no-shadow": "off",
     "id-length": "off"
   }
 }
