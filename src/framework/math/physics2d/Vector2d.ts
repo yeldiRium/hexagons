@@ -23,6 +23,13 @@ const sub = function (a: Vector2d, b: Vector2d): Vector2d {
   });
 };
 
+const mul = function (a: Vector2d, n: number): Vector2d {
+  return createVector2d({
+    x: a.x * n,
+    y: a.y * n
+  });
+};
+
 const equal = (a: Vector2d, b: Vector2d): boolean =>
   float.equal(a.x, b.x) && float.equal(a.y, b.y);
 
@@ -37,5 +44,6 @@ export {
   createVector2d,
   equal,
   sub,
+  mul,
   zero
 };
