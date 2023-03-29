@@ -6,6 +6,7 @@ type TextComponents =
   & layout.components.AbsoluteLocation.AbsoluteLocation
   & layout.components.TreeNode.TreeNode
   & layout.components.Location.Location
+  & layout.components.ZIndex.ZIndex
   & rendering.components.Text.Text
   & rendering.components.FillColor.FillColor;
 type TextArchetype = Entity<TextComponents>;
@@ -20,6 +21,7 @@ const createTextEntity = function ({ text }: {
       }),
       ...layout.components.TreeNode.createTreeNode(),
       ...layout.components.Location.createLocation({ vector: vector.zero }),
+      ...layout.components.ZIndex.createZIndex(),
       ...rendering.components.Text.createText(text),
       ...rendering.components.FillColor.createFillColor(color.predefined.black)
     }

@@ -6,8 +6,10 @@ type HexagonTileComponents =
   & layout.components.AbsoluteLocation.AbsoluteLocation
   & layout.components.TreeNode.TreeNode
   & layout.components.HexagonLocation.HexagonLocation
+  & layout.components.ZIndex.ZIndex
   & rendering.components.Polygon.Polygon
-  & rendering.components.StrokeColor.StrokeColor;
+  & rendering.components.StrokeColor.StrokeColor
+  & rendering.components.FillColor.FillColor;
 type HexagonTileArchetype = Entity<HexagonTileComponents>;
 
 const createHexagonTileEntity = function ({ hexagon }: {
@@ -20,8 +22,10 @@ const createHexagonTileEntity = function ({ hexagon }: {
       }),
       ...layout.components.TreeNode.createTreeNode(),
       ...layout.components.HexagonLocation.createHexagonLocation({ hexagon }),
+      ...layout.components.ZIndex.createZIndex(),
       ...rendering.components.Polygon.createPolygon([]),
-      ...rendering.components.StrokeColor.createStrokeColor(color.predefined.black)
+      ...rendering.components.StrokeColor.createStrokeColor(color.predefined.black),
+      ...rendering.components.FillColor.createFillColor(color.predefined.white)
     }
   });
 };

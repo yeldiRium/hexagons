@@ -1,7 +1,15 @@
-import { AbsoluteLocation } from '../../layout/components';
 import { color } from '../../../math';
+import { Entity } from '../../../ecs/Entity.js';
 import { System } from '../../../ecs/System.js';
+import { AbsoluteLocation, ZIndex } from '../../layout/components';
 import { FillColor, Polygon, StrokeColor, Text } from '../components';
+
+const isRenderable = function (entity: Entity<any>): entity is Entity<AbsoluteLocation.AbsoluteLocation & ZIndex.ZIndex> {
+  return (
+    AbsoluteLocation.entityHasAbsoluteLocation(entity) &&
+      ZIndex.entityHasZIndex(entity)
+  );
+};
 
 const renderFactory = function ({ canvas }: {
   canvas: HTMLCanvasElement;
@@ -10,9 +18,15 @@ const renderFactory = function ({ canvas }: {
 
   return {
     tick ({ entityManager }): void {
-      for (const entity of entityManager.getEntities(
-        AbsoluteLocation.entityHasAbsoluteLocation
-      )) {
+      const renderableEntities = entityManager.getEntities(
+        isRenderable
+      );
+      const zIndexSortedRenderableEntities = renderableEntities.sort(
+        (a, b): number =>
+          a.components.zIndex.zIndex - b.components.zIndex.zIndex
+      );
+
+      for (const entity of zIndexSortedRenderableEntities) {
         if (FillColor.entityHasFillColor(entity)) {
           ctx.fillStyle = color.toHexString({ color: entity.components.fillColor.color });
         }

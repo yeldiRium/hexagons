@@ -4,7 +4,8 @@ import { createEntity, Entity } from '../ecs/Entity.js';
 
 type ViewportComponents =
   & layout.components.AbsoluteLocation.AbsoluteLocation
-  & layout.components.TreeNode.TreeNode;
+  & layout.components.TreeNode.TreeNode
+  & layout.components.ZIndex.ZIndex;
 type ViewportArchetype = Entity<ViewportComponents>;
 
 const createViewportEntity = function ({ location: initialLocation }: {
@@ -15,7 +16,8 @@ const createViewportEntity = function ({ location: initialLocation }: {
       ...layout.components.AbsoluteLocation.createAbsoluteLocation({
         vector: initialLocation
       }),
-      ...layout.components.TreeNode.createTreeNode()
+      ...layout.components.TreeNode.createTreeNode(),
+      ...layout.components.ZIndex.createZIndex()
     }
   });
 };

@@ -8,6 +8,7 @@ type HexagonGridComponents =
   & layout.components.TreeNode.TreeNode
   & layout.components.Location.Location
   & layout.components.HexagonLayout.HexagonLayout
+  & layout.components.ZIndex.ZIndex
   & rendering.components.OnCanvasSizeChange.OnCanvasSizeChange;
 type HexagonGridArchetype = Entity<HexagonGridComponents>;
 
@@ -27,6 +28,7 @@ const createHexagonGridEntity = function ({ orientation: o, size, vector: initia
         orientation: o,
         size
       }),
+      ...layout.components.ZIndex.createZIndex(),
       ...rendering.components.OnCanvasSizeChange.createOnCanvasSizeChange({
         onCanvasSizeChange ({ newSize }) {
           const { x: width, y: height } = newSize;
