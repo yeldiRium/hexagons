@@ -1,13 +1,14 @@
 import { color } from '../../../framework/math';
 import { vector2d } from '../../../framework/math/physics2d';
 import { createEntity, Entity } from '../../../framework/ecs/Entity';
-import { layout, rendering } from '../../../framework/modules';
+import { layout, lifeCycle, rendering } from '../../../framework/modules';
 
 type TextComponents =
   & layout.components.AbsoluteLocation.AbsoluteLocation
   & layout.components.TreeNode.TreeNode
   & layout.components.Location.Location
   & layout.components.ZIndex.ZIndex
+  & lifeCycle.components.LifeCycle.LifeCycle
   & rendering.components.Text.Text
   & rendering.components.FillColor.FillColor
   & rendering.components.StrokeColor.StrokeColor
@@ -43,6 +44,7 @@ const createTextEntity = function ({
       ...layout.components.TreeNode.createTreeNode(),
       ...layout.components.Location.createLocation({ vector: location }),
       ...layout.components.ZIndex.createZIndex(),
+      ...lifeCycle.components.LifeCycle.createLifeCycle(),
       ...rendering.components.Text.createText({ text, fontSizePx, bold, italic, align }),
       ...rendering.components.FillColor.createFillColor(fillColor),
       ...rendering.components.StrokeColor.createStrokeColor(strokeColor),

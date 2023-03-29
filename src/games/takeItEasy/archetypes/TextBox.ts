@@ -1,7 +1,7 @@
 import { color } from '../../../framework/math';
 import { Text } from '.';
 import { createEntity, Entity } from '../../../framework/ecs/Entity';
-import { input, layout, rendering, spawning } from '../../../framework/modules';
+import { input, layout, lifeCycle, rendering, spawning } from '../../../framework/modules';
 import { rect2d, vector2d } from '../../../framework/math/physics2d';
 
 type TextBoxComponents =
@@ -12,6 +12,7 @@ type TextBoxComponents =
   & layout.components.TreeNode.TreeNode
   & layout.components.Location.Location
   & layout.components.ZIndex.ZIndex
+  & lifeCycle.components.LifeCycle.LifeCycle
   & rendering.components.Polygon.Polygon
   & rendering.components.StrokeColor.StrokeColor
   & rendering.components.FillColor.FillColor
@@ -59,6 +60,7 @@ const createTextBoxEntity = function ({ context, text, isVisible = true, vector 
       ...layout.components.TreeNode.createTreeNode(),
       ...layout.components.Location.createLocation({ vector }),
       ...layout.components.ZIndex.createZIndex(),
+      ...lifeCycle.components.LifeCycle.createLifeCycle(),
       ...rendering.components.Polygon.createPolygon({ polygon: rect2d.toPolygon({ rect }) }),
       ...rendering.components.StrokeColor.createStrokeColor(color.predefined.transparent),
       ...rendering.components.FillColor.createFillColor(color.predefined.transparent),

@@ -1,6 +1,6 @@
 import { color, hexagonGrid } from '../../../framework/math';
 import { createEntity, Entity } from '../../../framework/ecs/Entity';
-import { input, layout, messaging, rendering, spawning } from '../../../framework/modules';
+import { input, layout, lifeCycle,messaging, rendering, spawning } from '../../../framework/modules';
 import { polygon2d, vector2d } from '../../../framework/math/physics2d';
 import * as messages from '../messages';
 
@@ -12,6 +12,7 @@ type HexagonBackgroundTileComponents =
   & layout.components.TreeNode.TreeNode
   & layout.components.HexagonLocation.HexagonLocation
   & layout.components.ZIndex.ZIndex
+  & lifeCycle.components.LifeCycle.LifeCycle
   & messaging.components.SendMessage.SendMessage
   & rendering.components.Polygon.Polygon
   & rendering.components.StrokeColor.StrokeColor
@@ -67,6 +68,7 @@ const createHexagonBackgroundTileEntity = function ({ hexagon, isVisible = true 
       ...layout.components.TreeNode.createTreeNode(),
       ...layout.components.HexagonLocation.createHexagonLocation({ hexagon }),
       ...layout.components.ZIndex.createZIndex(),
+      ...lifeCycle.components.LifeCycle.createLifeCycle(),
       ...messaging.components.SendMessage.createSendMessage(),
       ...rendering.components.Polygon.createPolygon({ polygon: polygon2d.createPolygon2d({ points: []}) }),
       ...rendering.components.StrokeColor.createStrokeColor(color.predefined.black),
