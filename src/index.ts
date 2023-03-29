@@ -32,6 +32,15 @@ window.addEventListener('DOMContentLoaded', (): void => {
     entityManager.addEntity(entity);
   }
 
-  // Main loop
-  engine.runTick({ dt: 0 });
+  let time = Date.now();
+  const frame = (): void => {
+    const newTime = Date.now();
+    const dt = newTime - time;
+
+    engine.runTick({ dt });
+    time = newTime;
+    window.requestAnimationFrame(frame);
+  };
+
+  window.requestAnimationFrame(frame);
 });
