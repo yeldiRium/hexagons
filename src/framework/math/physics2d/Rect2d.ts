@@ -1,3 +1,4 @@
+import * as polygon2d from './Polygon2d.js';
 import * as vector2d from './Vector2d.js';
 
 interface Rect2d {
@@ -26,10 +27,24 @@ const containsVector = function ({ rect, vector }: {
   return !isOutside;
 };
 
+const toPolygon = function ({ rect }: {
+  rect: Rect2d;
+}): polygon2d.Polygon2d {
+  return polygon2d.createPolygon2d({
+    points: [
+      rect.topLeft,
+      vector2d.createVector2d({ x: rect.bottomRight.x, y: rect.topLeft.y }),
+      rect.bottomRight,
+      vector2d.createVector2d({ x: rect.topLeft.x, y: rect.bottomRight.y })
+    ]
+  });
+};
+
 export type {
   Rect2d
 };
 export {
   createRect2d,
-  containsVector
+  containsVector,
+  toPolygon
 };
