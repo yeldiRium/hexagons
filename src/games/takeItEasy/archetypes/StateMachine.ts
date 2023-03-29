@@ -68,7 +68,9 @@ const createStateMachineEntity = function ({ entityManager, canvas, rootEntityNa
               stateMachineEntity.components.onCanvasSizeChange = ({ newSize }): void => {
                 const { x: width, y: height } = newSize;
 
-                hexagonGridEntity.components.hexagonLayout.layout.size = physics2d.vector2d.createVector2d({ x: height / 20, y: height / 20 });
+                const layoutSizeReference = width < height ? width : height;
+                const layoutSize = layoutSizeReference / 20;
+                hexagonGridEntity.components.hexagonLayout.layout.size = physics2d.vector2d.createVector2d({ x: layoutSize, y: layoutSize });
                 hexagonGridEntity.components.location.vector = physics2d.vector2d.createVector2d({ x: width / 2, y: height / 2 });
               };
 
