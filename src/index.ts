@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded', (): void => {
     rendering.systems.trackCanvasSizeFactory({ canvas }),
     layout.systems.resolveAbsoluteLocationsFactory({ rootElementName }),
     layout.systems.calculateHexagonPolygonsFactory(),
-    input.systems.handleMouseInputFactory({ window }),
+    input.systems.handleMouseInput({ window }),
     messaging.systems.messageBusFactory(),
     rendering.systems.renderFactory({ canvas })
   ]});

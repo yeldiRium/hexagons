@@ -1,1 +1,1 @@
-export { handleMouseInputFactory } from './handleMouseInput.js';
+export { handleMouseInput } from './handleMouseInput.js';

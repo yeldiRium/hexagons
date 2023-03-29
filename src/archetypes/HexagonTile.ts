@@ -4,6 +4,7 @@ import { input, layout, messaging, rendering } from '../modules';
 import { polygon2d, vector2d } from '../math/physics2d';
 
 type HexagonTileComponents =
+  & input.components.OnClick.OnClick
   & input.components.OnMouseOver.OnMouseOver
   & input.components.OnMouseOut.OnMouseOut
   & layout.components.AbsoluteLocation.AbsoluteLocation
@@ -23,6 +24,18 @@ const createHexagonTileEntity = function ({ hexagon }: {
 }): HexagonTileArchetype {
   const hexagonTileEntity = createEntity<HexagonTileComponents>({
     components: {
+      ...input.components.OnClick.createOnClick({
+        onClick () {
+          hexagonTileEntity.components.sendMessage.sendMessage({
+            message: {
+              type: 'hexagonTileClicked',
+              payload: {
+                hexagon: hexagonTileEntity.components.hexagonLocation.hexagon
+              }
+            }
+          });
+        }
+      }),
       ...input.components.OnMouseOver.createOnMouseOver({
         onMouseOver () {
           hexagonTileEntity.components.fillColor.color = color.createColor({ r: 255, g: 0, b: 0 });

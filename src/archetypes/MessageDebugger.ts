@@ -15,7 +15,7 @@ const createMessageDebugger = function (): MessageDebuggerArchetype {
   messageDebugger.components.onMessage.addMessageListener({
     type: '*',
     callback ({ message }): void {
-      console.log('debugging message bus', { message });
+      console.log(`message: ${message.type}`, { payload: message.payload });
     }
   });
 
