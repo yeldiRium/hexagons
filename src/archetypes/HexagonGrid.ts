@@ -1,4 +1,4 @@
-import { orientation } from '../math/grid';
+import { orientation } from '../math/hexagonGrid';
 import { vector } from '../math';
 import { createEntity, Entity } from '../ecs/Entity.js';
 import { grid, rendering } from '../modules';

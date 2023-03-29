@@ -1,6 +1,6 @@
 import { Entity } from '../../../ecs/Entity.js';
 import { vector } from '../../../math';
-import { layout, orientation } from '../../../math/grid';
+import { layout, orientation } from '../../../math/hexagonGrid';
 
 interface HexagonGrid {
   hexagonGrid: {

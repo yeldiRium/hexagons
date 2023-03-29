@@ -1,7 +1,7 @@
 import { Entity } from '../../../ecs/Entity';
 import { HexagonGridArchetype } from '../../../archetypes/HexagonGrid';
 import { HexagonLocation } from '../components';
-import { layout } from '../../../math/grid';
+import { layout } from '../../../math/hexagonGrid';
 import { rendering } from '../..';
 import { System } from '../../../ecs/System.js';
 
