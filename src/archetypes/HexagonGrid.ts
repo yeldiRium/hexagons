@@ -1,5 +1,5 @@
 import { orientation } from '../math/grid';
-import { point } from '../math';
+import { vector } from '../math';
 import { createEntity, Entity } from '../ecs/Entity.js';
 import { grid, rendering } from '../modules';
 
@@ -10,8 +10,8 @@ type HexagonGridArchetype = Entity<HexagonGridComponents>;
 
 const createHexagonGridEntity = function ({ o, size, origin }: {
   o: orientation.Orientation;
-  size: point.Point;
-  origin: point.Point;
+  size: vector.Vector;
+  origin: vector.Vector;
 }): HexagonGridArchetype {
   const hexagonGrid = createEntity<HexagonGridComponents>({
     components: {
@@ -20,8 +20,8 @@ const createHexagonGridEntity = function ({ o, size, origin }: {
         onCanvasSizeChange ({ newSize }): void {
           const { x: width, y: height } = newSize;
 
-          const size = point.createPoint({ x: height / 20, y: height / 20 });
-          const origin = point.createPoint({ x: width / 2, y: height / 2 });
+          const size = vector.createVector({ x: height / 20, y: height / 20 });
+          const origin = vector.createVector({ x: width / 2, y: height / 2 });
 
           hexagonGrid.components.hexagonGrid.layout.size = size;
           hexagonGrid.components.hexagonGrid.layout.origin = origin;

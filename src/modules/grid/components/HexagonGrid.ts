@@ -1,5 +1,5 @@
 import { Entity } from '../../../ecs/Entity.js';
-import { point } from '../../../math';
+import { vector } from '../../../math';
 import { layout, orientation } from '../../../math/grid';
 
 interface HexagonGrid {
@@ -10,8 +10,8 @@ interface HexagonGrid {
 
 const createHexagonGrid = function ({ o, size, origin }: {
   o: orientation.Orientation;
-  size: point.Point;
-  origin: point.Point;
+  size: vector.Vector;
+  origin: vector.Vector;
 }): HexagonGrid {
   const mLayout = layout.createLayout({
     orientation: o,

@@ -1,21 +1,21 @@
 import { Entity } from '../../../ecs/Entity.js';
-import { point } from '../../../math';
+import { vector } from '../../../math';
 
 interface Polygon {
   polygon: {
-    polygon: point.Point[];
+    polygon: vector.Vector[];
   };
 }
 
-const createPolygon = function (polygon: point.Point[]): Polygon {
+const createPolygon = function (polygon: vector.Vector[]): Polygon {
   let mPolygon = polygon;
 
   return {
     polygon: {
-      get polygon (): point.Point[] {
+      get polygon (): vector.Vector[] {
         return mPolygon;
       },
-      set polygon (polygon: point.Point[]) {
+      set polygon (polygon: vector.Vector[]) {
         mPolygon = polygon;
       }
     }

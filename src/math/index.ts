@@ -1,2 +1,2 @@
 export * as grid from './grid';
-export * as point from './Point.js';
+export * as vector from './Vector.js';

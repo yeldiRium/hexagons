@@ -1,6 +1,6 @@
 import { engineFactory } from './ecs/Engine';
 import { orientation } from './math/grid';
-import { point } from './math';
+import { vector } from './math';
 import { grid, rendering } from './modules';
 import { HexagonGrid, HexTile } from './archetypes';
 
@@ -16,8 +16,8 @@ window.addEventListener('DOMContentLoaded', (): void => {
 
   const hexagonGridEntity = HexagonGrid.createHexagonGridEntity({
     o: orientation.pointyOrientation,
-    size: point.createPoint({ x: 0, y: 0 }),
-    origin: point.createPoint({ x: 0, y: 0 })
+    size: vector.createVector({ x: 0, y: 0 }),
+    origin: vector.createVector({ x: 0, y: 0 })
   });
 
   hexagonGridEntity.name = 'hexagonGrid';

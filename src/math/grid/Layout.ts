@@ -1,17 +1,17 @@
 import { Hexagon } from './Hexagon.js';
 import { Orientation } from './Orientation.js';
-import { point } from '..';
+import { vector } from '..';
 
 interface Layout {
   orientation: Orientation;
-  size: point.Point;
-  origin: point.Point;
+  size: vector.Vector;
+  origin: vector.Vector;
 }
 
 const createLayout = function ({ orientation, size, origin }: {
   orientation: Orientation;
-  size: point.Point;
-  origin: point.Point;
+  size: vector.Vector;
+  origin: vector.Vector;
 }): Layout {
   return {
     orientation,
@@ -23,11 +23,11 @@ const createLayout = function ({ orientation, size, origin }: {
 const coordinatesToScreen = function ({ layout, coordinates }: {
   layout: Layout;
   coordinates: Hexagon;
-}): point.Point {
+}): vector.Vector {
   const x = ((layout.orientation.f0 * coordinates.q) + (layout.orientation.f1 * coordinates.r)) * layout.size.x;
   const y = ((layout.orientation.f2 * coordinates.q) + (layout.orientation.f3 * coordinates.r)) * layout.size.y;
 
-  return point.createPoint({
+  return vector.createVector({
     x: x + layout.origin.x,
     y: y + layout.origin.y
   });
@@ -36,10 +36,10 @@ const coordinatesToScreen = function ({ layout, coordinates }: {
 const hexagonCornerOffset = function ({ layout, corner }: {
   layout: Layout;
   corner: number;
-}): point.Point {
+}): vector.Vector {
   const angle = 2 * Math.PI * (layout.orientation.startAngle + corner) / 6;
 
-  return point.createPoint({
+  return vector.createVector({
     x: layout.size.x * Math.cos(angle),
     y: layout.size.y * Math.sin(angle)
   });
@@ -48,7 +48,7 @@ const hexagonCornerOffset = function ({ layout, corner }: {
 const hexagonCorners = function ({ layout, coordinates }: {
   layout: Layout;
   coordinates: Hexagon;
-}): point.Point[] {
+}): vector.Vector[] {
   const corners = [];
 
   const center = coordinatesToScreen({ layout, coordinates });
@@ -56,7 +56,7 @@ const hexagonCorners = function ({ layout, coordinates }: {
   for (let i = 0; i < 6; i++) {
     const offset = hexagonCornerOffset({ layout, corner: i });
 
-    corners.push(point.createPoint({
+    corners.push(vector.createVector({
       x: center.x + offset.x,
       y: center.y + offset.y
     }));
