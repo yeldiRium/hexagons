@@ -1,7 +1,7 @@
 import { engineFactory } from './ecs/Engine';
 import { hexagonGrid } from './math';
 import { vector2d } from './math/physics2d';
-import { HexagonGrid, HexagonTile, MessageDebugger, Text, Viewport } from './archetypes';
+import { GameController, HexagonGrid, HexagonTile, Text, Viewport } from './archetypes';
 import { input, layout, messaging, rendering } from './modules';
 
 window.addEventListener('DOMContentLoaded', (): void => {
@@ -20,10 +20,10 @@ window.addEventListener('DOMContentLoaded', (): void => {
 
   const entityManager = engine.getEntityManager();
 
-  const messageDebuggerEntity = MessageDebugger.createMessageDebugger();
+  const gameControllerEntity = GameController.createGameControllerEntity();
 
-  messageDebuggerEntity.name = 'messageDebugger';
-  entityManager.addEntity(messageDebuggerEntity);
+  gameControllerEntity.name = 'gameController';
+  entityManager.addEntity(gameControllerEntity);
 
   const viewportEntity = Viewport.createViewportEntity({
     location: vector2d.createVector2d({ x: 0, y: 0 })
