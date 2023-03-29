@@ -1,3 +1,4 @@
+import { LifeCycle } from '../../lifeCycle/components';
 import { System } from '../../../ecs/System.js';
 import { TreeNode } from '../../layout/components';
 import { attachChildToParent, removeChildFromParent } from '../../layout';
@@ -19,11 +20,21 @@ const spawningFactory = function (): System {
         }
       }
 
+      for (const lifecycleEntity of entityManager.getEntities(
+        LifeCycle.entityHasLifeCycle
+      )) {
+        lifecycleEntity.components.lifeCycle.wasJustSpawned = false;
+      }
+
       for (const spawnerEntity of entityManager.getEntities(
         Spawn.entityHasSpawn
       )) {
         for (const spawnInstruction of spawnerEntity.components.spawn.entitiesToSpawn) {
           entityManager.addEntityAndChildren(spawnInstruction.entity);
+
+          if (LifeCycle.entityHasLifeCycle(spawnInstruction.entity)) {
+            spawnInstruction.entity.components.lifeCycle.wasJustSpawned = true;
+          }
 
           if ('parent' in spawnInstruction && spawnInstruction.parent !== undefined) {
             attachChildToParent({ child: spawnInstruction.entity, parent: spawnInstruction.parent });
