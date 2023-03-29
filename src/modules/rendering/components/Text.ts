@@ -6,7 +6,7 @@ interface Text {
   };
 }
 
-const createFillColor = function (initialText: string): Text {
+const createText = function (initialText: string): Text {
   let mText = initialText;
 
   return {
@@ -29,6 +29,6 @@ export type {
   Text
 };
 export {
-  createFillColor,
+  createText,
   entityHasText
 };
