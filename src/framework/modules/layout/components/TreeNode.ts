@@ -2,26 +2,26 @@ import { Entity } from '../../../ecs/Entity.js';
 
 interface TreeNode {
   treeNode: {
-    parent: Entity<any> | undefined;
-    children: Set<Entity<any>>;
+    parent: Entity<TreeNode> | undefined;
+    children: Set<Entity<TreeNode>>;
   };
 }
 
 const createTreeNode = function ({ parent: initialParent }: {
-  parent?: Entity<any>;
+  parent?: Entity<TreeNode>;
 } = {}): TreeNode {
   let mParent = initialParent;
-  const mChildren = new Set<Entity<any>>();
+  const mChildren = new Set<Entity<TreeNode>>();
 
   return {
     treeNode: {
-      get parent (): Entity<any> | undefined {
+      get parent (): Entity<TreeNode> | undefined {
         return mParent;
       },
-      set parent (newParent: Entity<any> | undefined) {
+      set parent (newParent: Entity<TreeNode> | undefined) {
         mParent = newParent;
       },
-      get children (): Set<Entity<any>> {
+      get children (): Set<Entity<TreeNode>> {
         return mChildren;
       }
     }

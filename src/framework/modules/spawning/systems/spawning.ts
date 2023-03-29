@@ -1,5 +1,6 @@
-import { attachChildToParent } from '../../layout';
 import { System } from '../../../ecs/System.js';
+import { TreeNode } from '../../layout/components';
+import { attachChildToParent, removeChildFromParent } from '../../layout';
 import { Despawn, Spawn } from '../components';
 
 const spawningFactory = function (): System {
@@ -9,7 +10,12 @@ const spawningFactory = function (): System {
         Despawn.entityHasDespawn
       )) {
         if (despawningEntity.components.despawn.shouldDespawn) {
-          entityManager.removeEntityAndChildren(despawningEntity.id);
+          if (TreeNode.entityHasTreeNode(despawningEntity)) {
+            removeChildFromParent({ child: despawningEntity });
+            entityManager.removeEntityAndChildren(despawningEntity.id);
+          } else {
+            entityManager.removeEntity(despawningEntity.id);
+          }
         }
       }
 

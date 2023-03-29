@@ -9,6 +9,7 @@
       "allowTypedFunctionExpressions": true,
       "allowHigherOrderFunctions": false
     }],
-    "id-length": "off"
+    "id-length": "off",
+    "prefer-destructuring": "off"
   }
 }

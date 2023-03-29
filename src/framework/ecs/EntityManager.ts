@@ -41,7 +41,7 @@ const createEntityManager = function (): EntityManager {
       if (entity === undefined) {
         return false;
       }
-      entities.delete(id);
+      this.removeEntity(id);
       if (layout.components.TreeNode.entityHasTreeNode(entity)) {
         for (const child of entity.components.treeNode.children) {
           this.removeEntityAndChildren(child.id);
