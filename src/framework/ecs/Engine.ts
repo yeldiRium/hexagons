@@ -4,6 +4,7 @@ import { createEntityManager, EntityManager } from './EntityManager';
 interface Engine {
   runTick: (parameters: {
     dt: number;
+    isFirstTick: boolean;
   }) => void;
   getEntityManager: () => EntityManager;
 }
@@ -14,9 +15,9 @@ const engineFactory = ({ systems }: {
   const entityManager = createEntityManager();
 
   return {
-    runTick ({ dt }): void {
+    runTick ({ dt, isFirstTick }): void {
       for (const system of systems) {
-        system.tick({ entityManager, dt });
+        system.tick({ entityManager, dt, isFirstTick });
       }
     },
     getEntityManager (): EntityManager {

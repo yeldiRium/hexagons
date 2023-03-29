@@ -40,7 +40,7 @@ const gameFactory = function (): GameController {
 
       return engine;
     },
-    tick ({ engine, canvas, context, dt }) {
+    tick ({ engine, canvas, context, dt, isFirstTick }) {
       const currentCanvasRect = canvas.getBoundingClientRect();
 
       /* eslint-disable no-param-reassign */
@@ -50,7 +50,7 @@ const gameFactory = function (): GameController {
 
       context.clearRect(0, 0, currentCanvasRect.width, currentCanvasRect.height);
 
-      engine.runTick({ dt });
+      engine.runTick({ dt, isFirstTick });
     }
   });
 };

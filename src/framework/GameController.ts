@@ -12,6 +12,7 @@ interface TickParameters {
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
   dt: number;
+  isFirstTick: boolean;
 }
 interface FrameParameters {
   engine: Engine;
@@ -19,6 +20,7 @@ interface FrameParameters {
   context: CanvasRenderingContext2D;
   lastTime: number;
   currentTime: number;
+  isFirstFrame: boolean;
 }
 type StopFunction = () => void;
 
@@ -38,17 +40,17 @@ const gameControllerFactory = function ({ initializeEngine, tick }: {
     isStopped = true;
   };
 
-  const frame = ({ engine, canvas, context, lastTime, currentTime }: FrameParameters): void => {
+  const frame = ({ engine, canvas, context, lastTime, currentTime, isFirstFrame }: FrameParameters): void => {
     if (isStopped) {
       return;
     }
 
     const dt = currentTime - lastTime;
 
-    tick({ engine, canvas, context, dt });
+    tick({ engine, canvas, context, dt, isFirstTick: isFirstFrame });
 
     window.requestAnimationFrame(time => {
-      frame({ engine, canvas, context, lastTime: currentTime, currentTime: time });
+      frame({ engine, canvas, context, lastTime: currentTime, currentTime: time, isFirstFrame: false });
     });
   };
 
@@ -64,7 +66,7 @@ const gameControllerFactory = function ({ initializeEngine, tick }: {
     window.requestAnimationFrame(time => {
       const engine = initializeEngine({ canvas, context });
 
-      frame({ engine, canvas, context, lastTime: time, currentTime: time });
+      frame({ engine, canvas, context, lastTime: time, currentTime: time, isFirstFrame: true });
     });
 
     return stop;

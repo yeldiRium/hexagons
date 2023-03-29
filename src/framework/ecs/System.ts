@@ -4,6 +4,7 @@ interface System {
   tick: (parameters: {
     entityManager: EntityManager;
     dt: number;
+    isFirstTick: boolean;
   }) => void;
 }
 
