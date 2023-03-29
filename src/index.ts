@@ -1,4 +1,4 @@
-import { createEntityManager } from './engine/EntityManager';
+import { engineFactory } from './ecs/Engine';
 import { orientation } from './grid';
 import { point } from './rendering';
 import { HexTile, Viewport } from './archetypes';
@@ -6,8 +6,13 @@ import { mapTilesToScreenPolygonsFactory, renderFactory, scaleUiFactory } from '
 
 window.addEventListener('DOMContentLoaded', (): void => {
   const canvas = document.getElementById('game')! as HTMLCanvasElement;
+  const engine = engineFactory({ systems: [
+    scaleUiFactory({ canvas }),
+    mapTilesToScreenPolygonsFactory(),
+    renderFactory({ canvas })
+  ]});
 
-  const entityManager = createEntityManager();
+  const entityManager = engine.getEntityManager();
 
   const viewportEntity = Viewport.createViewportEntity({
     o: orientation.pointyOrientation,
@@ -27,21 +32,6 @@ window.addEventListener('DOMContentLoaded', (): void => {
     entityManager.addEntity(entity);
   }
 
-  const scaleUiSystem = scaleUiFactory({ canvas });
-  const mapTilesToScreenSystem = mapTilesToScreenPolygonsFactory();
-  const renderingSystem = renderFactory({ canvas });
-
   // Main loop
-  scaleUiSystem.tick({
-    dt: 0,
-    entityManager
-  });
-  mapTilesToScreenSystem.tick({
-    dt: 0,
-    entityManager
-  });
-  renderingSystem.tick({
-    dt: 0,
-    entityManager
-  });
+  engine.runTick({ dt: 0 });
 });

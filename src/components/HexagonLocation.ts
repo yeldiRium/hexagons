@@ -1,4 +1,4 @@
-import { Entity } from '../engine/Entity.js';
+import { Entity } from '../ecs/Entity.js';
 import { hexagon } from '../grid';
 
 interface HexagonLocation {

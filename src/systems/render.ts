@@ -1,6 +1,6 @@
 import { point } from '../rendering';
 import { Renderable } from '../components';
-import { System } from '../engine/System.js';
+import { System } from '../ecs/System.js';
 
 const renderFactory = function ({ canvas }: {
   canvas: HTMLCanvasElement;

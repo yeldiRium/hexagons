@@ -1,5 +1,5 @@
 import { point } from '../rendering';
-import { System } from '../engine/System.js';
+import { System } from '../ecs/System.js';
 import { Viewport } from '../components';
 
 const scaleUiFactory = function ({ canvas }: {

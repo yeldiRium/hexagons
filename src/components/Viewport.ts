@@ -1,4 +1,4 @@
-import { Entity } from '../engine/Entity.js';
+import { Entity } from '../ecs/Entity.js';
 import { point } from '../rendering';
 import { layout, orientation } from '../grid';
 

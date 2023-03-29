@@ -1,6 +1,6 @@
-import { Entity } from '../engine/Entity';
+import { Entity } from '../ecs/Entity';
 import { layout } from '../grid';
-import { System } from '../engine/System.js';
+import { System } from '../ecs/System.js';
 import { HexagonLocation, Renderable } from '../components';
 
 const mapTilesToScreenPolygonsFactory = function (): System {
