@@ -12,12 +12,6 @@ const createLine2d = function ({ start, end }: {
   return { start, end };
 };
 
-const toDirecton = function ({ line }: {
-  line: Line2d;
-}): vector2d.Vector2d {
-  return vector2d.sub(line.start, line.end);
-};
-
 const intersect = function ({ a, b }: {
   a: Line2d;
   b: Line2d;

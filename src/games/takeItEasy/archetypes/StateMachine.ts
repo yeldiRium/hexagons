@@ -2,7 +2,7 @@ import { EntityManager } from '../../../framework/ecs/EntityManager.js';
 import { gameChip } from '../gameLogic';
 import { color, hexagonGrid, physics2d } from '../../../framework/math';
 import { createEntity, Entity } from '../../../framework/ecs/Entity.js';
-import { HexagonBackgroundTile, HexagonGameChip, HexagonGrid, TextBox, Viewport } from '.';
+import { HexagonBackgroundTile, HexagonGrid, TextBox, Viewport } from '.';
 import { layout, messaging, rendering, spawning, stateMachine } from '../../../framework/modules';
 import * as messages from '../messages';
 
@@ -37,7 +37,6 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
           /* eslint-disable @typescript-eslint/no-shadow, no-param-reassign */
           Menu: {
             initializeState ({ stateMachineEntity, changeState }) {
-              console.log('initialize menu');
               const viewPort: Viewport.ViewportArchetype = entityManager.getEntityByName(rootEntityName).unwrapOrThrow();
               const startButtonEntity = TextBox.createTextBoxEntity({
                 context,
@@ -63,7 +62,7 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
               });
               stateMachineEntity.components.onCanvasSizeChange = ({ newSize }): void => {
                 const boundingRect = physics2d.polygon2d.getBoundingRect({ polygon: startButtonEntity.components.polygon.polygon });
-                const xywh = physics2d.rect2d.toXYWH({ rect: boundingRect });
+                const xywh = physics2d.rect2d.toXywh({ rect: boundingRect });
 
                 startButtonEntity.components.location.vector = physics2d.vector2d.sub(
                   physics2d.vector2d.mul(newSize, 0.5),
@@ -72,7 +71,6 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
               };
             },
             teardownState ({ stateMachineEntity }) {
-              console.log('teardown menu');
               const startButton: TextBox.TextBoxArchetype = entityManager.getEntityByName('startButton').unwrapOrThrow();
 
               startButton.components.despawn.despawn();
@@ -83,7 +81,6 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
           },
           Playing: {
             initializeState ({ stateMachineEntity, changeState }) {
-              console.log('initialize playing');
               const viewportEntity: Viewport.ViewportArchetype = entityManager.getEntityByName(rootEntityName).unwrapOrThrow();
               const hexagonGridEntity = HexagonGrid.createHexagonGridEntity({
                 orientation: hexagonGrid.orientation.pointyOrientation,
@@ -138,7 +135,6 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
               });
             },
             teardownState ({ stateMachineEntity }) {
-              console.log('teardown playing');
               stateMachineEntity.components.onCanvasSizeChange = (): void => {
                 // Remove the previous handler.
               };
@@ -146,10 +142,8 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
           },
           Scoring: {
             initializeState () {
-              console.log('initialize scoring');
             },
             teardownState () {
-              console.log('teardown scoring');
             }
           }
           /* eslint-enable @typescript-eslint/no-shadow, no-param-reassign */

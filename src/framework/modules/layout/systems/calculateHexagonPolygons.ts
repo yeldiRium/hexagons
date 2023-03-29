@@ -1,7 +1,7 @@
 import { Entity } from '../../../ecs/Entity.js';
-import { hexagonGrid, physics2d } from '../../../math';
 import { Polygon } from '../../rendering/components';
 import { System } from '../../../ecs/System.js';
+import { hexagonGrid, physics2d } from '../../../math';
 import { HexagonLayout, HexagonLocation, TreeNode } from '../components';
 
 const entityIsHexagonLayoutWithChildren = function (entity: Entity<any>): entity is Entity<TreeNode.TreeNode & HexagonLayout.HexagonLayout> {
@@ -19,8 +19,8 @@ const calculateHexagonPolygonsFactory = function (): System {
       for (const hexagonLayout of entityManager.getEntities(
         entityIsHexagonLayoutWithChildren
       )) {
-        const children: Entity<HexagonLocation.HexagonLocation & Polygon.Polygon>[] = [ ...hexagonLayout.components.treeNode.children.values() ].filter(
-          entity => entityIsHexagonLocationWithPolygon(entity)
+        const children = [ ...hexagonLayout.components.treeNode.children.values() ].filter(
+          (entity): entity is Entity<TreeNode.TreeNode & HexagonLocation.HexagonLocation & Polygon.Polygon> => entityIsHexagonLocationWithPolygon(entity)
         );
 
         for (const child of children) {

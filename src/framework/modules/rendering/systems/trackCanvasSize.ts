@@ -39,9 +39,6 @@ const trackCanvasSizeFactory = function ({ canvas }: {
         oldSize !== undefined &&
         vector2d.equal(oldSize, newSize)
       ) {
-        if (receiverIfNotChanged.length > 0) {
-          console.log('notifying some of unchanged canvas size', {receiverIfNotChanged});
-        }
         for (const receiver of receiverIfNotChanged) {
           receiver.components.onCanvasSizeChange(onCanvasChangeParams);
         }

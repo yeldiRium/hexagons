@@ -40,7 +40,7 @@ const toPolygon = function ({ rect }: {
   });
 };
 
-const toXYWH = function ({ rect }: {
+const toXywh = function ({ rect }: {
   rect: Rect2d;
 }): { x: number; y: number; width: number; height: number } {
   return {
@@ -58,5 +58,5 @@ export {
   createRect2d,
   containsVector,
   toPolygon,
-  toXYWH
+  toXywh
 };

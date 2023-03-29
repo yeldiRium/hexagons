@@ -1,5 +1,4 @@
 import { defekt } from 'defekt';
-import { oneLine } from 'common-tags';
 
 class ColorValuesInvalid extends defekt({ code: 'ColorValuesInvalid' }) {}
 

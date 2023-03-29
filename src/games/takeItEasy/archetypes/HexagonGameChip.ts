@@ -1,7 +1,7 @@
 import { gameChip } from '../gameLogic';
+import { TextHexagon } from '.';
 import { color, hexagonGrid, physics2d } from '../../../framework/math';
 import { createEntity, Entity } from '../../../framework/ecs/Entity';
-import { HexagonGrid, TextHexagon } from '.';
 import { layout, lifeCycle, messaging, rendering, spawning } from '../../../framework/modules';
 
 type HexagonGameChipComponents =
@@ -50,7 +50,7 @@ const createHexagonGameChipEntity = function ({ hexagon, isVisible = true, gameC
       ...layout.components.HexagonLocation.createHexagonLocation({ hexagon }),
       ...layout.components.HexagonLayout.createHexagonLayout({
         orientation: hexagonGrid.orientation.flatOrientation,
-        size: physics2d.vector2d.zero,
+        size: physics2d.vector2d.zero
       }),
       ...layout.components.ZIndex.createZIndex(),
       ...lifeCycle.components.LifeCycle.createLifeCycle(),
