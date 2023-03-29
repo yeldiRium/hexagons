@@ -1,13 +1,17 @@
-import { Entity } from '../Entity.js';
+import { Entity } from '../engine/Entity';
 import { layout } from '../grid';
-import { System } from './System.js';
-import { HexagonLocation, Renderable, Viewport } from '../components';
+import { System } from '../engine/System.js';
+import { HexagonLocation, Renderable } from '../components';
 
-const mapTilesToScreenPolygons = function ({ viewport }: {
-  viewport: Entity<Viewport.Viewport>;
-}): System<HexagonLocation.HexagonLocation & Renderable.Renderable> {
-  return ({ entities }): void => {
-    for (const entity of entities) {
+const mapTilesToScreenPolygons = function (): System {
+  return ({ entityManager }): void => {
+    const viewport = entityManager.getEntityByName('viewport').unwrapOrThrow();
+
+    for (const entity of entityManager.getEntities(
+      (iEntity: Entity<any>): iEntity is Entity<HexagonLocation.HexagonLocation & Renderable.Renderable> =>
+        HexagonLocation.entityHasHexagonLocationComponent(iEntity) &&
+          Renderable.entityHasRenderableComponent(iEntity)
+    )) {
       entity.components.renderable.polygons = [
         layout.hexagonCorners({
           layout: viewport.components.viewport.layout,

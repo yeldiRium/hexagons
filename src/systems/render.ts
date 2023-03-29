@@ -1,10 +1,10 @@
 import { point } from '../rendering';
 import { Renderable } from '../components';
-import { System } from './System.js';
+import { System } from '../engine/System.js';
 
 const renderFactory = function ({ canvas }: {
   canvas: HTMLCanvasElement;
-}): System<Renderable.Renderable> {
+}): System {
   const { width, height } = canvas.getBoundingClientRect();
   const ctx = canvas.getContext('2d')!;
 
@@ -13,9 +13,10 @@ const renderFactory = function ({ canvas }: {
     y: height / 2
   });
 
-  return ({ entities }): void => {
-    console.log({ entities });
-    for (const entity of entities) {
+  return ({ entityManager }): void => {
+    for (const entity of entityManager.getEntities(
+      Renderable.entityHasRenderableComponent
+    )) {
       ctx.lineWidth = 5;
 
       for (const polygon of entity.components.renderable.polygons) {
@@ -23,8 +24,10 @@ const renderFactory = function ({ canvas }: {
 
         for (const corner of polygon) {
           ctx.lineTo(
+            /* eslint-disable @typescript-eslint/restrict-plus-operands */
             corner.x + offset.x,
             corner.y + offset.y
+            /* eslint-enable @typescript-eslint/restrict-plus-operands */
           );
         }
         ctx.closePath();

@@ -1,4 +1,4 @@
-import { Entity } from '../Entity.js';
+import { Entity } from '../engine/Entity.js';
 import { point } from '../rendering';
 
 interface Renderable {

@@ -1,7 +1,7 @@
 import { orientation } from '../grid';
 import { point } from '../rendering';
 import { Viewport } from '../components';
-import { createEntity, Entity } from '../Entity.js';
+import { createEntity, Entity } from '../engine/Entity.js';
 
 type ViewportArchetype = Entity<Viewport.Viewport>;
 

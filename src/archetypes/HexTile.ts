@@ -1,4 +1,4 @@
-import { createEntity, Entity } from '../Entity';
+import { createEntity, Entity } from '../engine/Entity';
 import { HexagonLocation, Renderable } from '../components';
 
 type HexTileArchetype = Entity<HexagonLocation.HexagonLocation & Renderable.Renderable>;

@@ -12,11 +12,14 @@
   "private": false,
   "type": "module",
   "dependencies": {
+    "defekt": "9.2.0",
+    "lodash": "4.17.21",
     "normalize.css": "8.0.1",
     "uuid": "8.3.2"
   },
   "devDependencies": {
     "@chialab/esbuild-plugin-html": "0.16.1",
+    "@types/lodash": "4.14.182",
     "assertthat": "6.5.2",
     "esbuild": "0.14.49",
     "http-server": "14.1.1",

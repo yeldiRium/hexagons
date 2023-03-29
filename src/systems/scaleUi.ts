@@ -1,13 +1,13 @@
-import { Entity } from '../Entity.js';
 import { point } from '../rendering';
-import { System } from './System.js';
+import { System } from '../engine/System.js';
 import { Viewport } from '../components';
 
-const scaleUiFactory = function ({ viewport, canvas }: {
-  viewport: Entity<Viewport.Viewport>;
+const scaleUiFactory = function ({ canvas }: {
   canvas: HTMLCanvasElement;
-}): System<Entity<any>> {
-  return (): void => {
+}): System {
+  return ({ entityManager }): void => {
+    const viewport = entityManager.getEntityByName<Viewport.Viewport>('viewport').unwrapOrThrow();
+
     /* eslint-disable no-param-reassign */
     const { width, height } = canvas.getBoundingClientRect();
 
