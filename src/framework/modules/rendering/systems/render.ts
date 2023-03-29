@@ -36,7 +36,7 @@ const renderFactory = function ({ context }: {
         }
 
         if (Polygon.entityHasPolygon(entity)) {
-          context.lineWidth = 5;
+          context.lineWidth = 1;
           context.beginPath();
 
           for (const point of entity.components.polygon.polygon.points) {
