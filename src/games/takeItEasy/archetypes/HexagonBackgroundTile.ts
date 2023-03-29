@@ -3,7 +3,6 @@ import { color, hexagonGrid } from '../../../framework/math';
 import { createEntity, Entity } from '../../../framework/ecs/Entity';
 import { input, layout, lifeCycle, messaging, rendering, spawning } from '../../../framework/modules';
 import { polygon2d, vector2d } from '../../../framework/math/physics2d';
-import * as messages from '../messages';
 
 type HexagonBackgroundTileComponents =
   & input.components.OnClick.OnClick
