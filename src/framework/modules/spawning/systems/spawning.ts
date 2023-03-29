@@ -1,7 +1,7 @@
 import { LifeCycle } from '../../lifeCycle/components';
 import { System } from '../../../ecs/System.js';
 import { TreeNode } from '../../layout/components';
-import { attachChildToParent, removeChildFromParent } from '../../layout';
+import { attachChildToParent, forEachDescendant, removeChildFromParent } from '../../layout';
 import { Despawn, Spawn } from '../components';
 
 const spawningFactory = function (): System {
@@ -30,14 +30,26 @@ const spawningFactory = function (): System {
         Spawn.entityHasSpawn
       )) {
         for (const spawnInstruction of spawnerEntity.components.spawn.entitiesToSpawn) {
-          entityManager.addEntityAndChildren(spawnInstruction.entity);
+          const { entity } = spawnInstruction;
 
-          if (LifeCycle.entityHasLifeCycle(spawnInstruction.entity)) {
-            spawnInstruction.entity.components.lifeCycle.wasJustSpawned = true;
+          entityManager.addEntityAndChildren(entity);
+
+          if (LifeCycle.entityHasLifeCycle(entity)) {
+            if (TreeNode.entityHasTreeNode(entity)) {
+              forEachDescendant({ entity,
+                callback ({ entity: iEntity }) {
+                  if (LifeCycle.entityHasLifeCycle(iEntity)) {
+                    // eslint-disable-next-line no-param-reassign
+                    iEntity.components.lifeCycle.wasJustSpawned = true;
+                  }
+                } });
+            } else {
+              entity.components.lifeCycle.wasJustSpawned = true;
+            }
           }
 
           if ('parent' in spawnInstruction && spawnInstruction.parent !== undefined) {
-            attachChildToParent({ child: spawnInstruction.entity, parent: spawnInstruction.parent });
+            attachChildToParent({ child: entity, parent: spawnInstruction.parent });
           }
         }
 
