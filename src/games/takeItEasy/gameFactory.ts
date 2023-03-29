@@ -32,7 +32,6 @@ const gameFactory = function (): GameController {
       const stateMachineEntity = StateMachine.createStateMachineEntity({
         entityManager,
         canvas,
-        context,
         rootEntityName
       });
 
