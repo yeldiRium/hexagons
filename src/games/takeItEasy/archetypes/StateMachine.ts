@@ -1,7 +1,7 @@
 import { EntityManager } from '../../../framework/ecs/EntityManager.js';
 import { color, hexagonGrid, physics2d } from '../../../framework/math';
 import { createEntity, Entity } from '../../../framework/ecs/Entity.js';
-import { HexagonGrid, HexagonTile, TextBox, Viewport } from '.';
+import { HexagonBackgroundTile, HexagonGrid, TextBox, Viewport } from '.';
 import { layout, messaging, rendering, spawning } from '../../../framework/modules';
 import * as messages from '../messages';
 
@@ -41,7 +41,6 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
           text: 'Start game',
           vector: physics2d.vector2d.zero
         });
-
 
         startButtonEntity.name = 'startButton';
         startButtonEntity.components.onClick = (): void => {
@@ -90,12 +89,10 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
         });
 
         for (const hexagon of hexagonGrid.patterns.createRegularHexagon({ hexagonSize: 5 })) {
-          const hexagonTileEntity = HexagonTile.createHexagonTileEntity({ hexagon });
+          const backgroundTileEntity = HexagonBackgroundTile.createHexagonBackgroundTileEntity({ hexagon });
 
-          layout.attachChildToParent({ child: hexagonTileEntity, parent: hexagonGridEntity });
+          layout.attachChildToParent({ child: backgroundTileEntity, parent: hexagonGridEntity });
         }
-
-        console.log({ hexagonGridEntity });
 
         stateMachineEntity.components.spawn.spawnEntity({
           entity: hexagonGridEntity,
@@ -113,10 +110,10 @@ const createStateMachineEntity = function ({ entityManager, canvas, context, roo
         stateMachineEntity.components.onCanvasSizeChange({ newSize: canvasSize });
       },
       teardownState ({ stateMachineEntity }) {
+        console.log('teardown playing');
         stateMachineEntity.components.onCanvasSizeChange = (): void => {
           // Remove the previous handler.
         };
-        console.log('teardown playing');
       }
     },
     [State.Scoring]: {

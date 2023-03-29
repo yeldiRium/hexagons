@@ -4,7 +4,7 @@ import { input, layout, messaging, rendering, spawning } from '../../../framewor
 import { polygon2d, vector2d } from '../../../framework/math/physics2d';
 import * as messages from '../messages';
 
-type HexagonTileComponents =
+type HexagonBackgroundTileComponents =
   & input.components.OnClick.OnClick
   & input.components.OnMouseOver.OnMouseOver
   & input.components.OnMouseOut.OnMouseOut
@@ -18,45 +18,45 @@ type HexagonTileComponents =
   & rendering.components.FillColor.FillColor
   & rendering.components.Visibility.Visibility
   & spawning.components.Despawn.Despawn;
-type HexagonTileArchetype = Entity<HexagonTileComponents>;
+type HexagonBackgroundTileArchetype = Entity<HexagonBackgroundTileComponents>;
 
 const defaultBackgroundColor = color.predefined.white;
 
-const createHexagonTileEntity = function ({ hexagon, isVisible = true }: {
+const createHexagonBackgroundTileEntity = function ({ hexagon, isVisible = true }: {
   hexagon: hexagonGrid.hexagon.Hexagon;
   isVisible?: boolean;
-}): HexagonTileArchetype {
+}): HexagonBackgroundTileArchetype {
   let fillColorBeforeHover: color.Color | undefined;
 
-  const hexagonTileEntity = createEntity<HexagonTileComponents>({
+  const hexagonBackgroundTileEntity = createEntity<HexagonBackgroundTileComponents>({
     components: {
       ...input.components.OnClick.createOnClick({
         onClick () {
-          hexagonTileEntity.components.sendMessage.sendMessage({
+          hexagonBackgroundTileEntity.components.sendMessage.sendMessage({
             message: messages.hexagonTileClicked({
-              hexagon: hexagonTileEntity.components.hexagonLocation.hexagon
+              hexagon: hexagonBackgroundTileEntity.components.hexagonLocation.hexagon
             })
           });
         }
       }),
       ...input.components.OnMouseOver.createOnMouseOver({
         onMouseOver () {
-          fillColorBeforeHover = hexagonTileEntity.components.fillColor.color;
-          hexagonTileEntity.components.fillColor.color = color.createColor({ r: 255, g: 0, b: 0 });
-          hexagonTileEntity.components.sendMessage.sendMessage({
+          fillColorBeforeHover = hexagonBackgroundTileEntity.components.fillColor.color;
+          hexagonBackgroundTileEntity.components.fillColor.color = color.createColor({ r: 180, g: 180, b: 180 });
+          hexagonBackgroundTileEntity.components.sendMessage.sendMessage({
             message: messages.hexagonTileMouseOver({
-              hexagon: hexagonTileEntity.components.hexagonLocation.hexagon
+              hexagon: hexagonBackgroundTileEntity.components.hexagonLocation.hexagon
             })
           });
         }
       }),
       ...input.components.OnMouseOut.createOnMouseOut({
         onMouseOut () {
-          hexagonTileEntity.components.fillColor.color = fillColorBeforeHover ?? defaultBackgroundColor;
+          hexagonBackgroundTileEntity.components.fillColor.color = fillColorBeforeHover ?? defaultBackgroundColor;
           fillColorBeforeHover = undefined;
-          hexagonTileEntity.components.sendMessage.sendMessage({
+          hexagonBackgroundTileEntity.components.sendMessage.sendMessage({
             message: messages.hexagonTileMouseOut({
-              hexagon: hexagonTileEntity.components.hexagonLocation.hexagon
+              hexagon: hexagonBackgroundTileEntity.components.hexagonLocation.hexagon
             })
           });
         }
@@ -76,12 +76,12 @@ const createHexagonTileEntity = function ({ hexagon, isVisible = true }: {
     }
   });
 
-  return hexagonTileEntity;
+  return hexagonBackgroundTileEntity;
 };
 
 export type {
-  HexagonTileArchetype
+  HexagonBackgroundTileArchetype
 };
 export {
-  createHexagonTileEntity
+  createHexagonBackgroundTileEntity
 };
