@@ -54,6 +54,8 @@ const handleMouseInputFactory = function ({ window }: {
           });
         }
 
+        lastHoveredEntity = undefined;
+
         return;
       }
 
@@ -62,21 +64,23 @@ const handleMouseInputFactory = function ({ window }: {
         (a, b) => a.components.zIndex.zIndex - b.components.zIndex.zIndex
       ).at(-1)!;
 
-      entityWithHighestZIndex.components.onMouseOver({
-        absoluteCursorCoordinates: cursorPosition,
-        relativeCursorCoordinates: vector2d.sub(cursorPosition, entityWithHighestZIndex.components.absoluteLocation.vector)
-      });
-
-      if (
-        lastHoveredEntity !== undefined &&
-        lastHoveredEntity !== entityWithHighestZIndex &&
-        OnMouseOut.entityHasOnMouseOut(lastHoveredEntity)
-      ) {
-        lastHoveredEntity.components.onMouseOut({
+      if (lastHoveredEntity !== entityWithHighestZIndex) {
+        entityWithHighestZIndex.components.onMouseOver({
           absoluteCursorCoordinates: cursorPosition,
-          relativeCursorCoordinates: vector2d.sub(cursorPosition, lastHoveredEntity.components.absoluteLocation.vector)
+          relativeCursorCoordinates: vector2d.sub(cursorPosition, entityWithHighestZIndex.components.absoluteLocation.vector)
         });
+
+        if (
+          lastHoveredEntity !== undefined &&
+          OnMouseOut.entityHasOnMouseOut(lastHoveredEntity)
+        ) {
+          lastHoveredEntity.components.onMouseOut({
+            absoluteCursorCoordinates: cursorPosition,
+            relativeCursorCoordinates: vector2d.sub(cursorPosition, lastHoveredEntity.components.absoluteLocation.vector)
+          });
+        }
       }
+
       lastHoveredEntity = entityWithHighestZIndex;
     }
   };
