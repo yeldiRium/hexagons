@@ -90,7 +90,7 @@ const handleMouseInput = function ({ rootElement }: {
       // Handle clicking
       if (unhandledClickEvents.length > 0) {
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        const clickableEntityWithHighestZIndex = entitiesThatContainCursor.filter((entity): entity is Entity<RequiredCursorReceiverComponents & OnClick.OnClick> => OnMouseOver.entityHasOnMouseOver(entity)).sort(
+        const clickableEntityWithHighestZIndex = entitiesThatContainCursor.filter((entity): entity is Entity<RequiredCursorReceiverComponents & OnClick.OnClick> => OnClick.entityHasOnClick(entity)).sort(
           (a, b) => a.components.zIndex.zIndex - b.components.zIndex.zIndex
         ).at(-1);
 
