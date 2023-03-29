@@ -7,7 +7,7 @@ import { HexagonGrid, HexTile } from './archetypes';
 window.addEventListener('DOMContentLoaded', (): void => {
   const canvas = document.getElementById('game')! as HTMLCanvasElement;
   const engine = engineFactory({ systems: [
-    grid.systems.scaleHexagonGrid({ canvas }),
+    rendering.systems.trackCanvasSizeFactory({ canvas }),
     grid.systems.mapTilesToScreenPolygonsFactory(),
     rendering.systems.renderFactory({ canvas })
   ]});
