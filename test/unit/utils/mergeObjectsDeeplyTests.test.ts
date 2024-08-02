@@ -1,14 +1,13 @@
-import { assert } from 'assertthat';
 import { mergeObjectsDeeply } from '../../../src/utils';
 
-suite('mergeObjectsDeeply', (): void => {
+describe('mergeObjectsDeeply', (): void => {
   test('merges two empty objects into an empty one.', async (): Promise<void> => {
     const object1 = {};
     const object2 = {};
 
     const mergedObject = mergeObjectsDeeply([ object1, object2 ]);
 
-    assert.that(mergedObject).is.equalTo({});
+    expect(mergedObject).toEqual({});
   });
 
   test('merges two one-level-deep objects.', async (): Promise<void> => {
@@ -21,7 +20,7 @@ suite('mergeObjectsDeeply', (): void => {
 
     const mergedObject = mergeObjectsDeeply([ object1, object2 ]);
 
-    assert.that(mergedObject).is.equalTo({
+    expect(mergedObject).toEqual({
       foo: 'foo',
       bar: 'bar'
     });
@@ -37,7 +36,7 @@ suite('mergeObjectsDeeply', (): void => {
 
     const mergedObject = mergeObjectsDeeply([ object1, object2 ]);
 
-    assert.that(mergedObject).is.equalTo({
+    expect(mergedObject).toEqual({
       foo: 'bar'
     });
   });
@@ -58,7 +57,7 @@ suite('mergeObjectsDeeply', (): void => {
 
     const mergedObject = mergeObjectsDeeply([ object1, object2 ]);
 
-    assert.that(mergedObject).is.equalTo({
+    expect(mergedObject).toEqual({
       foo: 'foo',
       bar: 'bar',
       nested: {
@@ -88,10 +87,8 @@ suite('mergeObjectsDeeply', (): void => {
 
     const propertyDescriptorForNestedObject = Object.getOwnPropertyDescriptor(mergedObject.nested, 'heck')!;
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    assert.that(propertyDescriptorForNestedObject.get).is.ofType('function');
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    assert.that(propertyDescriptorForNestedObject.set).is.undefined();
-    assert.that(propertyDescriptorForNestedObject.writable).is.undefined();
+    expect(typeof propertyDescriptorForNestedObject.get).toBe('function');
+    expect(propertyDescriptorForNestedObject.set).toBeUndefined();
+    expect(propertyDescriptorForNestedObject.writable).toBeUndefined();
   });
 });
