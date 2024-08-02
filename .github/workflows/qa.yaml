@@ -1,0 +1,26 @@
+name: QA
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: "20"
+
+    - name: Install dependencies
+      run: npm clean-install
+
+    - name: Run tests
+      run: npm test
